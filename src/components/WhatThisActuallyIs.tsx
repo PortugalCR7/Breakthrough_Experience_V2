@@ -128,7 +128,7 @@ export default function WhatThisActuallyIs() {
           <h3 className="sess-hl text-left uppercase mb-12">
             SIX SESSIONS.
             <br />
-            <span style={{ color: "var(--gl)" }}>ONE DIRECTION.</span>
+            ONE DIRECTION.
  
           </h3>
         </div>
