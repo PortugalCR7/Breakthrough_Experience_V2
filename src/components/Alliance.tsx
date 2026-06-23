@@ -9,7 +9,7 @@ export default function Alliance() {
   const [showNotice, setShowNotice] = useState(false);
   const magneticRef = useMagnetic({ strength: 0.35 });
   const hlScope = useRef<HTMLHeadingElement | null>(null);
-  useWordScrub(hlScope, { start: "top 82%", end: "top 40%" });
+  useWordScrub(hlScope);
 
   const handleApplyClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();

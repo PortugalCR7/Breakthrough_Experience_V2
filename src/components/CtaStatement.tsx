@@ -14,6 +14,9 @@ interface CtaStatementProps {
    *  to keep the grey word-scrub but let the section scroll normally — used when a
    *  bigger pin (e.g. Decision) follows immediately and back-to-back pins would drag. */
   pin?: boolean;
+  /** Looser vertical rhythm between lines/sentences (used by the multi-sentence
+   *  CtaText2 so its bigger type can breathe). */
+  spacious?: boolean;
 }
 
 /**
@@ -33,6 +36,7 @@ export default function CtaStatement({
   reveal = "word",
   size,
   pin = true,
+  spacious = false,
 }: CtaStatementProps) {
   // Retained for the `reveal="line"` branch (used by other CtaText variants).
   const [fadeRef, isVisible] = useScrollFadeIn({ threshold: 0.25, rootMargin: "0px 0px -12% 0px" });
@@ -64,27 +68,29 @@ export default function CtaStatement({
 
       // Desktop: PIN + scroll-lock brighten (or plain scrub when pin === false).
       mm.add("(min-width: 768px)", () => {
-        gsap.set(words, { opacity: 0.12, color: "#4c4c4c" });
+        gsap.set(words, { opacity: 0.1, color: "#454545" });
         gsap.to(words, {
           opacity: 1,
           color: "#ffffff",
           ease: "none",
-          stagger: { each: 0.05 },
+          duration: 0.4,
+          stagger: { each: 0.5 },
           scrollTrigger: pin
-            ? { trigger: root, start: "top top", end: "+=80%", pin: true, pinSpacing: true, scrub: true, anticipatePin: 1 }
-            : { trigger: root, start: "top 78%", end: "top 30%", scrub: true },
+            ? { trigger: root, start: "top top", end: "+=90%", pin: true, pinSpacing: true, scrub: true, anticipatePin: 1 }
+            : { trigger: root, start: "top 88%", end: "top 26%", scrub: true },
         });
       });
 
       // Touch / small screens: plain scrubbed brighten, native scroll, no pin.
       mm.add("(max-width: 767.98px)", () => {
-        gsap.set(words, { opacity: 0.18, color: "#5b5b5b" });
+        gsap.set(words, { opacity: 0.1, color: "#454545" });
         gsap.to(words, {
           opacity: 1,
           color: "#ffffff",
           ease: "none",
-          stagger: { each: 0.04 },
-          scrollTrigger: { trigger: root, start: "top 80%", end: "top 35%", scrub: true },
+          duration: 0.4,
+          stagger: { each: 0.5 },
+          scrollTrigger: { trigger: root, start: "top 86%", end: "top 30%", scrub: true },
         });
       });
 

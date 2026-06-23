@@ -16,7 +16,7 @@ const HEADLINE: { word: string; sv?: boolean; br?: boolean }[] = [
  */
 export default function AlignedOtherSide() {
   const hlScope = useRef<HTMLDivElement | null>(null);
-  useWordScrub(hlScope, { start: "top 80%", end: "top 34%" });
+  useWordScrub(hlScope);
   const [rightRef, isRightVisible] = useScrollFadeIn({ threshold: 0.2, rootMargin: "0px 0px -10% 0px" });
 
   return (

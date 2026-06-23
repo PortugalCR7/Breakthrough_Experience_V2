@@ -21,7 +21,9 @@ const LINES = [
 export default function FinalWord() {
   const [ref, isVisible] = useScrollFadeIn({ threshold: 0.12, rootMargin: "0px 0px -5% 0px" });
   const txtScope = useRef<HTMLDivElement | null>(null);
-  useWordScrub(txtScope, { start: "top 78%", end: "bottom 75%", each: 0.03 });
+  // Long prose block: keep the range tracking the block's own bottom (so the
+  // last lines never light up off-screen), but inherit the unified stepped feel.
+  useWordScrub(txtScope, { start: "top 82%", end: "bottom 78%" });
 
   const lineTransition = "opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1)";
 

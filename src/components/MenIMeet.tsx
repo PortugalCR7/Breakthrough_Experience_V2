@@ -33,7 +33,7 @@ export default function MenIMeet() {
   const [gridRef, isGridVisible] = useIntersectionObserver();
   const [closerRef, isCloserVisible] = useIntersectionObserver();
   const hlScope = useRef<HTMLHeadingElement | null>(null);
-  useWordScrub(hlScope, { start: "top 82%", end: "top 38%" });
+  useWordScrub(hlScope);
 
   return (
     <section id="meet" className="scroll-snap-section tex-glow">

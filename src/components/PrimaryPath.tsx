@@ -42,7 +42,7 @@ export default function PrimaryPath() {
   const [itemsRef, itemsVisible] = useScrollFadeIn({ threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
   const magneticRef = useMagnetic({ strength: 0.35 });
   const hlScope = useRef<HTMLHeadingElement | null>(null);
-  useWordScrub(hlScope, { start: "top 82%", end: "top 36%" });
+  useWordScrub(hlScope);
 
   return (
     <section

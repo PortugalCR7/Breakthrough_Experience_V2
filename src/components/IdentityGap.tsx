@@ -56,7 +56,7 @@ const BODY_WORDS = [
 export default function IdentityGap() {
   // Headline + body: scrubbed word narration (operates on existing .word-reveal-span markup)
   const headScope = useRef<HTMLDivElement | null>(null);
-  useWordScrub(headScope, { start: "top 82%", end: "top 34%" });
+  useWordScrub(headScope);
 
   // Staggered gap-row cascade trigger
   const [listRef, listVisible] = useScrollFadeIn({ threshold: 0.1, rootMargin: "0px 0px -10% 0px" });

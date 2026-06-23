@@ -45,7 +45,7 @@ export default function FAQ() {
   const [ref, isVisible] = useIntersectionObserver();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const hlScope = useRef<HTMLHeadingElement | null>(null);
-  useWordScrub(hlScope, { start: "top 84%", end: "top 42%" });
+  useWordScrub(hlScope);
 
   const toggleIndex = (idx: number) => {
     setOpenIndex((prev) => (prev === idx ? null : idx));
