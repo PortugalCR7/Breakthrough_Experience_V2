@@ -1,4 +1,6 @@
+import { useRef } from "react";
 import { useScrollFadeIn } from "../hooks/useScrollFadeIn";
+import { useWordScrub } from "../motion";
 
 const LINES = [
   "I've watched men wait years for the right moment.",
@@ -12,12 +14,14 @@ const LINES = [
 /**
  * Section 14 — The Final Word.
  *
- * Reworked from a 600vh scroll-scrubbed line reveal into a natural-flow section.
- * The portrait fades/slides in as the section enters, and the lines rise in a
- * smooth staggered cascade. No 6×-viewport scroll lock.
+ * V2: the letter brightens word-by-word **as the reader reads down it** (scrubbed
+ * narration over the whole prose block) — the most natural home for the device.
+ * The portrait slides in and the signature resolves after, both on view.
  */
 export default function FinalWord() {
   const [ref, isVisible] = useScrollFadeIn({ threshold: 0.12, rootMargin: "0px 0px -5% 0px" });
+  const txtScope = useRef<HTMLDivElement | null>(null);
+  useWordScrub(txtScope, { start: "top 78%", end: "bottom 75%", each: 0.03 });
 
   const lineTransition = "opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1)";
 
@@ -47,24 +51,18 @@ export default function FinalWord() {
             {/* Kept empty to preserve desktop grid spacing */}
           </div>
 
-          <div className="fw-txt">
+          <div className="fw-txt" ref={txtScope}>
             {LINES.map((line, index) => (
-              <p
-                key={index}
-                className="mt-4 first:mt-0"
-                style={{
-                  opacity: isVisible ? 1 : 0,
-                  transform: isVisible ? "translateY(0)" : "translateY(30px)",
-                  transition: lineTransition,
-                  transitionDelay: `${index * 0.15}s`,
-                  willChange: "transform, opacity",
-                }}
-              >
-                {line}
+              <p key={index} className="mt-4 first:mt-0">
+                {line.split(/\s+/).map((word, wi) => (
+                  <span key={wi} className="word-reveal-span mr-[0.25em]">
+                    {word}
+                  </span>
+                ))}
               </p>
             ))}
 
-            {/* Frank Mondeose signature — reveals after the final line */}
+            {/* Frank Mondeose signature — reveals after the letter */}
             <div
               className="mt-8"
               style={{

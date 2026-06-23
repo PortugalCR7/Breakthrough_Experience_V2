@@ -10,6 +10,10 @@ interface CtaStatementProps {
   reveal?: "word" | "line";
   /** Optional font-size override (any CSS length). Defaults to the shared Hero-capped clamp. */
   size?: string;
+  /** Desktop word-mode only: pin + scroll-lock the beat (default true). Set false
+   *  to keep the grey word-scrub but let the section scroll normally — used when a
+   *  bigger pin (e.g. Decision) follows immediately and back-to-back pins would drag. */
+  pin?: boolean;
 }
 
 /**
@@ -28,6 +32,7 @@ export default function CtaStatement({
   containerId = "",
   reveal = "word",
   size,
+  pin = true,
 }: CtaStatementProps) {
   // Retained for the `reveal="line"` branch (used by other CtaText variants).
   const [fadeRef, isVisible] = useScrollFadeIn({ threshold: 0.25, rootMargin: "0px 0px -12% 0px" });
@@ -57,7 +62,7 @@ export default function CtaStatement({
 
       const mm = gsap.matchMedia();
 
-      // Desktop: PIN + scroll-lock brighten.
+      // Desktop: PIN + scroll-lock brighten (or plain scrub when pin === false).
       mm.add("(min-width: 768px)", () => {
         gsap.set(words, { opacity: 0.12, color: "#4c4c4c" });
         gsap.to(words, {
@@ -65,15 +70,9 @@ export default function CtaStatement({
           color: "#ffffff",
           ease: "none",
           stagger: { each: 0.05 },
-          scrollTrigger: {
-            trigger: root,
-            start: "top top",
-            end: "+=80%",
-            pin: true,
-            pinSpacing: true,
-            scrub: true,
-            anticipatePin: 1,
-          },
+          scrollTrigger: pin
+            ? { trigger: root, start: "top top", end: "+=80%", pin: true, pinSpacing: true, scrub: true, anticipatePin: 1 }
+            : { trigger: root, start: "top 78%", end: "top 30%", scrub: true },
         });
       });
 
@@ -91,7 +90,7 @@ export default function CtaStatement({
 
       return () => mm.revert();
     },
-    { scope: sectionRef, dependencies: [reveal] }
+    { scope: sectionRef, dependencies: [reveal, pin] }
   );
 
   // Merge the fade-in ref (line mode) onto the same section node we pin.

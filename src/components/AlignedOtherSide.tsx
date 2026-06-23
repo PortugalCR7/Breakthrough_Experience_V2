@@ -1,14 +1,22 @@
+import { useRef } from "react";
 import { useScrollFadeIn } from "../hooks/useScrollFadeIn";
+import { useWordScrub } from "../motion";
+
+const HEADLINE: { word: string; sv?: boolean; br?: boolean }[] = [
+  { word: "NOT" }, { word: "PERFECT.", br: true },
+  { word: "NOT" }, { word: "FINISHED.", br: true },
+  { word: "JUST" }, { word: "ALIGNED.", sv: true },
+];
 
 /**
  * Section — The Man on the Other Side.
  *
- * Reworked from a 220vh scroll-scrubbed translate pin into a natural-flow section.
- * The left statement rises in on view; the right-hand bullets cascade with a
- * staggered reveal. Smooth, no per-frame scroll state.
+ * V2: the left statement brightens word-by-word as the reader scrolls (scrubbed
+ * narration); the right-hand bullets cascade in on view. No translate-pin.
  */
 export default function AlignedOtherSide() {
-  const [leftRef, isLeftVisible] = useScrollFadeIn({ threshold: 0.25 });
+  const hlScope = useRef<HTMLDivElement | null>(null);
+  useWordScrub(hlScope, { start: "top 80%", end: "top 34%" });
   const [rightRef, isRightVisible] = useScrollFadeIn({ threshold: 0.2, rootMargin: "0px 0px -10% 0px" });
 
   return (
@@ -20,23 +28,16 @@ export default function AlignedOtherSide() {
       <div className="w">
         <div className="other-g">
 
-          {/* Left column: statement rises in on view */}
-          <div
-            ref={leftRef as any}
-            style={{
-              opacity: isLeftVisible ? 1 : 0,
-              transform: isLeftVisible ? "translateY(0)" : "translateY(60px)",
-              transition: "opacity 0.7s ease-out, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1)",
-              willChange: "opacity, transform",
-            }}
-          >
+          {/* Left column: scrubbed word statement */}
+          <div ref={hlScope}>
             <div className="eyebrow">The Man on the Other Side</div>
             <h2 className="other-hl">
-              NOT PERFECT.
-              <br />
-              NOT FINISHED.
-              <br />
-              JUST <span className="sv">ALIGNED.</span>
+              {HEADLINE.map((w, i) => (
+                <span key={i}>
+                  <span className={`word-reveal-span ${w.sv ? "sv text-[var(--sv)]" : ""}`}>{w.word}</span>
+                  {w.br ? <br /> : " "}
+                </span>
+              ))}
             </h2>
           </div>
 

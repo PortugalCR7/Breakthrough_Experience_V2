@@ -1,6 +1,8 @@
+import { useRef } from "react";
 import { useScrollFadeIn } from "../hooks/useScrollFadeIn";
 import { useIntersectionObserver } from "../hooks/useIntersectionObserver";
 import { GapRowItem } from "../types";
+import { useWordScrub } from "../motion";
 
 const GAP_ROWS: GapRowItem[] = [
   {
@@ -46,14 +48,16 @@ const BODY_WORDS = [
 /**
  * Section 03 — The Identity Gap.
  *
- * Reworked from a scroll-scrubbed pin (which rubber-banded against the scroll)
- * to a natural-flow section with on-view staggered reveals: the headline lights
- * up word-by-word as it enters the viewport, then the four gap rows cascade in.
- * Smooth, GPU-friendly, no per-frame React state.
+ * V2: the headline + definition brighten word-by-word **as the reader scrolls
+ * through them** (scrubbed grey→white narration), then the four gap rows cascade
+ * in. The earlier scrub rubber-banded against raw scroll; driving it through
+ * Lenis + GSAP off a single rAF is what makes it smooth.
  */
 export default function IdentityGap() {
-  // Headline + body word-reveal trigger
-  const [headRef, headVisible] = useScrollFadeIn({ threshold: 0.3, rootMargin: "0px 0px -12% 0px" });
+  // Headline + body: scrubbed word narration (operates on existing .word-reveal-span markup)
+  const headScope = useRef<HTMLDivElement | null>(null);
+  useWordScrub(headScope, { start: "top 82%", end: "top 34%" });
+
   // Staggered gap-row cascade trigger
   const [listRef, listVisible] = useScrollFadeIn({ threshold: 0.1, rootMargin: "0px 0px -10% 0px" });
   // Left metadata reveal
@@ -80,39 +84,22 @@ export default function IdentityGap() {
             </div>
           </div>
 
-          {/* Right side: on-view staggered Word Reveal on headline & body */}
-          <div ref={headRef as any} className="flex flex-col gap-6">
+          {/* Right side: scrubbed Word Reveal on headline & body */}
+          <div ref={headScope} className="flex flex-col gap-6">
             <div className="eyebrow">The Identity Gap</div>
             <h2 className="gap-hl">
               {HEADLINE_WORDS.map((word, index) => (
-                <span
-                  key={`hl-word-${index}`}
-                  className={`word-reveal-span mr-[0.25em] ${headVisible ? "active" : ""}`}
-                  style={{
-                    transitionDelay: `${index * 0.05}s`,
-                    transitionProperty: "color, opacity, text-shadow",
-                  }}
-                >
+                <span key={`hl-word-${index}`} className="word-reveal-span mr-[0.25em]">
                   {word}
                 </span>
               ))}
             </h2>
             <p className="gap-def">
-              {BODY_WORDS.map((word, index) => {
-                const wordIndex = HEADLINE_WORDS.length + index;
-                return (
-                  <span
-                    key={`body-word-${index}`}
-                    className={`word-reveal-span mr-[0.25em] ${headVisible ? "active" : ""}`}
-                    style={{
-                      transitionDelay: `${wordIndex * 0.04}s`,
-                      transitionProperty: "color, opacity",
-                    }}
-                  >
-                    {word}
-                  </span>
-                );
-              })}
+              {BODY_WORDS.map((word, index) => (
+                <span key={`body-word-${index}`} className="word-reveal-span mr-[0.25em]">
+                  {word}
+                </span>
+              ))}
             </p>
           </div>
         </div>

@@ -1,24 +1,91 @@
-import { useScrollFadeIn } from "../hooks/useScrollFadeIn";
+import { useRef } from "react";
 import { useMagnetic } from "../hooks/useMagnetic";
+import { gsap, useGSAP, prefersReducedMotion } from "../motion";
 
+const HEADLINE: { word: string; sv?: boolean }[] = [
+  { word: "THE" }, { word: "MAN" }, { word: "YOU" }, { word: "WANT" }, { word: "TO" },
+  { word: "BECOME" }, { word: "IS" }, { word: "NOT" }, { word: "WAITING" },
+  { word: "IN" }, { word: "THE" }, { word: "FUTURE.", sv: true },
+];
+
+/**
+ * Section 06 — The Decision (climactic set-piece).
+ *
+ * V2: the verdict brightens word-by-word as the reader scrolls (scrubbed
+ * narration). On desktop it becomes a held PIN + scroll-lock — but only when the
+ * set-piece comfortably fits the viewport, so it can never clip on shorter
+ * laptops; otherwise it degrades to a plain scrub. Reduced-motion = instant.
+ */
 export default function Decision() {
-  const [ref, isVisible] = useScrollFadeIn({ threshold: 0.1 });
   const magneticRef = useMagnetic({ strength: 0.35 });
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const heroScope = useRef<HTMLDivElement | null>(null);
+
+  useGSAP(
+    () => {
+      const section = sectionRef.current;
+      const hero = heroScope.current;
+      if (!hero) return;
+      const words = gsap.utils.toArray<HTMLElement>(".word-reveal-span", hero);
+      if (!words.length) return;
+
+      if (prefersReducedMotion()) {
+        gsap.set(words, { opacity: 1, color: "#ffffff" });
+        return;
+      }
+
+      const mm = gsap.matchMedia();
+
+      mm.add("(min-width: 768px)", () => {
+        gsap.set(words, { opacity: 0.14, color: "#4c4c4c" });
+        const fits = !!section && section.offsetHeight <= window.innerHeight * 1.02;
+        gsap.to(words, {
+          opacity: 1,
+          color: "#ffffff",
+          ease: "none",
+          stagger: { each: 0.06 },
+          scrollTrigger: fits
+            ? { trigger: section, start: "top top", end: "+=70%", pin: true, pinSpacing: true, scrub: true, anticipatePin: 1 }
+            : { trigger: hero, start: "top 78%", end: "top 32%", scrub: true },
+        });
+      });
+
+      mm.add("(max-width: 767.98px)", () => {
+        gsap.set(words, { opacity: 0.18, color: "#5b5b5b" });
+        gsap.to(words, {
+          opacity: 1,
+          color: "#ffffff",
+          ease: "none",
+          stagger: { each: 0.05 },
+          scrollTrigger: { trigger: hero, start: "top 80%", end: "top 35%", scrub: true },
+        });
+      });
+
+      return () => mm.revert();
+    },
+    { scope: sectionRef }
+  );
 
   return (
-    <section id="decision" className="scroll-snap-section" ref={ref as any}>
+    <section ref={sectionRef} id="decision" className="scroll-snap-section">
       <div className="w">
-        <div className={`decision-hero fu ${isVisible ? "vis" : ""}`}>
+        <div ref={heroScope} className="decision-hero">
           {/* Meta kicker */}
           <div className="section-num">06</div>
           <div className="eyebrow" style={{ marginTop: "8px", marginBottom: "24px" }}>
             The Decision
           </div>
 
-          {/* Headline — full width, room to breathe */}
+          {/* Headline — scrubbed word reveal */}
           <h2 className="decision-hl text-left" style={{ marginBottom: "32px" }}>
-            THE MAN YOU WANT TO BECOME IS NOT WAITING IN THE{" "}
-            <span className="sv">FUTURE.</span>
+            {HEADLINE.map((w, i) => (
+              <span
+                key={i}
+                className={`word-reveal-span mr-[0.25em] ${w.sv ? "sv text-[var(--sv)]" : ""}`}
+              >
+                {w.word}
+              </span>
+            ))}
           </h2>
 
           {/* Sub-headline */}

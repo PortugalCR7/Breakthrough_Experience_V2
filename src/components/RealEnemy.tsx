@@ -1,4 +1,6 @@
+import { useRef } from "react";
 import { useScrollFadeIn } from "../hooks/useScrollFadeIn";
+import { useWordScrub } from "../motion";
 
 const NARRATIVE_BLOCKS = [
   { id: "b1", className: "", node: <p><strong>They're performing it.</strong></p> },
@@ -8,16 +10,27 @@ const NARRATIVE_BLOCKS = [
   { id: "b5", className: "mt-6 border-l border-[var(--sv)] pl-4 text-white italic", node: <p>Breakthrough begins when the performance ends.</p> },
 ];
 
+/** The big statement, split into scroll-scrub words (line breaks preserved). */
+const HEADLINE: { word: string; sv?: boolean; br?: boolean }[] = [
+  { word: "MOST" }, { word: "MEN", br: true },
+  { word: "AREN'T", br: true },
+  { word: "LIVING", sv: true, br: true },
+  { word: "THEIR", br: true },
+  { word: "LIVES." },
+];
+
 /**
  * Section 02 — The Real Enemy.
  *
- * Reworked from a 250vh scroll-scrubbed translate pin into a natural-flow section.
- * The narrative blocks cascade in with a staggered reveal once the column enters
- * view. No translate-scrub fighting the scroll.
+ * V2: the asymmetric headline brightens word-by-word as the reader scrolls
+ * (scrubbed narration — the signature beat), while the right-hand narrative
+ * blocks cascade in on view. No translate-pin fighting the scroll.
  */
 export default function RealEnemy() {
   const [ref, isVisible] = useScrollFadeIn({ threshold: 0.2 });
   const [blocksRef, blocksVisible] = useScrollFadeIn({ threshold: 0.25, rootMargin: "0px 0px -10% 0px" });
+  const hlScope = useRef<HTMLHeadingElement | null>(null);
+  useWordScrub(hlScope, { start: "top 80%", end: "top 30%" });
 
   return (
     <section
@@ -36,19 +49,16 @@ export default function RealEnemy() {
             </div>
           </div>
 
-          {/* Center Column: Large asymmetric headline */}
-          <div className={`fu ${isVisible ? "vis" : ""}`} style={{ transitionDelay: "0.15s" }}>
-            <div className="eyebrow" style={{ marginBottom: "24px" }}>The Real Enemy</div>
-            <h2 className="enemy-hl text-left">
-              MOST MEN
-              <br />
-              AREN'T
-              <br />
-              <span className="sv text-[var(--sv)]">LIVING</span>
-              <br />
-              THEIR
-              <br />
-              LIVES.
+          {/* Center Column: large asymmetric headline — scrubbed word reveal */}
+          <div>
+            <div className={`eyebrow fu ${isVisible ? "vis" : ""}`} style={{ marginBottom: "24px" }}>The Real Enemy</div>
+            <h2 ref={hlScope} className="enemy-hl text-left">
+              {HEADLINE.map((w, i) => (
+                <span key={i}>
+                  <span className={`word-reveal-span ${w.sv ? "sv text-[var(--sv)]" : ""}`}>{w.word}</span>
+                  {w.br ? <br /> : " "}
+                </span>
+              ))}
             </h2>
           </div>
 
