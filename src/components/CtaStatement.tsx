@@ -112,7 +112,7 @@ export default function CtaStatement({
       className="scroll-snap-section relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-neutral-950 px-[clamp(20px,4.5vw,56px)] py-[clamp(80px,14vh,160px)]"
     >
       <div
-        className="cta-statement w-full max-w-[1100px] mx-auto text-left"
+        className={`cta-statement w-full max-w-[1100px] mx-auto text-left${spacious ? " cta-statement--spacious" : ""}`}
         style={size ? { fontSize: size } : undefined}
       >
         {reveal === "line"

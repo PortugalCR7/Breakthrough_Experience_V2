@@ -1038,6 +1038,12 @@ footer { background: var(--c2); border-top: 1px solid var(--c4); padding: 48px 0
 }
 .cta-statement .cta-ln { display: block; }
 
+/* Spacious mode (CtaText2): a longer, multi-sentence beat that needs room to
+   breathe — looser line-height plus generous space between each line/sentence. */
+.cta-statement--spacious { line-height: 1.32; }
+.cta-statement--spacious .cta-ln { margin-bottom: 0.6em; }
+.cta-statement--spacious .cta-ln:last-child { margin-bottom: 0; }
+
 /* Sticky Word Reveal span styling */
 .word-reveal-span {
   display: inline-block;

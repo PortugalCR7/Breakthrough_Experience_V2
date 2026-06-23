@@ -37,27 +37,29 @@ export default function Decision() {
       const mm = gsap.matchMedia();
 
       mm.add("(min-width: 768px)", () => {
-        gsap.set(words, { opacity: 0.14, color: "#4c4c4c" });
+        gsap.set(words, { opacity: 0.1, color: "#454545" });
         const fits = !!section && section.offsetHeight <= window.innerHeight * 1.02;
         gsap.to(words, {
           opacity: 1,
           color: "#ffffff",
           ease: "none",
-          stagger: { each: 0.06 },
+          duration: 0.4,
+          stagger: { each: 0.5 },
           scrollTrigger: fits
-            ? { trigger: section, start: "top top", end: "+=70%", pin: true, pinSpacing: true, scrub: true, anticipatePin: 1 }
-            : { trigger: hero, start: "top 78%", end: "top 32%", scrub: true },
+            ? { trigger: section, start: "top top", end: "+=85%", pin: true, pinSpacing: true, scrub: true, anticipatePin: 1 }
+            : { trigger: hero, start: "top 88%", end: "top 26%", scrub: true },
         });
       });
 
       mm.add("(max-width: 767.98px)", () => {
-        gsap.set(words, { opacity: 0.18, color: "#5b5b5b" });
+        gsap.set(words, { opacity: 0.1, color: "#454545" });
         gsap.to(words, {
           opacity: 1,
           color: "#ffffff",
           ease: "none",
-          stagger: { each: 0.05 },
-          scrollTrigger: { trigger: hero, start: "top 80%", end: "top 35%", scrub: true },
+          duration: 0.4,
+          stagger: { each: 0.5 },
+          scrollTrigger: { trigger: hero, start: "top 86%", end: "top 30%", scrub: true },
         });
       });
 
