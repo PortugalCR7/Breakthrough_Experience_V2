@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useIntersectionObserver } from "../hooks/useIntersectionObserver";
 import { FAQItem } from "../types";
+import { useWordScrub } from "../motion";
 
 const FAQ_ITEMS: FAQItem[] = [
   {
@@ -43,6 +44,8 @@ const FAQ_ITEMS: FAQItem[] = [
 export default function FAQ() {
   const [ref, isVisible] = useIntersectionObserver();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const hlScope = useRef<HTMLHeadingElement | null>(null);
+  useWordScrub(hlScope, { start: "top 84%", end: "top 42%" });
 
   const toggleIndex = (idx: number) => {
     setOpenIndex((prev) => (prev === idx ? null : idx));
@@ -53,14 +56,19 @@ export default function FAQ() {
       <div className="w">
         <div className={`fu ${isVisible ? "vis" : ""}`}>
           <div className="eyebrow">Real Questions</div>
-          <h2 className="faq-hl">
-            WHAT I GET
-            <br />
-            ASKED. WHAT
-            <br />
-            I ACTUALLY SAY.
-          </h2>
         </div>
+        <h2 ref={hlScope} className="faq-hl">
+          <span className="word-reveal-span">WHAT</span>{" "}
+          <span className="word-reveal-span">I</span>{" "}
+          <span className="word-reveal-span">GET</span>
+          <br />
+          <span className="word-reveal-span">ASKED.</span>{" "}
+          <span className="word-reveal-span">WHAT</span>
+          <br />
+          <span className="word-reveal-span">I</span>{" "}
+          <span className="word-reveal-span">ACTUALLY</span>{" "}
+          <span className="word-reveal-span">SAY.</span>
+        </h2>
 
         <div className="faq-list">
           {FAQ_ITEMS.map((item, idx) => {

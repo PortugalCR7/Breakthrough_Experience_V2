@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useScrollFadeIn } from "../hooks/useScrollFadeIn";
 import { useMagnetic } from "../hooks/useMagnetic";
+import { useWordScrub } from "../motion";
 import { X, ShieldAlert } from "lucide-react";
 
 export default function Alliance() {
   const [ref, isVisible] = useScrollFadeIn({ threshold: 0.1 });
   const [showNotice, setShowNotice] = useState(false);
   const magneticRef = useMagnetic({ strength: 0.35 });
+  const hlScope = useRef<HTMLHeadingElement | null>(null);
+  useWordScrub(hlScope, { start: "top 82%", end: "top 40%" });
 
   const handleApplyClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
@@ -21,10 +24,10 @@ export default function Alliance() {
         </div>
         <div className="pp-grid">
           <div className={`fu ${isVisible ? "vis" : ""} border-r border-white/10 pr-12`}>
-            <h2 className="al-sec-hl">
-              THE
+            <h2 ref={hlScope} className="al-sec-hl">
+              <span className="word-reveal-span">THE</span>
               <br />
-              ALLIANCE
+              <span className="word-reveal-span">ALLIANCE</span>
             </h2>
             <p className="al-sec-intro mt-6 mb-8">
               For men seeking a deeper level of mentorship, accountability, and

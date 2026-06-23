@@ -1,5 +1,7 @@
+import { useRef } from "react";
 import { useScrollFadeIn } from "../hooks/useScrollFadeIn";
 import { useMagnetic } from "../hooks/useMagnetic";
+import { useWordScrub } from "../motion";
 
 const PP_ITEMS = [
   {
@@ -39,6 +41,8 @@ export default function PrimaryPath() {
   const [leftRef, isLeftVisible] = useScrollFadeIn({ threshold: 0.2 });
   const [itemsRef, itemsVisible] = useScrollFadeIn({ threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
   const magneticRef = useMagnetic({ strength: 0.35 });
+  const hlScope = useRef<HTMLHeadingElement | null>(null);
+  useWordScrub(hlScope, { start: "top 82%", end: "top 36%" });
 
   return (
     <section
@@ -54,18 +58,18 @@ export default function PrimaryPath() {
 
           {/* Left Column */}
           <div className="border-r border-white/10 pr-12">
-            <h2 className={`pp-hl fu ${isLeftVisible ? "vis" : ""}`} style={{ transitionDelay: "0.1s", fontSize: "clamp(28px, 4vw, 80px)", lineHeight: "1.1" }}>
-              SIX
+            <h2 ref={hlScope} className="pp-hl" style={{ fontSize: "clamp(28px, 4vw, 80px)", lineHeight: "1.1" }}>
+              <span className="word-reveal-span">SIX</span>
               <br />
-              PRIVATE
+              <span className="word-reveal-span">PRIVATE</span>
               <br />
-              ONE-on-ONE
+              <span className="word-reveal-span">ONE-on-ONE</span>
               <br />
-              SESSIONS
+              <span className="word-reveal-span">SESSIONS</span>
               <br />
-              WITH
+              <span className="word-reveal-span">WITH</span>
               <br />
-              FRANK
+              <span className="word-reveal-span">FRANK</span>
             </h2>
             <div className={`pp-body fu ${isLeftVisible ? "vis" : ""}`} style={{ transitionDelay: "0.15s" }}>
               <p>

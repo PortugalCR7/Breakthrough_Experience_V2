@@ -1,6 +1,8 @@
+import { useRef } from "react";
 import { useIntersectionObserver } from "../hooks/useIntersectionObserver";
 import KineticText from "./KineticText";
 import { ProfileItem } from "../types";
+import { useWordScrub } from "../motion";
 
 const PROFILES: ProfileItem[] = [
   {
@@ -30,6 +32,8 @@ export default function MenIMeet() {
   const [hdrRef, isHdrVisible] = useIntersectionObserver();
   const [gridRef, isGridVisible] = useIntersectionObserver();
   const [closerRef, isCloserVisible] = useIntersectionObserver();
+  const hlScope = useRef<HTMLHeadingElement | null>(null);
+  useWordScrub(hlScope, { start: "top 82%", end: "top 38%" });
 
   return (
     <section id="meet" className="scroll-snap-section tex-glow">
@@ -37,14 +41,16 @@ export default function MenIMeet() {
         <div className="meet-hdr" ref={hdrRef as any}>
           <div className={`fu ${isHdrVisible ? "vis" : ""}`}>
             <div className="eyebrow">The Men I Meet</div>
-            <h2 className="meet-hl">
-              FOR TWENTY
+            <h2 ref={hlScope} className="meet-hl">
+              <span className="word-reveal-span">FOR</span>{" "}
+              <span className="word-reveal-span">TWENTY</span>
               <br />
-              YEARS.
+              <span className="word-reveal-span">YEARS.</span>
               <br />
-              THE SAME
+              <span className="word-reveal-span">THE</span>{" "}
+              <span className="word-reveal-span">SAME</span>
               <br />
-              MAN.
+              <span className="word-reveal-span">MAN.</span>
             </h2>
           </div>
           <div className={`fu ${isHdrVisible ? "vis" : ""}`} style={{ transitionDelay: "0.15s" }}>

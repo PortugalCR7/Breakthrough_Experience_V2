@@ -1,6 +1,8 @@
+import { useRef } from "react";
 import { useScrollFadeIn } from "../hooks/useScrollFadeIn";
 import TypographicReveal from "./TypographicReveal";
 import { SessionItem } from "../types";
+import { useWordScrub } from "../motion";
 
 const SESSIONS: SessionItem[] = [
   {
@@ -65,7 +67,8 @@ const PASSAGE_WORDS = [
  */
 export default function WhatThisActuallyIs() {
   const [topRef, isTopVisible] = useScrollFadeIn({ threshold: 0.2 });
-  const [passageRef, isPassageVisible] = useScrollFadeIn({ threshold: 0.35, rootMargin: "0px 0px -10% 0px" });
+  const passageScope = useRef<HTMLDivElement | null>(null);
+  useWordScrub(passageScope, { start: "top 82%", end: "top 36%" });
   const [workHeadRef, isWorkHeadVisible] = useScrollFadeIn({ threshold: 0.25 });
   const [listRef, isListVisible] = useScrollFadeIn({ threshold: 0.08, rootMargin: "0px 0px -8% 0px" });
   const [codaRef, isCodaVisible] = useScrollFadeIn({ threshold: 0.25 });
@@ -105,18 +108,11 @@ export default function WhatThisActuallyIs() {
                 ))}
               </div>
 
-              {/* Passage — word-by-word reveal on view */}
-              <div ref={passageRef as any} className="is-box vis">
+              {/* Passage — scrubbed word-by-word narration */}
+              <div ref={passageScope} className="is-box vis">
                 <p>
                   {PASSAGE_WORDS.map((word, index) => (
-                    <span
-                      key={`pass-word-${index}`}
-                      className={`word-reveal-span mr-[0.25em] ${isPassageVisible ? "active" : ""}`}
-                      style={{
-                        transitionDelay: `${index * 0.03}s`,
-                        transitionProperty: "color, opacity",
-                      }}
-                    >
+                    <span key={`pass-word-${index}`} className="word-reveal-span mr-[0.25em]">
                       {word}
                     </span>
                   ))}
