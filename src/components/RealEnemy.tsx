@@ -30,7 +30,7 @@ export default function RealEnemy() {
   const [ref, isVisible] = useScrollFadeIn({ threshold: 0.2 });
   const [blocksRef, blocksVisible] = useScrollFadeIn({ threshold: 0.25, rootMargin: "0px 0px -10% 0px" });
   const hlScope = useRef<HTMLHeadingElement | null>(null);
-  useWordScrub(hlScope, { start: "top 80%", end: "top 30%" });
+  useWordScrub(hlScope);
 
   return (
     <section

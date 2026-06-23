@@ -35,9 +35,9 @@ export default function MeetFrank() {
       const mm = gsap.matchMedia();
 
       mm.add("(min-width: 768px)", () => {
-        // Pin the portrait column for the duration of the bio.
+        // Pin the portrait column, locking its bottom edge to the timeline end.
         if (photoColRef.current) {
-          ScrollTriggerPin(photoColRef.current, section);
+          pinPortrait(photoColRef.current, timelineRef.current);
         }
         // Scrubbed portrait parallax (depth).
         if (imgRef.current) {
@@ -199,15 +199,38 @@ export default function MeetFrank() {
 
 /* ── local helpers (kept here so the section is self-contained) ── */
 
-function ScrollTriggerPin(el: HTMLElement, section: HTMLElement) {
+/**
+ * Pin the portrait column and release it the instant the final timeline row's
+ * bottom edge rises to meet the portrait's bottom edge — so the image frame and
+ * the "2026 BREAKTHROUGH" row lock flush and scroll away together (client ask:
+ * "the bottom of the image frame stops | locks at the bottom of the timeline").
+ *
+ * Pinning off the column's OWN top makes its pinned top deterministic (= 12% of
+ * the viewport), so the end can be computed exactly: the last row's bottom is
+ * released when it reaches `12vh + columnHeight` from the viewport top — which is
+ * precisely where the pinned column's bottom sits.
+ */
+function pinPortrait(photoCol: HTMLElement, timeline: HTMLDivElement | null) {
+  const rows = timeline
+    ? gsap.utils.toArray<HTMLElement>(".tl-row", timeline)
+    : [];
+  const lastRow = rows[rows.length - 1];
+  if (!lastRow) return;
+
+  const PIN_TOP = 0.12; // matches start "top 12%"
+
   gsap.timeline({
     scrollTrigger: {
-      trigger: section,
-      start: "top 12%",
-      end: "bottom bottom",
-      pin: el,
+      trigger: photoCol,
+      start: `top ${PIN_TOP * 100}%`,
+      endTrigger: lastRow,
+      end: () =>
+        "bottom top+=" +
+        Math.round(window.innerHeight * PIN_TOP + photoCol.offsetHeight),
+      pin: photoCol,
       pinSpacing: false,
       anticipatePin: 1,
+      invalidateOnRefresh: true,
     },
   });
 }

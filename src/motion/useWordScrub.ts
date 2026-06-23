@@ -10,6 +10,13 @@ interface WordScrubOptions {
   end?: string;
   /** Per-word stagger in seconds (spread across the scrub range). */
   each?: number;
+  /**
+   * Per-word brighten duration (normalised within the scrub timeline).
+   * Keep it **≲ `each`** for a stepped, genuinely word-by-word ignition;
+   * raise it well above `each` and the words bleed together into a sweep.
+   * Defaults to GSAP's 0.5 so existing callers are unaffected.
+   */
+  duration?: number;
   /** Resting opacity of un-read words. */
   dimOpacity?: number;
   /** Resting colour of un-read words. */
@@ -34,11 +41,17 @@ export function useWordScrub(
 ) {
   const {
     selector = ".word-reveal-span",
-    start = "top 82%",
-    end = "top 38%",
-    each = 0.045,
-    dimOpacity = 0.18,
-    dimColor = "#5b5b5b",
+    // Unified "narration" feel, signed off on Vision and propagated site-wide:
+    // a wide scroll range (deliberate, slow) + stepped ignition (duration ≲ each
+    // so each word lights individually, never a sweep) + deep dim→white contrast
+    // so every ignition is unmistakable. Callers override only when a section's
+    // layout needs a different range (e.g. FinalWord tracks its prose block).
+    start = "top 90%",
+    end = "top 24%",
+    each = 0.5,
+    duration = 0.4,
+    dimOpacity = 0.1,
+    dimColor = "#454545",
     litColor = "#ffffff",
   } = opts;
 
@@ -57,6 +70,7 @@ export function useWordScrub(
         opacity: 1,
         color: litColor,
         ease: "none",
+        duration,
         stagger: { each },
         scrollTrigger: {
           trigger: scope.current,

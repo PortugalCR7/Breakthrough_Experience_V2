@@ -1133,6 +1133,13 @@ html { scroll-snap-type: none; }
 .word-reveal-span { -webkit-text-fill-color: currentColor; }
 .word-reveal-span.active { text-shadow: 0 0 30px rgba(255, 255, 255, 0.10); }
 
+/* Footer wordmark cascade: each letter paints its own solid colour instead of
+   inheriting the parent's clipped gradient (which computes to transparent on
+   the children, so only the .sv letters — "THROUGH" — survived; "BREAK" went
+   invisible). Same fix shape as .word-reveal-span above. */
+.foot-letter { -webkit-text-fill-color: currentColor; color: var(--gl); }
+.foot-letter.sv { color: var(--sv); }
+
 /* Section index numerals — quiet vertical gradient for depth */
 .section-num {
   background-image: linear-gradient(180deg, #ffffff 0%, rgba(255, 255, 255, 0.18) 100%);

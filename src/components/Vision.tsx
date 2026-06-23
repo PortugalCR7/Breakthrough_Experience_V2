@@ -37,7 +37,10 @@ export default function Vision() {
   const [metaRef, isMetaVisible] = useIntersectionObserver({ threshold: 0.2 });
   const stmtRef = useRef<HTMLHeadingElement | null>(null);
 
-  useWordScrub(stmtRef, { start: "top 80%", end: "top 30%" });
+  // Vision is the showcase beat that set the signed-off narration feel — it now
+  // simply inherits the unified useWordScrub defaults (stepped, slow, deep
+  // contrast). See useWordScrub.ts for the rationale behind those values.
+  useWordScrub(stmtRef);
 
   return (
     <section

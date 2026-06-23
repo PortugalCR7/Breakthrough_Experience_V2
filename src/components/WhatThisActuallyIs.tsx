@@ -68,7 +68,7 @@ const PASSAGE_WORDS = [
 export default function WhatThisActuallyIs() {
   const [topRef, isTopVisible] = useScrollFadeIn({ threshold: 0.2 });
   const passageScope = useRef<HTMLDivElement | null>(null);
-  useWordScrub(passageScope, { start: "top 82%", end: "top 36%" });
+  useWordScrub(passageScope);
   const [workHeadRef, isWorkHeadVisible] = useScrollFadeIn({ threshold: 0.25 });
   const [listRef, isListVisible] = useScrollFadeIn({ threshold: 0.08, rootMargin: "0px 0px -8% 0px" });
   const [codaRef, isCodaVisible] = useScrollFadeIn({ threshold: 0.25 });
