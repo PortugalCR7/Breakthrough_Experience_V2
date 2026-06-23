@@ -126,8 +126,8 @@ export default function WhatThisActuallyIs() {
         <div ref={workHeadRef as any} className={`fu ${isWorkHeadVisible ? "vis" : ""}`}>
           <div className="eyebrow mb-4">The Work</div>
           <h3 className="sess-hl text-left uppercase mb-12">
-            SIX SESSIONS.
-            ONE DIRECTION.
+            "SIX SESSIONS.",
+            "ONE DIRECTION."
           </h3>
         </div>
 
