@@ -127,7 +127,6 @@ export default function WhatThisActuallyIs() {
           <div className="eyebrow mb-4">The Work</div>
           <h3 className="sess-hl text-left uppercase mb-12">
             SIX SESSIONS.
-            <br />
             ONE DIRECTION.
           </h3>
         </div>
