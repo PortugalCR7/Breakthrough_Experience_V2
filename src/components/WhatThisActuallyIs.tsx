@@ -165,10 +165,7 @@ export default function WhatThisActuallyIs() {
           className={`prog-def gen-reveal ${isCodaVisible ? "vis" : ""}`}
           style={{ marginTop: "40px" }}
         >
-          <p>
-            Direct access. No team members. No handoffs. Frank in the room with
-            you, session by session, doing the actual work.
-          </p>
+         
         </div>
       </div>
     </section>
