@@ -1,5 +1,6 @@
-import { useScrollFadeIn } from "../hooks/useScrollFadeIn";
+import { useRef } from "react";
 import { useIntersectionObserver } from "../hooks/useIntersectionObserver";
+import { useWordScrub } from "../motion";
 
 const VISION_WORDS = [
   { text: "For", isSv: false, isBr: false },
@@ -26,15 +27,17 @@ const VISION_WORDS = [
 /**
  * Section 01 — The Foundation / Vision statement.
  *
- * Reworked from a 180vh scroll-scrubbed word reveal into a natural-flow section
- * whose statement lights up word-by-word, in a smooth staggered cascade, once it
- * enters the viewport. No per-frame scroll state.
+ * V2: the statement lights up word-by-word **as the reader scrolls through it**
+ * (GSAP scrub via useWordScrub) — scroll speed becomes reading pace. This is the
+ * signature narration beat. The earlier in-house scroll-scrub was removed for
+ * jank; driving it through Lenis + GSAP (off the React render loop) is what makes
+ * it read as premium rather than choppy.
  */
 export default function Vision() {
-  const [headRef, headVisible] = useScrollFadeIn({ threshold: 0.3, rootMargin: "0px 0px -12% 0px" });
   const [metaRef, isMetaVisible] = useIntersectionObserver({ threshold: 0.2 });
+  const stmtRef = useRef<HTMLHeadingElement | null>(null);
 
-  let currentWordIndex = 0;
+  useWordScrub(stmtRef, { start: "top 80%", end: "top 30%" });
 
   return (
     <section
@@ -53,27 +56,21 @@ export default function Vision() {
             <div className="section-num">01</div>
           </div>
 
-          {/* Vision statement — staggered word cascade on view */}
-          <div ref={headRef as any} className="asymmetric-panel asymmetric-border-accent vis">
+          {/* Vision statement — scroll-scrubbed word narration */}
+          <div className="asymmetric-panel asymmetric-border-accent vis">
             <div className="eyebrow" style={{ marginBottom: "24px" }}>The Foundation</div>
-            <h2 className="vision-text text-left tracking-tight leading-[0.95]">
+            <h2
+              ref={stmtRef}
+              className="vision-text text-left tracking-tight leading-[0.95]"
+            >
               {VISION_WORDS.map((word, index) => {
                 if (word.isBr) {
                   return <br key={`br-${index}`} />;
                 }
-
-                const wordIdx = currentWordIndex++;
-
                 return (
                   <span
                     key={`word-${index}`}
-                    className={`word-reveal-span mr-[0.25em] ${headVisible ? "active" : ""} ${
-                      word.isSv ? "sv text-[var(--sv)]" : ""
-                    }`}
-                    style={{
-                      transitionDelay: `${wordIdx * 0.05}s`,
-                      transitionProperty: "color, opacity, text-shadow",
-                    }}
+                    className={`word-reveal-span mr-[0.25em] ${word.isSv ? "sv" : ""}`}
                   >
                     {word.text}
                   </span>

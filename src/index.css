@@ -1364,3 +1364,20 @@ p, .gap-def, .enemy-b, .frank-b, .pp-desc, .sr-d, .gr-b,
     transform: none !important;
   }
 }
+
+/* ═══════════════════════════════════════════════
+   ✦ V2 EXPERIENCE LAYER — Lenis smooth-scroll contract ✦
+   Lenis owns scrolling; CSS smooth-scroll must yield to it.
+═══════════════════════════════════════════════ */
+html.lenis,
+html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
+.lenis.lenis-smooth iframe { pointer-events: none; }
+
+/* Safety net: if JS never runs (or reduced-motion), narration words must still
+   read as finished text rather than dim/invisible. */
+@media (prefers-reduced-motion: reduce) {
+  .word-reveal-span { color: #ffffff; opacity: 1 !important; }
+}

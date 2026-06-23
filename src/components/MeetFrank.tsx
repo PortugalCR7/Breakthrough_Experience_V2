@@ -1,32 +1,83 @@
-import React, { useState } from "react";
+import { useRef, useState } from "react";
 import { useScrollFadeIn } from "../hooks/useScrollFadeIn";
-import { useParallax } from "../hooks/useParallax";
+import { gsap, useGSAP, prefersReducedMotion } from "../motion";
 
+/**
+ * Section — Meet Frank.
+ *
+ * V2 scroll choreography (desktop only):
+ *  - the portrait column PINS while the long bio scrolls past it (editorial
+ *    "held image" beat),
+ *  - the portrait drifts with a scrubbed parallax for depth,
+ *  - the career timeline rows "draw in" as the reader scrolls the timeline.
+ * Touch screens stack normally with a light reveal — no pin, native momentum.
+ * Replaces the old per-frame useParallax (React-state-on-scroll) entirely.
+ */
 export default function MeetFrank() {
-  const [photoRef, isPhotoVisible] = useScrollFadeIn({ threshold: 0.1 });
   const [bioRef, isBioVisible] = useScrollFadeIn({ threshold: 0.1 });
   const [imgFailed, setImgFailed] = useState(false);
-  const { elementRef: parallaxRef, offset: parallaxOffset } = useParallax(-0.1);
+
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const photoColRef = useRef<HTMLDivElement | null>(null);
+  const imgRef = useRef<HTMLImageElement | null>(null);
+  const timelineRef = useRef<HTMLDivElement | null>(null);
+
+  useGSAP(
+    () => {
+      const section = sectionRef.current;
+      if (!section) return;
+
+      if (prefersReducedMotion()) {
+        if (imgRef.current) gsap.set(imgRef.current, { scale: 1.12 });
+        return;
+      }
+
+      const mm = gsap.matchMedia();
+
+      mm.add("(min-width: 768px)", () => {
+        // Pin the portrait column for the duration of the bio.
+        if (photoColRef.current) {
+          ScrollTriggerPin(photoColRef.current, section);
+        }
+        // Scrubbed portrait parallax (depth).
+        if (imgRef.current) {
+          gsap.set(imgRef.current, { scale: 1.16 });
+          gsap.fromTo(
+            imgRef.current,
+            { yPercent: -6 },
+            {
+              yPercent: 6,
+              ease: "none",
+              scrollTrigger: { trigger: section, start: "top bottom", end: "bottom top", scrub: true },
+            }
+          );
+        }
+        // Timeline rows draw in on scroll.
+        timelineDraw(timelineRef.current, true);
+      });
+
+      mm.add("(max-width: 767.98px)", () => {
+        if (imgRef.current) gsap.set(imgRef.current, { scale: 1.12 });
+        timelineDraw(timelineRef.current, false);
+      });
+
+      return () => mm.revert();
+    },
+    { scope: sectionRef, dependencies: [] }
+  );
 
   return (
-    <section id="frank" className="scroll-snap-section tex-glow tex-glow--alt">
+    <section ref={sectionRef} id="frank" className="scroll-snap-section tex-glow tex-glow--alt">
       <div className="ww">
         <div className="frank-g">
-          <div
-            ref={(node) => {
-              // Combine both intersection observer and parallax references
-              (photoRef as any).current = node;
-              parallaxRef.current = node;
-            }}
-            className={`frank-photo-col fi ${isPhotoVisible ? "vis" : ""} bg-neutral-900`}
-          >
+          <div ref={photoColRef} className="frank-photo-col bg-neutral-900">
             <div className="frank-portrait relative overflow-hidden bg-neutral-900 border border-neutral-800 rounded-lg">
               {!imgFailed ? (
                 <img
+                  ref={imgRef}
                   src="/frank_founder_updated.jpg"
                   alt="Frank Mondeose Portrait"
-                  className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-75 ease-out scale-110"
-                  style={{ transform: `scale(1.15) translateY(${parallaxOffset}px)` }}
+                  className="absolute inset-0 w-full h-full object-cover object-center"
                   referrerPolicy="no-referrer"
                   onError={() => setImgFailed(true)}
                 />
@@ -101,7 +152,7 @@ export default function MeetFrank() {
 
             <div className={`fu ${isBioVisible ? "vis" : ""}`} style={{ transitionDelay: "0.35s" }}>
               <span className="tl-lbl">The path that built Breakthrough</span>
-              <div className="tl">
+              <div className="tl" ref={timelineRef}>
                 <div className="tl-row">
                   <span className="tl-yr">2005</span>
                   <span className="tl-dash">——</span>
@@ -144,4 +195,34 @@ export default function MeetFrank() {
       </div>
     </section>
   );
+}
+
+/* ── local helpers (kept here so the section is self-contained) ── */
+
+function ScrollTriggerPin(el: HTMLElement, section: HTMLElement) {
+  gsap.timeline({
+    scrollTrigger: {
+      trigger: section,
+      start: "top 12%",
+      end: "bottom bottom",
+      pin: el,
+      pinSpacing: false,
+      anticipatePin: 1,
+    },
+  });
+}
+
+function timelineDraw(tl: HTMLDivElement | null, scrub: boolean) {
+  if (!tl) return;
+  const rows = gsap.utils.toArray<HTMLElement>(".tl-row", tl);
+  if (!rows.length) return;
+  gsap.from(rows, {
+    opacity: 0,
+    y: 22,
+    ease: scrub ? "none" : "power2.out",
+    stagger: scrub ? { each: 0.08 } : 0.06,
+    scrollTrigger: scrub
+      ? { trigger: tl, start: "top 85%", end: "bottom 60%", scrub: true }
+      : { trigger: tl, start: "top 85%", once: true },
+  });
 }

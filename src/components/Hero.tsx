@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { useParallax } from "../hooks/useParallax";
+import { useEffect, useState, useRef } from "react";
 import { useMagnetic } from "../hooks/useMagnetic";
+import { gsap, useGSAP, prefersReducedMotion } from "../motion";
 
 export default function Hero() {
   const magneticRef = useMagnetic({ strength: 0.35 });
@@ -63,17 +63,38 @@ export default function Hero() {
     };
   }, []);
 
-  const { elementRef, offset } = useParallax(-0.12);
+  const heroRef = useRef<HTMLElement | null>(null);
+  const contentRef = useRef<HTMLDivElement | null>(null);
+  const photoRef = useRef<HTMLDivElement | null>(null);
+
+  // Cinematic scroll-out: background drifts down (parallax depth) while the
+  // content lifts and dissolves as the reader leaves the first screen. Scrubbed
+  // through GSAP/Lenis — replaces the old per-frame useParallax React state.
+  useGSAP(
+    () => {
+      if (prefersReducedMotion()) return;
+      const hero = heroRef.current;
+      if (!hero) return;
+      const st = { trigger: hero, start: "top top", end: "bottom top", scrub: true };
+      if (photoRef.current) {
+        gsap.to(photoRef.current, { yPercent: 14, ease: "none", scrollTrigger: st });
+      }
+      if (contentRef.current) {
+        gsap.to(contentRef.current, { yPercent: -10, opacity: 0.12, ease: "none", scrollTrigger: st });
+      }
+    },
+    { scope: heroRef }
+  );
 
   return (
-    <section id="hero" className="relative grid min-h-screen scroll-snap-section">
+    <section ref={heroRef} id="hero" className="relative grid min-h-screen scroll-snap-section">
       <div
         id="hGhost"
         className={`hero-ghost ${scrollGhostActive ? "s" : ""}`}
       >
         BREAKTHROUGH
       </div>
-      <div className="hero-in relative z-10">
+      <div ref={contentRef} className="hero-in relative z-10">
         <div id="hOl" className={`hero-ol ${olActive ? "s" : ""}`}>
           BREAKTHROUGH WITH FRANK MONDEOSE
         </div>
@@ -147,8 +168,8 @@ export default function Hero() {
           <span className="scroll-text">scroll</span>
         </div>
       </div>
-      <div 
-        ref={elementRef as any}
+      <div
+        ref={photoRef}
         className="hero-photo-col relative overflow-hidden z-1 bg-neutral-950 flex items-center justify-center"
       >
         {bgImages.map((src, idx) => (
@@ -160,7 +181,7 @@ export default function Hero() {
             style={{
               opacity: currentBgIdx === idx ? 0.62 : 0,
               filter: "grayscale(100%) brightness(0.72) contrast(1.08)",
-              transform: `translateY(${offset}px) scale(1.15)`,
+              transform: "scale(1.15)",
             }}
             referrerPolicy="no-referrer"
           />
