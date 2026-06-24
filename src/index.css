@@ -338,7 +338,7 @@ body::after {
 }
 .anchor-body .dim { color: var(--sv); }
 .anchor-quote {
-  margin-top: clamp(48px,6vw,80px);
+  margin-top: clamp(24px,3vw,40px);
   border-left: 3px solid var(--sv); padding-left: clamp(28px,4vw,48px);
   display: flex; flex-direction: column; gap: clamp(20px,2.6vw,32px);
 }
@@ -494,6 +494,7 @@ body::after {
 .prog-def p { font-family: var(--fb); font-size: 16px; font-weight: 300; line-height: 1.75; color: var(--gd); }
 .prog-def p+p { margin-top: 12px; }
 .prog-def strong { color: var(--gl); font-weight: 500; }
+.not-lead { font-family: var(--fb); font-size: clamp(15px,1.6vw,18px); font-weight: 300; color: var(--gd); margin: 28px 0 16px; }
 .not-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 40px; }
 .not-item {
   background: transparent; padding: 12px 20px;
@@ -510,7 +511,7 @@ body::after {
 .is-box { border-left: 3px solid var(--sv); padding: 28px 36px; background: rgba(122,150,168,.04); margin-bottom: 60px; }
 .is-box p { font-family: var(--fs); font-size: clamp(19px,2.2vw,26px); font-weight: 400; font-style: italic; line-height: 1.45; color: var(--gl); }
 .sess-lbl { font-family: var(--fm); font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: var(--mu); margin-bottom: 8px; }
-.sess-hl { font-family: var(--fd); font-size: var(--h3); color: var(--gl); margin-bottom: 40px; }
+.sess-hl { font-family: var(--fd); font-size: var(--h3); line-height: 1; color: var(--gl); margin-bottom: 40px; }
 .sess-list { display: flex; flex-direction: column; }
 .sess-row { display: grid; grid-template-columns: 52px 1fr 1.5fr; gap: 0 48px; padding: 32px 0; border-top: 1px solid var(--c4); }
 .sess-row:last-child { border-bottom: 1px solid var(--c4); }
@@ -574,7 +575,7 @@ body::after {
    S10 · PRIMARY PATH
 ═══════════════════════════════════════════════ */
 #primary-path { border-bottom: 1px solid var(--c4); }
-.pp-grid { display: grid; grid-template-columns: 400px 1fr; gap: 80px; align-items: start; }
+.pp-grid { display: grid; grid-template-columns: 400px 1fr; gap: 80px; align-items: stretch; }
 .pp-hl { font-family: var(--fd); font-size: var(--h2); line-height:.88; letter-spacing:-.025em; color:var(--gl); margin-bottom:24px; text-transform:uppercase; }
 .pp-body { font-family:var(--fb); font-size:16px; font-weight:300; line-height:1.8; color:var(--gd); margin-bottom:36px; }
 .pp-body p+p { margin-top:14px; }
@@ -678,16 +679,9 @@ body::after {
 .decision-b { font-family: var(--fb); font-size: clamp(16px,1.9vw,20px); font-weight: 300; line-height: 1.75; color: var(--gd); margin-bottom: 0; }
 .decision-body { max-width: 640px; }
 
-/* ── Unified body prose → Jost at the Decision-body size (David's directive) ──
-   Section intros, bios, letters and FAQ answers share one font + size.
-   Structured breakdowns (work sessions .sr-d, gap items .gr-b/.gap-def,
-   primary-path checklist .pp-desc) and the serif editorial accent (.mid-sub)
-   are intentionally left on their own treatment. */
-.meet-intro, .p-body, .other-sub, .frank-b, .pp-body,
-.al-sec-intro, .decision-b, .enemy-b, .faq-ai {
-  font-family: var(--fu);
-  font-size: clamp(16px, 1.9vw, 20px);
-}
+/* Body prose keeps its per-section treatment (DM Sans + each section's own
+   size). The earlier blanket Jost unification overreached and was reverted so
+   each section can be tuned deliberately. */
 .decision-cta { margin-top: 40px; }
 .decision-b p+p { margin-top: 14px; }
 

@@ -57,7 +57,7 @@ export default function PrimaryPath() {
         <div className="pp-grid">
 
           {/* Left Column */}
-          <div className="border-r border-white/10 pr-12">
+          <div className="border-r border-white/10 pr-12 flex flex-col">
             <h2 ref={hlScope} className="pp-hl" style={{ fontSize: "clamp(28px, 4vw, 80px)", lineHeight: "1.1" }}>
               <span className="word-reveal-span">SIX</span>
               <br />
@@ -81,7 +81,7 @@ export default function PrimaryPath() {
                 session is live, present, and built around the man in front of me.
               </p>
             </div>
-            <div className={`fu ${isLeftVisible ? "vis" : ""}`} style={{ transitionDelay: "0.2s", marginTop: "32px" }}>
+            <div className={`fu ${isLeftVisible ? "vis" : ""} mt-auto pt-8`} style={{ transitionDelay: "0.2s" }}>
               <div style={{ marginBottom: "16px" }}>
                 <a ref={magneticRef as any} href="#checkout" className="btn-tactile btn-stack w-full">
                   <span className="btn-tactile-wrap">
@@ -102,7 +102,7 @@ export default function PrimaryPath() {
           </div>
 
           {/* Right Column: staggered item reveal */}
-          <div ref={itemsRef as any}>
+          <div ref={itemsRef as any} className="flex flex-col">
             <div className="pp-items">
               {PP_ITEMS.map((item, index) => (
                 <div
@@ -119,9 +119,9 @@ export default function PrimaryPath() {
               ))}
             </div>
 
-            {/* Pricing — lands last */}
+            {/* Pricing — lands last, bottom-aligned with the left CTA block */}
             <div
-              className={`mt-12 pt-8 border-t border-white/5 block-reveal-item ${itemsVisible ? "active" : ""}`}
+              className={`mt-auto pt-12 block-reveal-item ${itemsVisible ? "active" : ""}`}
               style={{ transitionDelay: `${PP_ITEMS.length * 0.1}s` }}
             >
               <div className="pp-price-lbl">Investment</div>

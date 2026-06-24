@@ -23,7 +23,7 @@ export default function Alliance() {
           The Deeper Path
         </div>
         <div className="pp-grid">
-          <div className={`fu ${isVisible ? "vis" : ""} border-r border-white/10 pr-12`}>
+          <div className={`fu ${isVisible ? "vis" : ""} border-r border-white/10 pr-12 flex flex-col`}>
             <h2 ref={hlScope} className="al-sec-hl">
               <span className="word-reveal-span">THE</span>
               <br />
@@ -33,7 +33,7 @@ export default function Alliance() {
               For men seeking a deeper level of mentorship, accountability, and
               access. This is where the real work becomes a way of life.
             </p>
-            <div className="mt-8">
+            <div className="mt-auto pt-8">
               <a ref={magneticRef as any} href="#" className="btn-tactile btn-stack w-full" onClick={handleApplyClick}>
                 <span className="btn-tactile-wrap">
                   <span className="btn-tactile-text">Apply For<br />The Alliance</span>
@@ -44,7 +44,7 @@ export default function Alliance() {
             </div>
           </div>
 
-          <div className={`fu ${isVisible ? "vis" : ""}`} style={{ transitionDelay: "0.15s" }}>
+          <div className={`fu ${isVisible ? "vis" : ""} flex flex-col`} style={{ transitionDelay: "0.15s" }}>
             <div className="al-incl-lbl">What's Included</div>
             <div className="al-incl-list">
               <div className="al-incl-row">
@@ -61,7 +61,7 @@ export default function Alliance() {
               </div>
             </div>
 
-            <div className="mt-12 pt-8 border-t border-white/5">
+            <div className="mt-auto pt-12">
               <p className="al-right-note border-b-0 pb-0 mb-0">
                 Application required. Discernment on both sides. The Alliance is not
                 for every man. It is for the man who has closed the initial gap and

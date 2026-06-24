@@ -54,6 +54,11 @@ export default function MenIMeet() {
             </h2>
           </div>
           <div className={`fu ${isHdrVisible ? "vis" : ""}`} style={{ transitionDelay: "0.15s" }}>
+            {/* Invisible eyebrow spacer: matches the left column's eyebrow height so the
+                body's first line top-aligns with the headline's first line ("FOR"). */}
+            <div className="eyebrow" aria-hidden="true" style={{ visibility: "hidden" }}>
+              The Men I Meet
+            </div>
             <div className="meet-intro text-left pt-0 mt-0 flex flex-col gap-4">
               <p className="leading-relaxed">
                 <KineticText text="Different stories. Different conversations. The same realization: You already know there is more." />

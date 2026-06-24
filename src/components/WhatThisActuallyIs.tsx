@@ -116,16 +116,7 @@ export default function WhatThisActuallyIs() {
             </h2>
 
             <div className={`fu ${isTopVisible ? "vis" : ""}`} style={{ transitionDelay: "0.25s" }}>
-              <div className="not-row mb-8 flex flex-wrap gap-x-6 gap-y-3">
-                {NOT_ITEMS.map((item) => (
-                  <div key={item} className="not-item group cursor-pointer">
-                    <span className="x mr-2">✕</span>
-                    <s className="transition-colors duration-300 group-hover:text-[var(--gl)]">{item}</s>
-                  </div>
-                ))}
-              </div>
-
-              {/* Passage — scrubbed word-by-word narration */}
+              {/* Passage — scrubbed word-by-word narration (leads the block) */}
               <div ref={passageScope} className="is-box vis">
                 <p>
                   {PASSAGE_WORDS.map((word, index) => (
@@ -135,13 +126,24 @@ export default function WhatThisActuallyIs() {
                   ))}
                 </p>
               </div>
+
+              {/* Lead-in + the "not this" chips */}
+              <div className="not-lead">Breakthrough is not…</div>
+              <div className="not-row flex flex-wrap gap-x-6 gap-y-3">
+                {NOT_ITEMS.map((item) => (
+                  <div key={item} className="not-item group cursor-pointer">
+                    <span className="x mr-2">✕</span>
+                    <s className="transition-colors duration-300 group-hover:text-[var(--gl)]">{item}</s>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
 
         {/* The Work — six sessions */}
         <div ref={workHeadRef as any} className={`fu ${isWorkHeadVisible ? "vis" : ""}`}>
-          <div className="eyebrow mb-4">The Work</div>
+          <div className="eyebrow mb-4">The Path</div>
           <h3 ref={sessHlRef} className="sess-hl text-left uppercase mb-12">
             <span className="word-reveal-span mr-[0.25em]">SIX</span>
             <span className="word-reveal-span mr-[0.25em]">SESSIONS.</span>
