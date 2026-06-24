@@ -9,7 +9,6 @@ import AnchorQuote from "./components/AnchorQuote";
 import MenIMeet from "./components/MenIMeet";
 import RealEnemy from "./components/RealEnemy";
 import IdentityGap from "./components/IdentityGap";
-import IdentityGapReveal from "./components/IdentityGapReveal";
 import AlignedOtherSide from "./components/AlignedOtherSide";
 import MeetFrank from "./components/MeetFrank";
 import WhatThisActuallyIs from "./components/WhatThisActuallyIs";
@@ -67,9 +66,6 @@ export default function App() {
 
         {/* Section 4-B: Identity Gap pattern grid elements */}
         <IdentityGap />
-
-        {/* Section 4-C: Identity Gap made literal — draggable before/after reveal */}
-        <IdentityGapReveal />
 
         {/* Section 5: Grounded aligned checkboxes checklist */}
         <AlignedOtherSide />

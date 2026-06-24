@@ -16,6 +16,7 @@ const INTERACTIVE =
 export default function CustomCursor() {
   const rootRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
+  const glowRef = useRef<HTMLDivElement>(null);
   const mouse = useRef({ x: 0, y: 0 });
   const ring = useRef({ x: 0, y: 0 });
 
@@ -40,12 +41,17 @@ export default function CustomCursor() {
       mouse.current.x = e.clientX;
       mouse.current.y = e.clientY;
       if (rootRef.current) rootRef.current.style.opacity = "1";
+      // Clearing the inline opacity lets the glow fall back to its CSS rest value.
+      if (glowRef.current) glowRef.current.style.opacity = "";
     };
     const onDown = () => ringRef.current?.classList.add("is-down");
     const onUp = () => ringRef.current?.classList.remove("is-down");
     // Fade out only on a genuine window exit (relatedTarget null), not internal moves.
     const onWindowOut = (e: MouseEvent) => {
-      if (!e.relatedTarget && rootRef.current) rootRef.current.style.opacity = "0";
+      if (!e.relatedTarget) {
+        if (rootRef.current) rootRef.current.style.opacity = "0";
+        if (glowRef.current) glowRef.current.style.opacity = "0";
+      }
     };
 
     const onOver = (e: MouseEvent) => {
@@ -82,6 +88,12 @@ export default function CustomCursor() {
       if (r) {
         r.style.transform = `translate3d(${ring.current.x}px, ${ring.current.y}px, 0) translate(-50%, -50%)`;
       }
+      // Soft tracking halo follows the live pointer (snappier than the inertial
+      // ring) and lives outside the difference-blend root so it reads as a glow.
+      const g = glowRef.current;
+      if (g) {
+        g.style.transform = `translate3d(${mouse.current.x}px, ${mouse.current.y}px, 0) translate(-50%, -50%)`;
+      }
       raf = requestAnimationFrame(loop);
     };
     raf = requestAnimationFrame(loop);
@@ -100,10 +112,15 @@ export default function CustomCursor() {
   if (!mounted) return null;
 
   return (
-    <div ref={rootRef} className="cursor-root" aria-hidden="true">
-      <div ref={ringRef} className={`cursor-ring cursor-${variant}`}>
-        <span className="cursor-label">{label}</span>
+    <>
+      {/* Soft monochrome tracking halo — outside the difference-blend root so it
+          reads as a glow, not a harsh inversion. */}
+      <div ref={glowRef} className="cursor-glow" aria-hidden="true" />
+      <div ref={rootRef} className="cursor-root" aria-hidden="true">
+        <div ref={ringRef} className={`cursor-ring cursor-${variant}`}>
+          <span className="cursor-label">{label}</span>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

@@ -1,6 +1,5 @@
 import { useRef } from "react";
-import { useScrollFadeIn } from "../hooks/useScrollFadeIn";
-import { useWordScrub } from "../motion";
+import { gsap, useGSAP, prefersReducedMotion, ScrollTrigger } from "../motion";
 
 const LINES = [
   "I've watched men wait years for the right moment.",
@@ -12,37 +11,108 @@ const LINES = [
 ];
 
 /**
- * Section 14 — The Final Word.
+ * Section 14 — The Final Word (closing statement).
  *
- * V2: the letter brightens word-by-word **as the reader reads down it** (scrubbed
- * narration over the whole prose block) — the most natural home for the device.
- * The portrait slides in and the signature resolves after, both on view.
+ * V3: a held PIN + scroll-lock (modelled on Decision). While pinned, Frank's
+ * full letter ignites word-by-word and only releases once every word has lit.
+ * The portrait is revealed immediately at pin start — together with the first
+ * words — and the signature resolves at/after the final line. On viewports too
+ * short to hold the set-piece it degrades to a plain non-pinned scrub so nothing
+ * clips; reduced-motion shows the whole letter + portrait instantly.
  */
 export default function FinalWord() {
-  const [ref, isVisible] = useScrollFadeIn({ threshold: 0.12, rootMargin: "0px 0px -5% 0px" });
+  const sectionRef = useRef<HTMLElement | null>(null);
   const txtScope = useRef<HTMLDivElement | null>(null);
-  // Long prose block: keep the range tracking the block's own bottom (so the
-  // last lines never light up off-screen), but inherit the unified stepped feel.
-  useWordScrub(txtScope, { start: "top 82%", end: "bottom 78%" });
+  const portraitRef = useRef<HTMLDivElement | null>(null);
+  const sigRef = useRef<HTMLDivElement | null>(null);
 
-  const lineTransition = "opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1)";
+  useGSAP(
+    () => {
+      const section = sectionRef.current;
+      const scope = txtScope.current;
+      const portrait = portraitRef.current;
+      const sig = sigRef.current;
+      if (!scope) return;
+      const words = gsap.utils.toArray<HTMLElement>(".word-reveal-span", scope);
+      if (!words.length) return;
+
+      if (prefersReducedMotion()) {
+        gsap.set(words, { opacity: 1, color: "#ffffff" });
+        if (portrait) gsap.set(portrait, { opacity: 1, x: 0 });
+        if (sig) gsap.set(sig, { opacity: 1, y: 0 });
+        return;
+      }
+
+      const build = (st: ScrollTrigger.Vars) => {
+        gsap.set(words, { opacity: 0.1, color: "#454545" });
+        if (portrait) gsap.set(portrait, { opacity: 0, x: -28 });
+        if (sig) gsap.set(sig, { opacity: 0, y: 30 });
+
+        const tl = gsap.timeline({ scrollTrigger: st });
+        // Portrait reveals immediately — at pin start, alongside the first words.
+        if (portrait) tl.to(portrait, { opacity: 1, x: 0, ease: "none", duration: 0.5 }, 0);
+        tl.to(
+          words,
+          { opacity: 1, color: "#ffffff", ease: "none", duration: 0.4, stagger: { each: 0.5 } },
+          0
+        );
+        // Signature resolves at/after the final line.
+        if (sig) tl.to(sig, { opacity: 1, y: 0, ease: "none", duration: 0.6 }, ">-0.3");
+        return tl;
+      };
+
+      const mm = gsap.matchMedia();
+
+      mm.add("(min-width: 768px)", () => {
+        // Only pin when the set-piece comfortably fits the viewport, so it can
+        // never clip on shorter laptops; otherwise fall back to a plain scrub.
+        const fits = !!section && section.offsetHeight <= window.innerHeight * 1.02;
+        const tl = build(
+          fits
+            ? {
+                trigger: section,
+                start: "top top",
+                end: "+=95%",
+                pin: true,
+                pinSpacing: true,
+                scrub: true,
+                anticipatePin: 1,
+              }
+            : { trigger: scope, start: "top 85%", end: "top 22%", scrub: true }
+        );
+        return () => {
+          tl.scrollTrigger?.kill();
+          tl.kill();
+        };
+      });
+
+      mm.add("(max-width: 767.98px)", () => {
+        const tl = build({ trigger: scope, start: "top 85%", end: "top 28%", scrub: true });
+        return () => {
+          tl.scrollTrigger?.kill();
+          tl.kill();
+        };
+      });
+
+      return () => mm.revert();
+    },
+    { scope: sectionRef }
+  );
 
   return (
     <section
       id="finalword"
-      ref={ref as any}
+      ref={sectionRef}
       className="scroll-snap-section relative w-full overflow-hidden"
       style={{ paddingTop: "var(--secpad)", paddingBottom: "var(--secpad)" }}
     >
-      {/* Frank portrait — bleeds off the left edge into the black, no frame. */}
+      {/* Frank portrait — bleeds off the left edge into the black, no frame.
+          GSAP controls its reveal, so the CSS transition is disabled here. */}
       <div
         className="fw-portrait"
+        ref={portraitRef}
         aria-hidden="true"
-        style={{
-          opacity: isVisible ? 1 : 0,
-          transform: isVisible ? "translateX(0)" : "translateX(-28px)",
-          transition: "opacity 1s ease-out, transform 1s cubic-bezier(0.16, 1, 0.3, 1)",
-        }}
+        style={{ opacity: 0, transition: "none" }}
       >
         <img src="/frank_founder_updated.jpg" alt="" referrerPolicy="no-referrer" />
       </div>
@@ -64,17 +134,8 @@ export default function FinalWord() {
               </p>
             ))}
 
-            {/* Frank Mondeose signature — reveals after the letter */}
-            <div
-              className="mt-8"
-              style={{
-                opacity: isVisible ? 1 : 0,
-                transform: isVisible ? "translateY(0)" : "translateY(30px)",
-                transition: lineTransition,
-                transitionDelay: `${LINES.length * 0.15}s`,
-                willChange: "transform, opacity",
-              }}
-            >
+            {/* Frank Mondeose signature — resolves at/after the final line */}
+            <div ref={sigRef} className="mt-8" style={{ opacity: 0 }}>
               <div className="fw-sig">Frank Mondeose</div>
               <div className="fw-ttls">
                 Teacher of Teachers
@@ -85,7 +146,6 @@ export default function FinalWord() {
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </section>
