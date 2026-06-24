@@ -1,99 +1,115 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
+type Variant = "default" | "hover" | "label";
+
+const INTERACTIVE =
+  'a, button, [role="button"], input, textarea, select, label, summary, .interactive-card, .bar-btn, .btn-tactile, .sl-btn, .sl-dot';
+
+/**
+ * Custom cursor with morphing states.
+ *
+ * A monochrome dot tracks the pointer 1:1 while a ring trails with inertia. Over
+ * interactive targets the ring expands; targets carrying `data-cursor-label`
+ * morph it into a labelled pill. The whole cursor uses `mix-blend-mode: difference`
+ * so it inverts against any background. Hidden on touch / coarse-pointer devices.
+ */
 export default function CustomCursor() {
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [trail, setTrail] = useState({ x: 0, y: 0 });
-  const [clicked, setClicked] = useState(false);
-  const [hovered, setHovered] = useState(false);
-  const [hidden, setHidden] = useState(true);
-  const trailRef = useRef({ x: 0, y: 0 });
-  const mouseRef = useRef({ x: 0, y: 0 });
+  const rootRef = useRef<HTMLDivElement>(null);
+  const dotRef = useRef<HTMLDivElement>(null);
+  const ringRef = useRef<HTMLDivElement>(null);
+  const mouse = useRef({ x: 0, y: 0 });
+  const ring = useRef({ x: 0, y: 0 });
+
+  const [mounted, setMounted] = useState(false);
+  const [variant, setVariant] = useState<Variant>("default");
+  const [label, setLabel] = useState("");
 
   useEffect(() => {
-    // Detect mobile / touch devices to prevent rendering cursor
-    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-    if (isTouchDevice) {
-      return;
-    }
+    // A fine pointer (mouse/trackpad) must be present; pure-touch devices are skipped.
+    const hasFinePointer =
+      typeof window.matchMedia === "function" &&
+      window.matchMedia("(any-pointer: fine)").matches;
+    const isTouchOnly =
+      ("ontouchstart" in window || navigator.maxTouchPoints > 0) &&
+      !hasFinePointer;
+    if (isTouchOnly || !hasFinePointer) return;
 
-    setHidden(false);
+    document.documentElement.classList.add("has-custom-cursor");
+    setMounted(true);
 
-    const onMouseMove = (e: MouseEvent) => {
-      mouseRef.current = { x: e.clientX, y: e.clientY };
-      setPosition({ x: e.clientX, y: e.clientY });
+    const onMove = (e: MouseEvent) => {
+      mouse.current.x = e.clientX;
+      mouse.current.y = e.clientY;
+      const dot = dotRef.current;
+      if (dot) {
+        dot.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%)`;
+      }
+      if (rootRef.current) rootRef.current.style.opacity = "1";
+    };
+    const onDown = () => ringRef.current?.classList.add("is-down");
+    const onUp = () => ringRef.current?.classList.remove("is-down");
+    // Fade out only on a genuine window exit (relatedTarget null), not internal moves.
+    const onWindowOut = (e: MouseEvent) => {
+      if (!e.relatedTarget && rootRef.current) rootRef.current.style.opacity = "0";
     };
 
-    const onMouseDown = () => setClicked(true);
-    const onMouseUp = () => setClicked(false);
-    const onMouseLeave = () => setHidden(true);
-    const onMouseEnter = () => setHidden(false);
-
-    // Event delegation for detecting hovers on interactive targets
-    const onMouseOver = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      if (
-        target.tagName === "A" ||
-        target.tagName === "BUTTON" ||
-        target.closest("a") ||
-        target.closest("button") ||
-        target.classList.contains("bar-btn") ||
-        target.classList.contains("btn") ||
-        target.classList.contains("btn-tactile") ||
-        target.closest(".btn-tactile") ||
-        target.classList.contains("interactive-card")
-      ) {
-        setHovered(true);
+    const onOver = (e: MouseEvent) => {
+      const el = (e.target as HTMLElement | null)?.closest(INTERACTIVE) as
+        | HTMLElement
+        | null;
+      if (!el) {
+        setVariant("default");
+        setLabel("");
+        return;
+      }
+      const labelled = el.closest("[data-cursor-label]") as HTMLElement | null;
+      const text = labelled?.getAttribute("data-cursor-label");
+      if (text) {
+        setLabel(text);
+        setVariant("label");
       } else {
-        setHovered(false);
+        setLabel("");
+        setVariant("hover");
       }
     };
 
-    window.addEventListener("mousemove", onMouseMove);
-    window.addEventListener("mousedown", onMouseDown);
-    window.addEventListener("mouseup", onMouseUp);
-    document.addEventListener("mouseleave", onMouseLeave);
-    document.addEventListener("mouseenter", onMouseEnter);
-    window.addEventListener("mouseover", onMouseOver);
+    window.addEventListener("mousemove", onMove, { passive: true });
+    window.addEventListener("mousedown", onDown);
+    window.addEventListener("mouseup", onUp);
+    window.addEventListener("mouseout", onWindowOut);
+    window.addEventListener("mouseover", onOver, { passive: true });
 
-    // RequestAnimationFrame for a smooth inertial trail
-    let rId: number;
-    const animateTrail = () => {
-      const dx = mouseRef.current.x - trailRef.current.x;
-      const dy = mouseRef.current.y - trailRef.current.y;
-      
-      // Dampened factor for smooth fluid momentum
-      trailRef.current.x += dx * 0.15;
-      trailRef.current.y += dy * 0.15;
-
-      setTrail({ x: trailRef.current.x, y: trailRef.current.y });
-      rId = requestAnimationFrame(animateTrail);
+    let raf = 0;
+    const loop = () => {
+      ring.current.x += (mouse.current.x - ring.current.x) * 0.18;
+      ring.current.y += (mouse.current.y - ring.current.y) * 0.18;
+      const r = ringRef.current;
+      if (r) {
+        r.style.transform = `translate3d(${ring.current.x}px, ${ring.current.y}px, 0) translate(-50%, -50%)`;
+      }
+      raf = requestAnimationFrame(loop);
     };
-    rId = requestAnimationFrame(animateTrail);
+    raf = requestAnimationFrame(loop);
 
     return () => {
-      window.removeEventListener("mousemove", onMouseMove);
-      window.removeEventListener("mousedown", onMouseDown);
-      window.removeEventListener("mouseup", onMouseUp);
-      document.removeEventListener("mouseleave", onMouseLeave);
-      document.removeEventListener("mouseenter", onMouseEnter);
-      window.removeEventListener("mouseover", onMouseOver);
-      cancelAnimationFrame(rId);
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mousedown", onDown);
+      window.removeEventListener("mouseup", onUp);
+      window.removeEventListener("mouseout", onWindowOut);
+      window.removeEventListener("mouseover", onOver);
+      cancelAnimationFrame(raf);
+      document.documentElement.classList.remove("has-custom-cursor");
     };
   }, []);
 
-  if (hidden) return null;
+  if (!mounted) return null;
 
   return (
-    <>
-      {/* Dynamic ambient mouse-following radial glow backing */}
-      <div
-        className="pointer-events-none fixed z-[9999] h-[350px] w-[350px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-10 blur-[80px] transition-opacity duration-500"
-        style={{
-          left: `${position.x}px`,
-          top: `${position.y}px`,
-          background: "radial-gradient(circle, var(--sv) 0%, transparent 70%)",
-        }}
-      />
-    </>
+    <div ref={rootRef} className="cursor-root" aria-hidden="true">
+      <div ref={dotRef} className="cursor-dot" />
+      <div ref={ringRef} className={`cursor-ring cursor-${variant}`}>
+        <span className="cursor-label">{label}</span>
+      </div>
+    </div>
   );
 }

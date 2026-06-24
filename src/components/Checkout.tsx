@@ -185,7 +185,7 @@ export default function Checkout() {
                 </div>
 
                 <div className="f-field" style={{ marginTop: "8px" }}>
-                  <button ref={magneticRef as any} type="submit" className="btn-tactile w-full">
+                  <button ref={magneticRef as any} type="submit" className="btn-tactile w-full" data-cursor-label="Join">
                     <span className="btn-tactile-wrap">
                       <span className="btn-tactile-text">Begin Your Breakthrough</span>
                       <span className="btn-tactile-hover">Begin Your Breakthrough</span>

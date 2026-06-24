@@ -19,10 +19,12 @@ export default function Header() {
     <div id="bar" className={isVisible ? "on" : ""}>
       <div className="bar-left">
         <strong>BREAKTHROUGH</strong>
-        <span className="bar-pipe">·</span> 6 Sessions
-        <span className="bar-pipe">·</span> 1:1 with Frank
+        <span className="bar-desc">
+          <span className="bar-pipe">·</span> 6 Sessions
+          <span className="bar-pipe">·</span> 1:1 with Frank
+        </span>
       </div>
-      <a href="#checkout" className="bar-btn">
+      <a href="#checkout" className="bar-btn" data-cursor-label="Begin">
         Begin Your Breakthrough →
       </a>
     </div>

@@ -833,10 +833,16 @@ footer { background: var(--c2); border-top: 1px solid var(--c4); padding: 48px 0
 
 @media(max-width:960px){
   #hero { grid-template-columns: 1fr; }
-  .hero-photo-col { display: none; }
+  /* Photo column becomes a faint full-bleed wash behind the copy instead of vanishing */
+  .hero-photo-col { position: absolute; inset: 0; display: flex; z-index: 0; }
+  .hero-photo-col::after {
+    background: linear-gradient(to bottom, rgba(0,0,0,.78) 0%, rgba(0,0,0,.62) 45%, var(--c0) 100%);
+  }
   .hero-in { padding: clamp(100px,12vw,160px) clamp(24px,5vw,80px) 80px; }
   .vision-grid { grid-template-columns: 1fr 1fr; }
   .vision-cell:first-child { grid-row: auto; min-height: 260px; aspect-ratio: 4/3; }
+  /* Sticky bar: drop the secondary descriptor so brand + CTA fit one row */
+  .bar-left .bar-pipe, .bar-left { gap: 10px; }
 }
 @media(max-width:640px){
   .vision-grid { grid-template-columns: 1fr; }
@@ -858,7 +864,25 @@ footer { background: var(--c2); border-top: 1px solid var(--c4); padding: 48px 0
 }
 @media(max-width:640px){
   .w,.ww{padding:0 20px}
-  #hero{padding:100px 20px 60px}
+  /* #hero pads via .hero-in only — avoid stacking padding on both and clipping copy */
+  #hero{padding:0}
+  .hero-in{padding:104px 20px 72px}
+  /* Eyebrow: tighter tracking + smaller size so the full line never clips */
+  .hero-ol{font-size:11px;letter-spacing:.18em;margin-bottom:28px}
+  .hero-hl{margin-bottom:32px}
+  .gap-big{font-size:clamp(20px,6vw,28px)}
+  .gap-sub{font-size:16px}
+  .hero-btm{gap:28px}
+  /* Sticky bar: hide the long descriptor, keep brand + CTA tidy on one row */
+  #bar{gap:12px;padding:9px 20px}
+  .bar-left{font-size:10px;letter-spacing:.12em}
+  .bar-desc{display:none}
+  .bar-btn{padding:8px 14px;font-size:10px;letter-spacing:.08em}
+  /* Checkout headline/price scale down so the long word can't stretch the column */
+  .co-t{font-size:clamp(26px,8.5vw,48px);margin-bottom:24px}
+  .f-price{font-size:clamp(44px,14vw,60px)}
+  .fs-h{font-size:clamp(30px,9vw,40px)}
+  .fs-icon{font-size:44px}
   .f-row2{grid-template-columns:1fr}
   .oc-panel{padding:40px 24px}
   .tcard{padding:36px 24px}
@@ -1449,4 +1473,64 @@ html.lenis body { height: auto; }
    read as finished text rather than dim/invisible. */
 @media (prefers-reduced-motion: reduce) {
   .word-reveal-span { color: #ffffff; opacity: 1 !important; }
+}
+
+/* ═══════════════════════════════════════════════
+   CUSTOM CURSOR — monochrome, morphing, blend-difference
+   Renders only on fine-pointer devices (component gates on touch).
+═══════════════════════════════════════════════ */
+html.has-custom-cursor,
+html.has-custom-cursor * { cursor: none !important; }
+
+.cursor-root {
+  position: fixed; inset: 0; z-index: 10000;
+  pointer-events: none;
+  mix-blend-mode: difference;
+  transition: opacity .3s ease;
+}
+.cursor-dot {
+  position: fixed; top: 0; left: 0;
+  width: 7px; height: 7px;
+  background: #fff; border-radius: 50%;
+  will-change: transform;
+}
+.cursor-ring {
+  position: fixed; top: 0; left: 0;
+  width: 40px; height: 40px;
+  border: 1px solid rgba(255,255,255,.8);
+  border-radius: 999px;
+  display: flex; align-items: center; justify-content: center;
+  will-change: transform;
+  transition:
+    width .3s cubic-bezier(.16,1,.3,1),
+    height .3s cubic-bezier(.16,1,.3,1),
+    background-color .3s ease,
+    border-color .3s ease;
+}
+.cursor-ring.cursor-hover { width: 56px; height: 56px; background: rgba(255,255,255,.14); }
+.cursor-ring.cursor-label { width: 94px; height: 94px; background: #fff; border-color: #fff; }
+.cursor-ring.is-down { width: 30px; height: 30px; }
+.cursor-label {
+  font-family: var(--fm); font-size: 10px; font-weight: 600;
+  letter-spacing: .16em; text-transform: uppercase; color: #000;
+  white-space: nowrap; pointer-events: none;
+  opacity: 0; transform: scale(.5);
+  transition: opacity .22s ease, transform .3s cubic-bezier(.16,1,.3,1);
+}
+.cursor-ring.cursor-label .cursor-label { opacity: 1; transform: scale(1); }
+
+/* Hide the custom cursor entirely if the user prefers reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .cursor-ring { transition: none; }
+}
+
+/* ═══════════════════════════════════════════════
+   MOBILE OVERRIDES — placed last so they win over base
+   rules defined later in the file (equal specificity).
+═══════════════════════════════════════════════ */
+@media(max-width:640px){
+  /* Tactile CTA: the wide desktop padding/tracking forced the page wider than
+     the viewport. Trim it so the button (and its column) fit cleanly. */
+  .btn-tactile{ padding:18px 22px; font-size:12px; letter-spacing:.1em; gap:10px; max-width:100%; }
+  .btn-tactile-arrow{ font-size:13px; }
 }

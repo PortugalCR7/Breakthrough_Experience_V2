@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useMagnetic } from "../hooks/useMagnetic";
 import { gsap, useGSAP, prefersReducedMotion } from "../motion";
+import ScrambleText from "./ScrambleText";
 
 export default function Hero() {
   const magneticRef = useMagnetic({ strength: 0.35 });
@@ -125,7 +126,7 @@ export default function Hero() {
           <br />
           <span className="wc">
             <span className={`wi ${wordsActive[7] ? "s" : ""}`} style={{ color: "var(--sv)" }}>
-              OF IMPACT
+              <ScrambleText text="OF IMPACT" trigger={wordsActive[7]} duration={950} />
             </span>
           </span>
         </h1>
@@ -138,7 +139,7 @@ export default function Hero() {
         </div>
         <div id="hBtm" className={`hero-btm ${btmActive ? "s" : ""}`}>
           <div className="hero-cta-wrapper">
-            <a ref={magneticRef as any} href="#checkout" className="btn-tactile">
+            <a ref={magneticRef as any} href="#checkout" className="btn-tactile" data-cursor-label="Begin">
               <span className="btn-tactile-wrap">
                 <span className="btn-tactile-text">Begin Your Breakthrough</span>
                 <span className="btn-tactile-hover">Begin Your Breakthrough</span>
