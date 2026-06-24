@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
 import { useIntersectionObserver } from "../hooks/useIntersectionObserver";
 import { TestimonialItem } from "../types";
 import { useWordScrub } from "../motion";
@@ -48,6 +48,22 @@ export default function Testimonials() {
     setCurrent((index + len) % len);
   };
 
+  // Pointer/touch swipe — drag the card left/right to advance.
+  const dragStartX = useRef<number | null>(null);
+  const onPointerDown = (e: ReactPointerEvent) => {
+    dragStartX.current = e.clientX;
+  };
+  const onPointerUp = (e: ReactPointerEvent) => {
+    if (dragStartX.current === null) return;
+    const dx = e.clientX - dragStartX.current;
+    dragStartX.current = null;
+    if (Math.abs(dx) > 50) goTo(current + (dx < 0 ? 1 : -1));
+  };
+
+  // Monogram initials from an anonymised name like "J.M." → "JM".
+  const initials = (name: string) =>
+    name.replace(/[^A-Za-z]/g, "").slice(0, 2).toUpperCase();
+
   return (
     <section id="testi" className="scroll-snap-section">
       <div className="w">
@@ -63,7 +79,14 @@ export default function Testimonials() {
         </div>
 
         <div ref={ref2 as any} className={`fu ${isVisible2 ? "vis" : ""}`} style={{ transitionDelay: "0.15s" }}>
-          <div className="sl-track" id="slTrack">
+          <div
+            className="sl-track"
+            id="slTrack"
+            data-cursor-label="Drag"
+            onPointerDown={onPointerDown}
+            onPointerUp={onPointerUp}
+            style={{ touchAction: "pan-y" }}
+          >
             {TESTIMONIALS.map((t, idx) => (
               <div
                 key={t.id}
@@ -74,8 +97,11 @@ export default function Testimonials() {
                   <span className="tcard-qm">"</span>
                   <p className="tcard-q">{t.quote}</p>
                   <div className="tcard-meta">
-                    <span className="tcard-name">{t.name}</span>
-                    <span className="tcard-det">{t.details}</span>
+                    <span className="tcard-avatar" aria-hidden="true">{initials(t.name)}</span>
+                    <span className="tcard-meta-text">
+                      <span className="tcard-name">{t.name}</span>
+                      <span className="tcard-det">{t.details}</span>
+                    </span>
                   </div>
                 </div>
               </div>
@@ -99,10 +125,13 @@ export default function Testimonials() {
             </button>
             <div className="sl-dots">
               {TESTIMONIALS.map((_, idx) => (
-                <div
+                <button
                   key={idx}
+                  type="button"
                   onClick={() => goTo(idx)}
                   className={`sl-dot ${idx === current ? "on" : ""}`}
+                  aria-label={`Go to testimonial ${idx + 1}`}
+                  aria-current={idx === current}
                 />
               ))}
             </div>

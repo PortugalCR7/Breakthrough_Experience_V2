@@ -13,6 +13,9 @@ export function useParallax(speed: number = -0.12) {
     const element = elementRef.current;
     if (!element) return;
 
+    // Honour reduced-motion: keep offset at 0 (no parallax drift).
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
     let rId: number;
     let isIntersecting = false;
 

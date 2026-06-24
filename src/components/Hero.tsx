@@ -177,7 +177,11 @@ export default function Hero() {
           <img
             key={src}
             src={src}
-            alt={`Hero Background ${idx + 1}`}
+            alt=""
+            aria-hidden="true"
+            loading={idx === 0 ? "eager" : "lazy"}
+            decoding="async"
+            fetchPriority={idx === 0 ? "high" : "low"}
             className="absolute inset-0 object-cover w-full h-full transition-opacity duration-1000 ease-in-out hero-photo"
             style={{
               opacity: currentBgIdx === idx ? 0.62 : 0,

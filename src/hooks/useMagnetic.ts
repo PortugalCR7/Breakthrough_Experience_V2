@@ -20,6 +20,9 @@ export function useMagnetic({
     const el = elementRef.current;
     if (!el) return;
 
+    // Honour reduced-motion: skip the pointer-driven pull entirely.
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
     // Apply fluid transition styles
     el.style.transition = "transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)";
     el.style.transformStyle = "preserve-3d";

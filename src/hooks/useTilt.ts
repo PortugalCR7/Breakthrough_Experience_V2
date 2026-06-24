@@ -13,6 +13,9 @@ export function useTilt(maxTilt: number = 7, perspective: number = 800) {
     const card = elementRef.current;
     if (!card) return;
 
+    // Honour reduced-motion: leave the card flat, no tilt tracking.
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
     // Make sure transition styling exists for dynamic layout resets on leave
     card.style.transition = "transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1)";
     card.style.transformStyle = "preserve-3d";

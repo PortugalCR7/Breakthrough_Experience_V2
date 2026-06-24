@@ -54,23 +54,23 @@ export default function CustomCursor() {
     };
 
     const onOver = (e: MouseEvent) => {
-      const el = (e.target as HTMLElement | null)?.closest(INTERACTIVE) as
-        | HTMLElement
-        | null;
-      if (!el) {
-        setVariant("default");
-        setLabel("");
-        return;
-      }
-      const labelled = el.closest("[data-cursor-label]") as HTMLElement | null;
+      const target = e.target as HTMLElement | null;
+      // A label takes priority and works on any element (e.g. the draggable
+      // carousel), not just standard interactive controls.
+      const labelled = target?.closest("[data-cursor-label]") as HTMLElement | null;
       const text = labelled?.getAttribute("data-cursor-label");
       if (text) {
         setLabel(text);
         setVariant("label");
-      } else {
+        return;
+      }
+      if (target?.closest(INTERACTIVE)) {
         setLabel("");
         setVariant("hover");
+        return;
       }
+      setVariant("default");
+      setLabel("");
     };
 
     window.addEventListener("mousemove", onMove, { passive: true });
