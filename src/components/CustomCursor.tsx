@@ -15,7 +15,6 @@ const INTERACTIVE =
  */
 export default function CustomCursor() {
   const rootRef = useRef<HTMLDivElement>(null);
-  const dotRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
   const mouse = useRef({ x: 0, y: 0 });
   const ring = useRef({ x: 0, y: 0 });
@@ -40,10 +39,6 @@ export default function CustomCursor() {
     const onMove = (e: MouseEvent) => {
       mouse.current.x = e.clientX;
       mouse.current.y = e.clientY;
-      const dot = dotRef.current;
-      if (dot) {
-        dot.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%)`;
-      }
       if (rootRef.current) rootRef.current.style.opacity = "1";
     };
     const onDown = () => ringRef.current?.classList.add("is-down");
@@ -106,7 +101,6 @@ export default function CustomCursor() {
 
   return (
     <div ref={rootRef} className="cursor-root" aria-hidden="true">
-      <div ref={dotRef} className="cursor-dot" />
       <div ref={ringRef} className={`cursor-ring cursor-${variant}`}>
         <span className="cursor-label">{label}</span>
       </div>

@@ -1501,27 +1501,22 @@ html.has-custom-cursor * { cursor: none !important; }
   mix-blend-mode: difference;
   transition: opacity .3s ease;
 }
-.cursor-dot {
-  position: fixed; top: 0; left: 0;
-  width: 7px; height: 7px;
-  background: #fff; border-radius: 50%;
-  will-change: transform;
-}
+/* Filled monochrome disc. mix-blend-mode: difference on .cursor-root inverts
+   whatever sits beneath it — over any background, not just interactive targets. */
 .cursor-ring {
   position: fixed; top: 0; left: 0;
   width: 40px; height: 40px;
-  border: 1px solid rgba(255,255,255,.8);
+  background: #fff;
   border-radius: 999px;
   display: flex; align-items: center; justify-content: center;
   will-change: transform;
   transition:
     width .3s cubic-bezier(.16,1,.3,1),
     height .3s cubic-bezier(.16,1,.3,1),
-    background-color .3s ease,
-    border-color .3s ease;
+    background-color .3s ease;
 }
-.cursor-ring.cursor-hover { width: 56px; height: 56px; background: rgba(255,255,255,.14); }
-.cursor-ring.cursor-label { width: 94px; height: 94px; background: #fff; border-color: #fff; }
+.cursor-ring.cursor-hover { width: 56px; height: 56px; }
+.cursor-ring.cursor-label { width: 94px; height: 94px; }
 .cursor-ring.is-down { width: 30px; height: 30px; }
 .cursor-label {
   font-family: var(--fm); font-size: 10px; font-weight: 600;
@@ -1535,6 +1530,79 @@ html.has-custom-cursor * { cursor: none !important; }
 /* Hide the custom cursor entirely if the user prefers reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .cursor-ring { transition: none; }
+}
+
+/* ═══════════════════════════════════════════════
+   IDENTITY GAP — before/after reveal slider
+═══════════════════════════════════════════════ */
+#gap-reveal { padding: var(--secpad) 0; border-bottom: 1px solid var(--c4); position: relative; isolation: isolate; }
+.ba-head { margin-bottom: clamp(32px, 4vw, 56px); }
+.ba-hl {
+  font-family: var(--fd); font-size: var(--h2);
+  line-height: .95; letter-spacing: -.02em; text-transform: uppercase;
+  color: var(--gl); margin-top: 12px;
+}
+.ba-wrap {
+  position: relative; width: 100%;
+  aspect-ratio: 16 / 10; max-height: 78vh;
+  overflow: hidden; background: var(--c0);
+  border: 1px solid var(--c4);
+  cursor: ew-resize; user-select: none; touch-action: pan-y;
+}
+.ba-layer { position: absolute; inset: 0; }
+.ba-layer img {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; display: block; pointer-events: none;
+}
+/* AFTER — sharp, clear, present */
+.ba-after img { filter: grayscale(100%) brightness(.96) contrast(1.12); }
+/* BEFORE — diminished: dim, low-contrast, out of focus. Clipped to the left of the divider. */
+.ba-before { clip-path: inset(0 calc(100% - var(--pos)) 0 0); }
+.ba-before img { filter: grayscale(100%) brightness(.42) contrast(.82) blur(3px); transform: scale(1.06); }
+.ba-before::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.55));
+}
+.ba-tag {
+  position: absolute; bottom: 18px; z-index: 3;
+  font-family: var(--fm); font-size: clamp(9px, 1.1vw, 11px);
+  letter-spacing: .22em; text-transform: uppercase;
+  padding: 7px 12px; background: rgba(0,0,0,.45); backdrop-filter: blur(6px);
+  border: 1px solid var(--sl); white-space: nowrap;
+}
+.ba-tag--before { left: 18px; color: var(--mu); }
+.ba-tag--after { right: 18px; color: var(--sv); }
+.ba-divider {
+  position: absolute; top: 0; bottom: 0; left: var(--pos);
+  width: 2px; transform: translateX(-1px); z-index: 4;
+  background: var(--sv); cursor: ew-resize; outline: none;
+}
+.ba-divider:focus-visible { box-shadow: 0 0 0 2px rgba(255,255,255,.7); }
+.ba-handle {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 46px; height: 46px; border-radius: 50%;
+  background: var(--sv); color: var(--c0);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 6px 24px rgba(0,0,0,.5);
+  transition: transform .25s cubic-bezier(.16,1,.3,1);
+}
+.ba-divider:hover .ba-handle,
+.ba-divider:focus-visible .ba-handle { transform: translate(-50%, -50%) scale(1.12); }
+/* One-time hint nudge so users discover the drag affordance */
+@media (prefers-reduced-motion: no-preference) {
+  .ba-handle { animation: baHint 2.6s ease-in-out 1s 2; }
+  @keyframes baHint {
+    0%, 100% { transform: translate(-50%, -50%); }
+    25% { transform: translate(calc(-50% - 9px), -50%); }
+    60% { transform: translate(calc(-50% + 9px), -50%); }
+  }
+}
+@media (max-width: 640px) {
+  .ba-wrap { aspect-ratio: 4 / 5; }
+  .ba-tag { bottom: 12px; padding: 6px 9px; letter-spacing: .16em; }
+  .ba-tag--before { left: 12px; }
+  .ba-tag--after { right: 12px; }
 }
 
 /* ═══════════════════════════════════════════════
