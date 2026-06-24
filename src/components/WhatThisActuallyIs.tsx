@@ -1,6 +1,5 @@
 import { useRef } from "react";
 import { useScrollFadeIn } from "../hooks/useScrollFadeIn";
-import TypographicReveal from "./TypographicReveal";
 import { SessionItem } from "../types";
 import { useWordScrub } from "../motion";
 
@@ -69,6 +68,10 @@ export default function WhatThisActuallyIs() {
   const [topRef, isTopVisible] = useScrollFadeIn({ threshold: 0.2 });
   const passageScope = useRef<HTMLDivElement | null>(null);
   useWordScrub(passageScope);
+  const progHlRef = useRef<HTMLHeadingElement | null>(null);
+  useWordScrub(progHlRef);
+  const sessHlRef = useRef<HTMLHeadingElement | null>(null);
+  useWordScrub(sessHlRef);
   const [workHeadRef, isWorkHeadVisible] = useScrollFadeIn({ threshold: 0.25 });
   const [listRef, isListVisible] = useScrollFadeIn({ threshold: 0.08, rootMargin: "0px 0px -8% 0px" });
   const [codaRef, isCodaVisible] = useScrollFadeIn({ threshold: 0.25 });
@@ -88,15 +91,29 @@ export default function WhatThisActuallyIs() {
           </div>
 
           <div className="flex flex-col gap-8">
-            <TypographicReveal
-              as="h2"
-              lines={[
-                "THIS IS NOT A PROGRAM.",
-                "IT IS A STRUCTURED PATH",
-                "TO CLOSE THE PERFORMANCE GAP."
-              ]}
+            <h2
+              ref={progHlRef}
               className="text-stone-100 text-[length:var(--h2)] font-light leading-[0.88] tracking-[-0.025em] uppercase"
-            />
+              style={{ fontFamily: "var(--fd)" }}
+            >
+              <span className="word-reveal-span mr-[0.25em]">THIS</span>
+              <span className="word-reveal-span mr-[0.25em]">IS</span>
+              <span className="word-reveal-span mr-[0.25em]">NOT</span>
+              <span className="word-reveal-span mr-[0.25em]">A</span>
+              <span className="word-reveal-span mr-[0.25em]">PROGRAM.</span>
+              <br />
+              <span className="word-reveal-span mr-[0.25em]">IT</span>
+              <span className="word-reveal-span mr-[0.25em]">IS</span>
+              <span className="word-reveal-span mr-[0.25em]">A</span>
+              <span className="word-reveal-span mr-[0.25em]">STRUCTURED</span>
+              <span className="word-reveal-span mr-[0.25em]">PATH</span>
+              <br />
+              <span className="word-reveal-span mr-[0.25em]">TO</span>
+              <span className="word-reveal-span mr-[0.25em]">CLOSE</span>
+              <span className="word-reveal-span mr-[0.25em]">THE</span>
+              <span className="word-reveal-span mr-[0.25em]">PERFORMANCE</span>
+              <span className="word-reveal-span mr-[0.25em]">GAP.</span>
+            </h2>
 
             <div className={`fu ${isTopVisible ? "vis" : ""}`} style={{ transitionDelay: "0.25s" }}>
               <div className="not-row mb-8 flex flex-wrap gap-x-6 gap-y-3">
@@ -125,11 +142,12 @@ export default function WhatThisActuallyIs() {
         {/* The Work — six sessions */}
         <div ref={workHeadRef as any} className={`fu ${isWorkHeadVisible ? "vis" : ""}`}>
           <div className="eyebrow mb-4">The Work</div>
-          <h3 className="sess-hl text-left uppercase mb-12">
-            SIX SESSIONS.
+          <h3 ref={sessHlRef} className="sess-hl text-left uppercase mb-12">
+            <span className="word-reveal-span mr-[0.25em]">SIX</span>
+            <span className="word-reveal-span mr-[0.25em]">SESSIONS.</span>
             <br />
-            ONE DIRECTION.
- 
+            <span className="word-reveal-span mr-[0.25em]">ONE</span>
+            <span className="word-reveal-span mr-[0.25em]">DIRECTION.</span>
           </h3>
         </div>
 
@@ -140,7 +158,7 @@ export default function WhatThisActuallyIs() {
           {SESSIONS.map((session, index) => (
             <div
               key={session.id}
-              className={`group relative grid grid-cols-1 md:grid-cols-[60px_240px_1fr] gap-6 md:gap-12 py-12 px-4 md:px-8 hover:bg-neutral-900/40 cursor-pointer block-reveal-item ${
+              className={`group relative grid grid-cols-1 md:grid-cols-[60px_240px_1fr] gap-6 md:gap-12 py-5 px-4 md:px-8 hover:bg-neutral-900/40 cursor-pointer block-reveal-item ${
                 isListVisible ? "active" : ""
               }`}
               style={{ transitionDelay: `${index * 0.08}s` }}

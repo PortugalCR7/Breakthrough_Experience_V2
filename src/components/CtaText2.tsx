@@ -3,18 +3,16 @@ import CtaStatement from "./CtaStatement";
 export default function CtaText2() {
   return (
     <CtaStatement
-      // Word-by-word narration (the signed-off feel), but un-pinned — pins stay
-      // reserved for CtaText1 + Decision. Bigger type + looser rhythm so the
-      // multi-sentence beat breathes.
-      pin={false}
+      // Pinned word-by-word set-piece (same treatment as CtaText1). Size is
+      // reduced from the headline clamp so the multi-sentence beat fits the
+      // viewport and pins tastefully; spacious keeps the lines breathing.
       spacious
-      size="clamp(34px, 4.4vw, 62px)"
+      size="clamp(26px, 3.2vw, 44px)"
       lines={[
         "Most men don't need more information.",
         "They need structure.",
         "They need accountability.",
-        "They need someone willing to",
-        "hold them to who they can become.",
+        "They need someone willing to hold them to who they can become.",
       ]}
     />
   );

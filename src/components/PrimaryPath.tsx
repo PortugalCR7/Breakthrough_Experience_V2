@@ -83,10 +83,10 @@ export default function PrimaryPath() {
             </div>
             <div className={`fu ${isLeftVisible ? "vis" : ""}`} style={{ transitionDelay: "0.2s", marginTop: "32px" }}>
               <div style={{ marginBottom: "16px" }}>
-                <a ref={magneticRef as any} href="#checkout" className="btn-tactile w-full">
+                <a ref={magneticRef as any} href="#checkout" className="btn-tactile btn-stack w-full">
                   <span className="btn-tactile-wrap">
-                    <span className="btn-tactile-text">Begin Your Breakthrough</span>
-                    <span className="btn-tactile-hover">Begin Your Breakthrough</span>
+                    <span className="btn-tactile-text">Begin Your<br />Breakthrough</span>
+                    <span className="btn-tactile-hover">Begin Your<br />Breakthrough</span>
                   </span>
                   <span className="btn-tactile-arrow">→</span>
                 </a>

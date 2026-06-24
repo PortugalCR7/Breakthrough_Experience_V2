@@ -1,12 +1,14 @@
 import { useRef } from "react";
 import { useIntersectionObserver } from "../hooks/useIntersectionObserver";
 import KineticText from "./KineticText";
-import { gsap, useGSAP, prefersReducedMotion } from "../motion";
+import { gsap, useGSAP, prefersReducedMotion, useWordScrub } from "../motion";
 
 export default function AnchorQuote() {
   const [ref, isVisible] = useIntersectionObserver();
   const sectionRef = useRef<HTMLElement | null>(null);
   const quoteRef = useRef<HTMLDivElement | null>(null);
+  const anchorHlRef = useRef<HTMLHeadingElement | null>(null);
+  useWordScrub(anchorHlRef);
 
   // Gentle scrubbed depth drift between the headline and the supporting quote —
   // "environmental motion", almost invisible. The existing word-rise is untouched.
@@ -37,14 +39,25 @@ export default function AnchorQuote() {
         <div className="anchor-wrap">
           <div className={`fu ${isVisible ? "vis" : ""}`}>
             <div className="eyebrow">From the first step you take</div>
-            <h2 className="anchor-body">
-              "I am invested in you
+            <h2 ref={anchorHlRef} className="anchor-body">
+              <span className="word-reveal-span mr-[0.25em]">"I</span>
+              <span className="word-reveal-span mr-[0.25em]">am</span>
+              <span className="word-reveal-span mr-[0.25em]">invested</span>
+              <span className="word-reveal-span mr-[0.25em]">in</span>
+              <span className="word-reveal-span mr-[0.25em]">you</span>
               <br />
-              the entire way.
+              <span className="word-reveal-span mr-[0.25em]">the</span>
+              <span className="word-reveal-span mr-[0.25em]">entire</span>
+              <span className="word-reveal-span mr-[0.25em]">way.</span>
               <br />
-              <span className="dim">I am in the arena
+              <span className="word-reveal-span mr-[0.25em]">I</span>
+              <span className="word-reveal-span mr-[0.25em]">am</span>
+              <span className="word-reveal-span mr-[0.25em]">in</span>
+              <span className="word-reveal-span mr-[0.25em]">the</span>
+              <span className="word-reveal-span mr-[0.25em]">arena</span>
               <br />
-              with you."</span>
+              <span className="word-reveal-span mr-[0.25em]">with</span>
+              <span className="word-reveal-span mr-[0.25em]">you."</span>
             </h2>
           </div>
           <div ref={quoteRef} className={`anchor-quote fu ${isVisible ? "vis" : ""}`} style={{ transitionDelay: "0.2s" }}>

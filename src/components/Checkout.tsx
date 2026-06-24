@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useScrollFadeIn } from "../hooks/useScrollFadeIn";
 import { useMagnetic } from "../hooks/useMagnetic";
+import { useWordScrub } from "../motion";
 
 export default function Checkout() {
   const [ref, isVisible] = useScrollFadeIn({ threshold: 0.1 });
   const magneticRef = useMagnetic({ strength: 0.35 });
+  const coTitleRef = useRef<HTMLDivElement | null>(null);
+  useWordScrub(coTitleRef);
 
   // Form states
   const [firstName, setFirstName] = useState("");
@@ -55,7 +58,9 @@ export default function Checkout() {
         <div className="co-g">
           <div className={`fu ${isVisible ? "vis" : ""}`}>
             <div className="co-lbl">SECURE YOUR PLACE</div>
-            <div className="co-t">BREAKTHROUGH</div>
+            <div ref={coTitleRef} className="co-t">
+              <span className="word-reveal-span">BREAKTHROUGH</span>
+            </div>
             <div className="co-list">
               <div className="co-row">
                 <span className="co-ck">✓</span>6 live 1:1 sessions with Frank directly

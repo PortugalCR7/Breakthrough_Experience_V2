@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useIntersectionObserver } from "../hooks/useIntersectionObserver";
 import { TestimonialItem } from "../types";
+import { useWordScrub } from "../motion";
 
 const TESTIMONIALS: TestimonialItem[] = [
   {
@@ -30,6 +31,8 @@ export default function Testimonials() {
   const [ref1, isVisible1] = useIntersectionObserver();
   const [ref2, isVisible2] = useIntersectionObserver();
   const [current, setCurrent] = useState(0);
+  const testiHlRef = useRef<HTMLHeadingElement | null>(null);
+  useWordScrub(testiHlRef);
 
   useEffect(() => {
     // Autoplay testimonials every 5000ms
@@ -50,10 +53,12 @@ export default function Testimonials() {
       <div className="w">
         <div ref={ref1 as any} className={`fu ${isVisible1 ? "vis" : ""}`}>
           <div className="eyebrow">The Men Who Did the Work</div>
-          <h2 className="testi-hl">
-            WHAT THE
+          <h2 ref={testiHlRef} className="testi-hl">
+            <span className="word-reveal-span mr-[0.25em]">WHAT</span>
+            <span className="word-reveal-span mr-[0.25em]">THE</span>
             <br />
-            MEN SAY.
+            <span className="word-reveal-span mr-[0.25em]">MEN</span>
+            <span className="word-reveal-span mr-[0.25em]">SAY.</span>
           </h2>
         </div>
 

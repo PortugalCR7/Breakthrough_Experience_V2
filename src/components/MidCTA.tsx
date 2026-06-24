@@ -1,9 +1,13 @@
+import { useRef } from "react";
 import { useScrollFadeIn } from "../hooks/useScrollFadeIn";
 import { useMagnetic } from "../hooks/useMagnetic";
+import { useWordScrub } from "../motion";
 
 export default function MidCTA() {
   const [ref, isVisible] = useScrollFadeIn({ threshold: 0.15 });
   const magneticRef = useMagnetic({ strength: 0.35 });
+  const midHlRef = useRef<HTMLHeadingElement | null>(null);
+  useWordScrub(midHlRef);
 
   return (
     <section 
@@ -33,8 +37,19 @@ export default function MidCTA() {
               <div className={`eyebrow fu ${isVisible ? "vis" : ""}`} style={{ marginBottom: "20px" }}>
                 The Decision Point
               </div>
-              <h2 className={`mid-hl text-sheen fu text-left leading-[0.88] tracking-[-0.025em] ${isVisible ? "vis run" : ""}`} style={{ marginBottom: 0 }}>
-                THE MAN YOU WANT TO BECOME IS NOT WAITING IN THE <span className="sv">FUTURE.</span>
+              <h2 ref={midHlRef} className="mid-hl text-left leading-[0.88] tracking-[-0.025em]" style={{ marginBottom: 0 }}>
+                <span className="word-reveal-span mr-[0.25em]">THE</span>
+                <span className="word-reveal-span mr-[0.25em]">MAN</span>
+                <span className="word-reveal-span mr-[0.25em]">YOU</span>
+                <span className="word-reveal-span mr-[0.25em]">WANT</span>
+                <span className="word-reveal-span mr-[0.25em]">TO</span>
+                <span className="word-reveal-span mr-[0.25em]">BECOME</span>
+                <span className="word-reveal-span mr-[0.25em]">IS</span>
+                <span className="word-reveal-span mr-[0.25em]">NOT</span>
+                <span className="word-reveal-span mr-[0.25em]">WAITING</span>
+                <span className="word-reveal-span mr-[0.25em]">IN</span>
+                <span className="word-reveal-span mr-[0.25em]">THE</span>
+                <span className="word-reveal-span sv mr-[0.25em]">FUTURE.</span>
               </h2>
             </div>
 

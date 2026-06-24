@@ -1,10 +1,16 @@
+import { useRef } from "react";
 import { useIntersectionObserver } from "../hooks/useIntersectionObserver";
 import { useTilt } from "../hooks/useTilt";
+import { useWordScrub } from "../motion";
 
 export default function Outcomes() {
   const [ref, isVisible] = useIntersectionObserver({ threshold: 0.1 });
   const tiltRef1 = useTilt(5);
   const tiltRef2 = useTilt(5);
+  const hl1Ref = useRef<HTMLHeadingElement | null>(null);
+  const hl2Ref = useRef<HTMLHeadingElement | null>(null);
+  useWordScrub(hl1Ref);
+  useWordScrub(hl2Ref);
 
   return (
     <section id="outcomes" className="scroll-snap-section" ref={ref as any}>
@@ -21,12 +27,14 @@ export default function Outcomes() {
             willChange: "opacity, transform",
           }}
         >
-          <h3 className="oc-hl">
-            WHAT YOU
+          <h3 ref={hl1Ref} className="oc-hl">
+            <span className="word-reveal-span mr-[0.25em]">WHAT</span>
+            <span className="word-reveal-span mr-[0.25em]">YOU</span>
             <br />
-            WALK AWAY
+            <span className="word-reveal-span mr-[0.25em]">WALK</span>
+            <span className="word-reveal-span mr-[0.25em]">AWAY</span>
             <br />
-            WITH
+            <span className="word-reveal-span mr-[0.25em]">WITH</span>
           </h3>
           <div className="oc-list">
             <div className="oc-row">
@@ -68,12 +76,15 @@ export default function Outcomes() {
             willChange: "opacity, transform",
           }}
         >
-          <h3 className="oc-hl">
-            WHAT TWENTY
+          <h3 ref={hl2Ref} className="oc-hl">
+            <span className="word-reveal-span mr-[0.25em]">WHAT</span>
+            <span className="word-reveal-span mr-[0.25em]">TWENTY</span>
             <br />
-            YEARS HAVE
+            <span className="word-reveal-span mr-[0.25em]">YEARS</span>
+            <span className="word-reveal-span mr-[0.25em]">HAVE</span>
             <br />
-            TAUGHT ME
+            <span className="word-reveal-span mr-[0.25em]">TAUGHT</span>
+            <span className="word-reveal-span mr-[0.25em]">ME</span>
           </h3>
           <div className="aph-list">
             <div className="aph-row">

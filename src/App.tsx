@@ -19,7 +19,6 @@ import PrimaryPath from "./components/PrimaryPath";
 import Alliance from "./components/Alliance";
 import FAQ from "./components/FAQ";
 import Decision from "./components/Decision";
-import FinalWord from "./components/FinalWord";
 import Checkout from "./components/Checkout";
 import Footer from "./components/Footer";
 import CtaText1 from "./components/CtaText1";
@@ -102,9 +101,6 @@ export default function App() {
 
         {/* Section 13: Immersive choice decision point */}
         <Decision />
-
-        {/* Section 14: Hand-crafted final letter signed by mentor */}
-        <FinalWord />
 
         {/* Section 15: Client-side Interactive checkout validation form */}
         <Checkout />

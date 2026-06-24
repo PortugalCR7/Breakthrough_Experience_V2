@@ -524,8 +524,10 @@ body::after {
 #outcomes { border-bottom: 1px solid var(--c4); }
 .oc-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
 .oc-panel { padding: clamp(56px,7vw,88px) clamp(48px,7vw,96px); }
-.oc-panel:first-child { background: var(--c2); }
-.oc-panel:last-child  { background: var(--c3); }
+/* Mirrored greyscale gradients break the back-to-back black (MeetFrank → here →
+   Testimonials are all #000) and give the two cards depth/separation. */
+.oc-panel:first-child { background: linear-gradient(150deg, #1b1b1b 0%, #0a0a0a 52%, #000 100%); }
+.oc-panel:last-child  { background: linear-gradient(330deg, #1b1b1b 0%, #0a0a0a 52%, #000 100%); }
 .oc-hl { font-family: var(--fd); font-size: var(--h3); line-height: .88; letter-spacing: -.02em; color: var(--gl); margin-bottom: 40px; text-transform: uppercase; }
 .oc-list { display: flex; flex-direction: column; }
 .oc-row { font-family: var(--fb); font-size: clamp(15px,1.7vw,18px); font-weight: 300; line-height: 1.65; color: var(--gd); padding: 18px 0; border-bottom: 1px solid rgba(255,255,255,.05); display: flex; align-items: center; gap: 16px; }
@@ -613,12 +615,26 @@ body::after {
 .faq-hl { font-family: var(--fd); font-size: var(--h2); line-height: .88; letter-spacing: -.025em; color: var(--gl); margin-bottom: 52px; text-transform: uppercase; }
 .faq-list { display: flex; flex-direction: column; }
 .faq-item {
+  position: relative;
   border-top: 1px solid var(--c4);
   cursor: pointer;
   padding: 0 clamp(20px, 3.5vw, 40px);
   background-color: #000000;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.3s ease, padding-left 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
+/* Left accent bar — same device as the Work sessions */
+.faq-item::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--sv);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.faq-item:not(.open):hover::before,
+.faq-item.open::before { transform: scaleY(1); }
 .faq-item:last-child { border-bottom: 1px solid var(--c4); }
 .faq-q { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 24px 0; user-select: none; }
 .faq-qt { font-family: var(--fb); font-size: 17px; font-weight: 400; color: var(--gl); line-height: 1.4; transition: color 0.2s ease; }
@@ -626,16 +642,19 @@ body::after {
 .faq-tog { width: 28px; height: 28px; flex-shrink: 0; border: 1px solid var(--c4); display: flex; align-items: center; justify-content: center; font-size: 16px; color: var(--mu); transition: all .2s; font-family: var(--fb); font-weight: 300; }
 .faq-item.open .faq-tog { background: var(--sv); color: var(--c1); border-color: var(--sv); }
 
-/* Closed Item Hover States */
+/* Closed Item Hover States — subtle dark tint + accent glow + indent (matches
+   the Primary Path / Work session hover language; no more white invert). */
 .faq-item:not(.open):hover {
-  background-color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.02);
+  padding-left: calc(clamp(20px, 3.5vw, 40px) + 12px);
 }
 .faq-item:not(.open):hover .faq-qt {
-  color: #000000;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
 }
 .faq-item:not(.open):hover .faq-tog {
-  color: #000000;
-  border-color: #000000;
+  color: var(--sv);
+  border-color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.04);
 }
 .faq-ans { max-height: 0; overflow: hidden; transition: max-height .48s cubic-bezier(.16,1,.3,1); }
 .faq-item.open .faq-ans { max-height: 800px; }
@@ -658,6 +677,17 @@ body::after {
 .decision-sub { font-family: var(--fd); font-size: var(--hsub); line-height: 1.2; letter-spacing: -.01em; color: var(--gl); margin: 0 0 30px; max-width: 760px; }
 .decision-b { font-family: var(--fb); font-size: clamp(16px,1.9vw,20px); font-weight: 300; line-height: 1.75; color: var(--gd); margin-bottom: 0; }
 .decision-body { max-width: 640px; }
+
+/* ── Unified body prose → Jost at the Decision-body size (David's directive) ──
+   Section intros, bios, letters and FAQ answers share one font + size.
+   Structured breakdowns (work sessions .sr-d, gap items .gr-b/.gap-def,
+   primary-path checklist .pp-desc) and the serif editorial accent (.mid-sub)
+   are intentionally left on their own treatment. */
+.meet-intro, .p-body, .other-sub, .frank-b, .pp-body,
+.al-sec-intro, .decision-b, .enemy-b, .faq-ai {
+  font-family: var(--fu);
+  font-size: clamp(16px, 1.9vw, 20px);
+}
 .decision-cta { margin-top: 40px; }
 .decision-b p+p { margin-top: 14px; }
 
@@ -955,6 +985,17 @@ footer { background: var(--c2); border-top: 1px solid var(--c4); padding: 48px 0
 .btn-tactile:hover .btn-tactile-arrow {
   transform: translateX(6px);
 }
+
+/* Stacked label variant — for full-width buttons in narrow columns whose single
+   line was clipping (PrimaryPath, Alliance). Lets the wrap grow to two lines
+   while keeping the vertical hover-swap intact (translateY is % of own height). */
+.btn-tactile.btn-stack .btn-tactile-wrap {
+  height: auto;
+  line-height: 1.25;
+  white-space: normal;
+  text-align: center;
+}
+.btn-tactile.btn-stack { padding-top: 18px; padding-bottom: 18px; }
 
 /* White / transparent hollow luxury CTA variant */
 .btn-tactile-w {
@@ -1331,6 +1372,27 @@ input:focus-visible,
 .profile > *,
 .tcard > *,
 .pp-item > * { position: relative; z-index: 1; }
+
+/* Outcomes cards (.interactive-card): a more prominent version of the same
+   cursor-tracked glow, plus a hairline highlight on hover — so the hover-over
+   functionality reads clearly against the new greyscale gradient. */
+.interactive-card { position: relative; isolation: isolate; transition: box-shadow 0.5s ease; }
+.interactive-card::before {
+  content: '';
+  position: absolute; inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    340px circle at var(--mx, -100%) var(--my, -100%),
+    rgba(255, 255, 255, 0.12),
+    transparent 62%
+  );
+  opacity: 0;
+  transition: opacity 0.45s ease;
+}
+.interactive-card:hover::before { opacity: 1; }
+.interactive-card:hover { box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14); }
+.interactive-card > * { position: relative; z-index: 1; }
 
 /* ── Modern typographic line-breaking ───────────── */
 h1, h2, h3,

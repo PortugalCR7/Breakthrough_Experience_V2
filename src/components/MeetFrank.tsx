@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { useScrollFadeIn } from "../hooks/useScrollFadeIn";
-import { gsap, useGSAP, prefersReducedMotion } from "../motion";
+import { gsap, useGSAP, prefersReducedMotion, useWordScrub } from "../motion";
 
 /**
  * Section — Meet Frank.
@@ -21,6 +21,8 @@ export default function MeetFrank() {
   const photoColRef = useRef<HTMLDivElement | null>(null);
   const imgRef = useRef<HTMLImageElement | null>(null);
   const timelineRef = useRef<HTMLDivElement | null>(null);
+  const frankHlRef = useRef<HTMLHeadingElement | null>(null);
+  useWordScrub(frankHlRef);
 
   useGSAP(
     () => {
@@ -35,10 +37,12 @@ export default function MeetFrank() {
       const mm = gsap.matchMedia();
 
       mm.add("(min-width: 768px)", () => {
-        // Pin the portrait column, locking its bottom edge to the timeline end.
-        if (photoColRef.current) {
-          pinPortrait(photoColRef.current, timelineRef.current);
-        }
+        // The portrait column holds via native CSS `position: sticky` (.frank-photo-col),
+        // which releases exactly when the grid's bottom — the timeline's last row
+        // (2026 BREAKTHROUGH) — reaches the image's bottom edge. That gives the
+        // flush bottom-lock for free; a GSAP pin here only fought the sticky and
+        // dragged the image behind the next section, so it's intentionally gone.
+
         // Scrubbed portrait parallax (depth).
         if (imgRef.current) {
           gsap.set(imgRef.current, { scale: 1.16 });
@@ -98,14 +102,22 @@ export default function MeetFrank() {
 
           <div ref={bioRef as any}>
             <div className={`eyebrow fu ${isBioVisible ? "vis" : ""}`}>Meet Frank</div>
-            <h2 className={`frank-hl fu ${isBioVisible ? "vis" : ""}`} style={{ transitionDelay: "0.1s" }}>
-              I DID NOT BUILD
+            <h2 ref={frankHlRef} className="frank-hl">
+              <span className="word-reveal-span mr-[0.25em]">I</span>
+              <span className="word-reveal-span mr-[0.25em]">DID</span>
+              <span className="word-reveal-span mr-[0.25em]">NOT</span>
+              <span className="word-reveal-span mr-[0.25em]">BUILD</span>
               <br />
-              THIS FROM THEORY.
+              <span className="word-reveal-span mr-[0.25em]">THIS</span>
+              <span className="word-reveal-span mr-[0.25em]">FROM</span>
+              <span className="word-reveal-span mr-[0.25em]">THEORY.</span>
               <br />
-              I EARNED IT
+              <span className="word-reveal-span mr-[0.25em]">I</span>
+              <span className="word-reveal-span mr-[0.25em]">EARNED</span>
+              <span className="word-reveal-span mr-[0.25em]">IT</span>
               <br />
-              THROUGH <span className="sv">EXPERIENCE.</span>
+              <span className="word-reveal-span mr-[0.25em]">THROUGH</span>
+              <span className="word-reveal-span sv mr-[0.25em]">EXPERIENCE.</span>
             </h2>
 
             <div className={`frank-b fu ${isBioVisible ? "vis" : ""}`} style={{ transitionDelay: "0.15s" }}>
@@ -198,42 +210,6 @@ export default function MeetFrank() {
 }
 
 /* ── local helpers (kept here so the section is self-contained) ── */
-
-/**
- * Pin the portrait column and release it the instant the final timeline row's
- * bottom edge rises to meet the portrait's bottom edge — so the image frame and
- * the "2026 BREAKTHROUGH" row lock flush and scroll away together (client ask:
- * "the bottom of the image frame stops | locks at the bottom of the timeline").
- *
- * Pinning off the column's OWN top makes its pinned top deterministic (= 12% of
- * the viewport), so the end can be computed exactly: the last row's bottom is
- * released when it reaches `12vh + columnHeight` from the viewport top — which is
- * precisely where the pinned column's bottom sits.
- */
-function pinPortrait(photoCol: HTMLElement, timeline: HTMLDivElement | null) {
-  const rows = timeline
-    ? gsap.utils.toArray<HTMLElement>(".tl-row", timeline)
-    : [];
-  const lastRow = rows[rows.length - 1];
-  if (!lastRow) return;
-
-  const PIN_TOP = 0.12; // matches start "top 12%"
-
-  gsap.timeline({
-    scrollTrigger: {
-      trigger: photoCol,
-      start: `top ${PIN_TOP * 100}%`,
-      endTrigger: lastRow,
-      end: () =>
-        "bottom top+=" +
-        Math.round(window.innerHeight * PIN_TOP + photoCol.offsetHeight),
-      pin: photoCol,
-      pinSpacing: false,
-      anticipatePin: 1,
-      invalidateOnRefresh: true,
-    },
-  });
-}
 
 function timelineDraw(tl: HTMLDivElement | null, scrub: boolean) {
   if (!tl) return;

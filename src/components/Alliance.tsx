@@ -34,10 +34,10 @@ export default function Alliance() {
               access. This is where the real work becomes a way of life.
             </p>
             <div className="mt-8">
-              <a ref={magneticRef as any} href="#" className="btn-tactile w-full" onClick={handleApplyClick}>
+              <a ref={magneticRef as any} href="#" className="btn-tactile btn-stack w-full" onClick={handleApplyClick}>
                 <span className="btn-tactile-wrap">
-                  <span className="btn-tactile-text">Apply For The Alliance</span>
-                  <span className="btn-tactile-hover">Apply For The Alliance</span>
+                  <span className="btn-tactile-text">Apply For<br />The Alliance</span>
+                  <span className="btn-tactile-hover">Apply For<br />The Alliance</span>
                 </span>
                 <span className="btn-tactile-arrow">→</span>
               </a>
