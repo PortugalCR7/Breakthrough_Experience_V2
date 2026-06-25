@@ -422,7 +422,7 @@ body::after {
   font-family: var(--fs); font-size: clamp(20px,2.6vw,33px);
   font-weight: 400; font-style: italic; line-height: 1.35; color: var(--gl);
 }
-.anchor-quote p.big { font-family: var(--fd); font-size: clamp(24px,3.4vw,46px); font-style: normal; line-height: 1.06; letter-spacing: .005em; }
+.anchor-quote p.big { font-family: var(--fd); font-size: clamp(20px,2.6vw,33px); font-style: normal; line-height: 1.06; letter-spacing: .005em; }
 .anchor-quote p.big .sv { color: var(--sv); }
 
 /* ═══════════════════════════════════════════════
@@ -493,9 +493,9 @@ body::after {
 .gap-hdr { margin-bottom: 56px; }
 .gap-hl { font-family: var(--fd); font-size: var(--h2); line-height: .88; letter-spacing: -.025em; color: var(--gl); margin-bottom: 14px; text-transform: uppercase; }
 .gap-hl .sv { color: var(--sv); }
-.gap-def { font-family: var(--fb); font-size: clamp(15px,1.8vw,20px); font-weight: 300; font-style: italic; color: var(--gd); max-width: 540px; }
+.gap-def { font-family: var(--fb); font-size: clamp(15px,1.8vw,20px); font-weight: 300; font-style: italic; color: var(--gd); max-width: 760px; }
 .gap-list { display: flex; flex-direction: column; }
-.gap-row { display: grid; grid-template-columns: 64px 240px 1fr; gap: 0 48px; padding: 36px 0; border-top: 1px solid var(--c4); }
+.gap-row { display: grid; grid-template-columns: 64px 240px 1fr; gap: 0 48px; padding: 36px 0 36px 22px; border-top: 1px solid var(--c4); }
 .gap-row:last-child { border-bottom: 1px solid var(--c4); }
 .gr-num { font-family: var(--fm); font-size: 11px; letter-spacing: .12em; color: var(--mu); padding-top: 4px; align-self: start; }
 .gr-tc { align-self: center; }

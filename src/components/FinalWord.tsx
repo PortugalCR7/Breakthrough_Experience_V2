@@ -104,7 +104,7 @@ export default function FinalWord() {
       id="finalword"
       ref={sectionRef}
       className="scroll-snap-section relative w-full overflow-hidden"
-      style={{ paddingTop: "var(--secpad)", paddingBottom: "var(--secpad)" }}
+      style={{ paddingTop: "var(--secpad)", paddingBottom: "var(--secpad)", borderTop: "1px solid var(--c4)" }}
     >
       {/* Frank portrait — bleeds off the left edge into the black, no frame.
           GSAP controls its reveal, so the CSS transition is disabled here. */}

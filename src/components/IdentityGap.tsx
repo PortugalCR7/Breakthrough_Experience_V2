@@ -8,7 +8,7 @@ const GAP_ROWS: GapRowItem[] = [
   {
     id: "g1",
     num: "01 ·",
-    title: "Validation Seek",
+    title: "Seeking Validation",
     body: "You adjust for approval. You know you're doing it. You do it anyway.",
     highlight: "Strong men don't need agreement. They need alignment.",
   },
@@ -42,7 +42,7 @@ const HEADLINE_WORDS = [
 ];
 
 const BODY_WORDS = [
-  "That", "gap", "shows", "up", "in", "highly", "predictable,", "silent,", "destructive", "ways."
+  "That", "gap", "shows", "up", "in", "highly", "predictable,", "silent,", "and", "destructive", "ways."
 ];
 
 /**
@@ -77,11 +77,6 @@ export default function IdentityGap() {
             className={`flex flex-col gap-4 gen-reveal ${isMetaVisible ? "vis" : ""}`}
           >
             <div className="section-num">03</div>
-            <div>
-              <span className="font-mono text-xs text-neutral-500 tracking-[0.3em] uppercase">
-                IDENTITY GAP ANALYSIS
-              </span>
-            </div>
           </div>
 
           {/* Right side: scrubbed Word Reveal on headline & body */}

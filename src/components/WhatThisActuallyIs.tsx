@@ -132,7 +132,7 @@ export default function WhatThisActuallyIs() {
               </div>
 
               {/* Lead-in + the "not this" chips */}
-              <div className="not-lead">Breakthrough is not…</div>
+              <div className="not-lead">BREAKTHROUGH IS NOT…</div>
               <div className="not-row flex flex-wrap gap-x-6 gap-y-3">
                 {NOT_ITEMS.map((item) => (
                   <div key={item} className="not-item group cursor-pointer">
