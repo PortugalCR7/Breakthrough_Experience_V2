@@ -25,12 +25,16 @@ import Footer from "./components/Footer";
 import CtaText1 from "./components/CtaText1";
 import CtaText2 from "./components/CtaText2";
 import CtaText3 from "./components/CtaText3";
+import ThemeToggle from "./components/ThemeToggle";
 
 export default function App() {
   return (
     <>
       {/* Dynamic tactile custom cursor glow */}
       <CustomCursor />
+
+      {/* Fixed-corner dark/light toggle (direct token inversion) */}
+      <ThemeToggle />
 
       {/* Cursor-tracked spotlight light on cards (writes --mx/--my, CSS draws it) */}
       <Spotlight />

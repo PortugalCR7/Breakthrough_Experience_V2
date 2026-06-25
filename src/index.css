@@ -36,6 +36,92 @@
   --eyebrow: 13px;                   /* bumped up from 10px */
 }
 
+/* ============================================================================
+   THEMING — dark (default) / light, via direct token inversion.
+   The page background, type, dividers and greyscale all flow through these
+   tokens, so swapping the block re-themes the whole site. Photographs are left
+   black-and-white untouched; the Hero (text over a photo) opts out by carrying
+   its own data-theme="dark". The word-reveal animations now drive OPACITY only
+   and inherit these token colors, so they read correctly in either theme.
+   ========================================================================= */
+
+/* Dark token set — also re-asserted here (not only :root) so any data-theme="dark"
+   island (the Hero) keeps dark tokens even when the document is in light mode.
+   Custom properties inherit from the nearest ancestor, so the island wins. */
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
+  --c0: #000000;  --c1: #000000;  --c2: #000000;  --c3: #000000;
+  --c4: #242424;
+  --sv: #ffffff;
+  --sd: rgba(255,255,255,.55);
+  --sl: rgba(255,255,255,.10);
+  --sl-light: rgba(255,255,255,.05);
+  --gl: #ffffff;
+  --gd: rgba(255,255,255,.65);
+  --gf: rgba(255,255,255,.05);
+  --mu: #8e8e8e;
+}
+
+/* Light token set — a faithful inversion of the above. */
+[data-theme="light"] {
+  color-scheme: light;
+  --c0: #ffffff;  --c1: #ffffff;  --c2: #ffffff;  --c3: #ffffff;
+  --c4: #dcdcdc;
+  --sv: #000000;
+  --sd: rgba(0,0,0,.55);
+  --sl: rgba(0,0,0,.10);
+  --sl-light: rgba(0,0,0,.05);
+  --gl: #000000;
+  --gd: rgba(0,0,0,.70);
+  --gf: rgba(0,0,0,.05);
+  --mu: #6f6f6f;
+}
+
+/* Hardcoded Tailwind greyscale utilities that don't flow through tokens.
+   Under light, remap each to its inverted equivalent. (The Hero carries none
+   of these, so its data-theme="dark" island is unaffected.) Gradient stops
+   (from-/to-/via-) are intentionally left dark — they scrim the B&W photos. */
+[data-theme="light"] .text-white,
+[data-theme="light"] .text-stone-100 { color: var(--gl); }
+[data-theme="light"] .text-stone-200,
+[data-theme="light"] .text-stone-300,
+[data-theme="light"] .text-neutral-300 { color: rgba(0,0,0,.62); }
+[data-theme="light"] .text-stone-400,
+[data-theme="light"] .text-neutral-400 { color: rgba(0,0,0,.55); }
+[data-theme="light"] .text-neutral-600 { color: var(--mu); }
+
+[data-theme="light"] .border-neutral-900,
+[data-theme="light"] .border-neutral-800 { border-color: var(--c4); }
+[data-theme="light"] .border-neutral-700,
+[data-theme="light"] .border-stone-700 { border-color: #cfcfcf; }
+[data-theme="light"] .border-white\/10 { border-color: rgba(0,0,0,.12); }
+[data-theme="light"] .divide-neutral-900 > * + * { border-color: var(--c4); }
+
+[data-theme="light"] .bg-neutral-900 { background-color: #f2f2f2; }
+[data-theme="light"] .bg-neutral-950 { background-color: #f6f6f6; }
+[data-theme="light"] .bg-neutral-800,
+[data-theme="light"] .bg-stone-800 { background-color: #ededed; }
+[data-theme="light"] .bg-neutral-700 { background-color: #e4e4e4; }
+[data-theme="light"] .bg-neutral-900\/40 { background-color: rgba(0,0,0,.04); }
+[data-theme="light"] .bg-neutral-950\/80 { background-color: rgba(255,255,255,.82); }
+
+/* Fixed-corner theme toggle */
+.theme-toggle {
+  position: fixed; right: 22px; bottom: 22px; z-index: 990;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 46px; height: 46px; border-radius: 999px;
+  background: var(--c1); color: var(--gl);
+  border: 1px solid var(--c4);
+  cursor: pointer; line-height: 0;
+  transition: background .25s ease, color .25s ease, border-color .25s ease, transform .15s ease;
+  box-shadow: 0 6px 24px rgba(0,0,0,.28);
+}
+.theme-toggle:hover { transform: translateY(-2px); border-color: var(--sv); }
+.theme-toggle:active { transform: translateY(0); }
+.theme-toggle svg { width: 20px; height: 20px; }
+@media (max-width: 600px) { .theme-toggle { right: 14px; bottom: 14px; width: 42px; height: 42px; } }
+
 /* Base styles resets */
 html {
   scroll-behavior: smooth;

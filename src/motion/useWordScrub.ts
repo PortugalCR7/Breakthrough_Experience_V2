@@ -50,9 +50,11 @@ export function useWordScrub(
     end = "top 24%",
     each = 0.5,
     duration = 0.4,
-    dimOpacity = 0.1,
-    dimColor = "#454545",
-    litColor = "#ffffff",
+    // Theme-aware reveal: words rest at their CSS color (var(--gl)) and we only
+    // animate OPACITY, so the dim→lit narration reads correctly in both dark and
+    // light themes (no hardcoded #fff/#454545 baked inline). dimOpacity is tuned
+    // so the resting word reads as a soft grey on either background.
+    dimOpacity = 0.22,
   } = opts;
 
   useGSAP(
@@ -61,14 +63,13 @@ export function useWordScrub(
       if (!words.length) return;
 
       if (prefersReducedMotion()) {
-        gsap.set(words, { opacity: 1, color: litColor, clearProps: "transition" });
+        gsap.set(words, { opacity: 1, clearProps: "transition" });
         return;
       }
 
-      gsap.set(words, { opacity: dimOpacity, color: dimColor });
+      gsap.set(words, { opacity: dimOpacity });
       gsap.to(words, {
         opacity: 1,
-        color: litColor,
         ease: "none",
         duration,
         stagger: { each },

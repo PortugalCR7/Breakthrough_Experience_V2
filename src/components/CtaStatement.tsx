@@ -60,7 +60,7 @@ export default function CtaStatement({
       if (!words.length) return;
 
       if (prefersReducedMotion()) {
-        gsap.set(words, { opacity: 1, color: "#ffffff" });
+        gsap.set(words, { opacity: 1 });
         return;
       }
 
@@ -68,10 +68,9 @@ export default function CtaStatement({
 
       // Desktop: PIN + scroll-lock brighten (or plain scrub when pin === false).
       mm.add("(min-width: 768px)", () => {
-        gsap.set(words, { opacity: 0.1, color: "#454545" });
+        gsap.set(words, { opacity: 0.22 });
         gsap.to(words, {
           opacity: 1,
-          color: "#ffffff",
           ease: "none",
           duration: 0.4,
           stagger: { each: 0.5 },
@@ -83,10 +82,9 @@ export default function CtaStatement({
 
       // Touch / small screens: plain scrubbed brighten, native scroll, no pin.
       mm.add("(max-width: 767.98px)", () => {
-        gsap.set(words, { opacity: 0.1, color: "#454545" });
+        gsap.set(words, { opacity: 0.22 });
         gsap.to(words, {
           opacity: 1,
-          color: "#ffffff",
           ease: "none",
           duration: 0.4,
           stagger: { each: 0.5 },

@@ -37,14 +37,14 @@ export default function FinalWord() {
       if (!words.length) return;
 
       if (prefersReducedMotion()) {
-        gsap.set(words, { opacity: 1, color: "#ffffff" });
+        gsap.set(words, { opacity: 1 });
         if (portrait) gsap.set(portrait, { opacity: 1, x: 0 });
         if (sig) gsap.set(sig, { opacity: 1, y: 0 });
         return;
       }
 
       const build = (st: ScrollTrigger.Vars) => {
-        gsap.set(words, { opacity: 0.1, color: "#454545" });
+        gsap.set(words, { opacity: 0.22 });
         if (portrait) gsap.set(portrait, { opacity: 0, x: -28 });
         if (sig) gsap.set(sig, { opacity: 0, y: 30 });
 
@@ -53,7 +53,7 @@ export default function FinalWord() {
         if (portrait) tl.to(portrait, { opacity: 1, x: 0, ease: "none", duration: 0.5 }, 0);
         tl.to(
           words,
-          { opacity: 1, color: "#ffffff", ease: "none", duration: 0.4, stagger: { each: 0.5 } },
+          { opacity: 1, ease: "none", duration: 0.4, stagger: { each: 0.5 } },
           0
         );
         // Signature resolves at/after the final line.
