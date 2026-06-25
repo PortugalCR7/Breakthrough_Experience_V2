@@ -22,7 +22,7 @@ const PROFILES: ProfileItem[] = [
   {
     id: "p3",
     num: "PROFILE 03",
-    title: "THE MAN<br />IN EXISTENTIAL<br />CRISIS",
+    title: "THE MAN<br />IN&nbsp;EXISTENTIAL<br />CRISIS",
     body: "Something has fallen apart. A marriage. A business. A future you counted on. That feeling isn't failure. It's the first sign that your old way of living no longer works. <strong>The crisis is not the end. It's the beginning.</strong>",
     image: "/profile_03.png",
   },
