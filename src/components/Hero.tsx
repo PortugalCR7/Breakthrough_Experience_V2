@@ -75,7 +75,7 @@ export default function Hero() {
   const { elementRef, offset } = useParallax(-0.14);
 
   return (
-    <section id="hero" data-theme="dark" className="relative overflow-hidden">
+    <section id="hero" className="relative overflow-hidden">
       {/* ── Layer 1 · Full-bleed cinematic slideshow ─────────────── */}
       <div
         ref={elementRef as any}
