@@ -211,7 +211,9 @@ body::after {
   opacity: 0;
   filter: grayscale(100%) brightness(.8) contrast(1.08);
   transform: scale(1.12);
-  transition: opacity 1.8s ease-in-out;
+  /* Transition transform too, so when a slide deactivates the Ken Burns scale
+     eases back instead of snapping mid-fade (the "snapback glitch"). */
+  transition: opacity 1.8s ease-in-out, transform 1.8s ease-in-out;
 }
 .hero-photo.is-active {
   opacity: 1;
@@ -551,7 +553,7 @@ body::after {
 .frank-sub { font-family: var(--fd); font-size: clamp(20px,2.4vw,30px); color: var(--gl); margin: 34px 0 16px; line-height: 1.05; }
 .frank-pull { margin: 36px 0; padding: 22px 0 22px 28px; border-left: 3px solid var(--sv); }
 .frank-pull p { font-family: var(--fs); font-size: clamp(18px,2.1vw,26px); font-weight: 400; font-style: italic; line-height: 1.4; color: var(--gl); }
-.frank-close { margin-top: 24px; padding: 18px 22px; background: rgba(122,150,168,.06); border-left: 2px solid var(--sv); font-family: var(--fb); font-size: 15px; font-weight: 500; line-height: 1.6; color: var(--gl); }
+.frank-close { margin-top: 24px; padding: 22px 26px; background: rgba(122,150,168,.06); border-left: 2px solid var(--sv); font-family: var(--fd); font-size: clamp(20px,2.4vw,30px); font-weight: 400; line-height: 1.32; color: var(--gl); }
 .tl-lbl { font-family: var(--fm); font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: var(--mu); margin-top: 40px; margin-bottom: 14px; display: block; }
 .tl { display: flex; flex-direction: column; }
 .tl-row { display: flex; align-items: baseline; gap: 14px; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,.04); }

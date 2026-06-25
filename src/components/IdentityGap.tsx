@@ -54,9 +54,14 @@ const BODY_WORDS = [
  * Lenis + GSAP off a single rAF is what makes it smooth.
  */
 export default function IdentityGap() {
-  // Headline + body: scrubbed word narration (operates on existing .word-reveal-span markup)
-  const headScope = useRef<HTMLDivElement | null>(null);
-  useWordScrub(headScope);
+  // Headline + body: scrubbed word narration (operates on existing .word-reveal-span markup).
+  // Each block triggers on *itself* — exactly like the other section headlines
+  // (AnchorQuote, MeetFrank) — so the headline reveals word-by-word reliably
+  // instead of jumping when the scroll-snap lands the section.
+  const headlineRef = useRef<HTMLHeadingElement | null>(null);
+  const bodyRef = useRef<HTMLParagraphElement | null>(null);
+  useWordScrub(headlineRef);
+  useWordScrub(bodyRef);
 
   // Staggered gap-row cascade trigger
   const [listRef, listVisible] = useScrollFadeIn({ threshold: 0.1, rootMargin: "0px 0px -10% 0px" });
@@ -80,16 +85,16 @@ export default function IdentityGap() {
           </div>
 
           {/* Right side: scrubbed Word Reveal on headline & body */}
-          <div ref={headScope} className="flex flex-col gap-6">
+          <div className="flex flex-col gap-6">
             <div className="eyebrow">The Identity Gap</div>
-            <h2 className="gap-hl">
+            <h2 ref={headlineRef} className="gap-hl">
               {HEADLINE_WORDS.map((word, index) => (
                 <span key={`hl-word-${index}`} className="word-reveal-span mr-[0.25em]">
                   {word}
                 </span>
               ))}
             </h2>
-            <p className="gap-def">
+            <p ref={bodyRef} className="gap-def">
               {BODY_WORDS.map((word, index) => (
                 <span key={`body-word-${index}`} className="word-reveal-span mr-[0.25em]">
                   {word}

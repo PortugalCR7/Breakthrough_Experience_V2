@@ -101,12 +101,7 @@ export default function MeetFrank() {
           </div>
 
           <div ref={bioRef as any}>
-            <div
-              className={`eyebrow fu ${isBioVisible ? "vis" : ""}`}
-              style={{ fontFamily: "var(--fd)", fontSize: "clamp(22px,2.4vw,34px)", letterSpacing: ".08em", fontWeight: 600 }}
-            >
-              Meet Frank
-            </div>
+            <div className={`eyebrow fu ${isBioVisible ? "vis" : ""}`}>Meet Frank</div>
             <h2 ref={frankHlRef} className="frank-hl">
               <span className="word-reveal-span mr-[0.25em]">I</span>
               <span className="word-reveal-span mr-[0.25em]">DID</span>
