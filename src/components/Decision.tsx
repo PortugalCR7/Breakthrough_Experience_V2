@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { useMagnetic } from "../hooks/useMagnetic";
-import { gsap, useGSAP, prefersReducedMotion } from "../motion";
+import { gsap, useGSAP, prefersReducedMotion, readWordColors } from "../motion";
+import { useTheme } from "../theme/useTheme";
 
 const HEADLINE: { word: string; sv?: boolean }[] = [
   { word: "THE" }, { word: "MAN" }, { word: "YOU" }, { word: "WANT" }, { word: "TO" },
@@ -20,6 +21,7 @@ export default function Decision() {
   const magneticRef = useMagnetic({ strength: 0.35 });
   const sectionRef = useRef<HTMLElement | null>(null);
   const heroScope = useRef<HTMLDivElement | null>(null);
+  const { theme } = useTheme();
 
   useGSAP(
     () => {
@@ -29,19 +31,21 @@ export default function Decision() {
       const words = gsap.utils.toArray<HTMLElement>(".word-reveal-span", hero);
       if (!words.length) return;
 
+      const { dim, lit } = readWordColors(hero);
+
       if (prefersReducedMotion()) {
-        gsap.set(words, { opacity: 1, color: "#ffffff" });
+        gsap.set(words, { opacity: 1, color: lit });
         return;
       }
 
       const mm = gsap.matchMedia();
 
       mm.add("(min-width: 768px)", () => {
-        gsap.set(words, { opacity: 0.1, color: "#454545" });
+        gsap.set(words, { opacity: 0.1, color: dim });
         const fits = !!section && section.offsetHeight <= window.innerHeight * 1.02;
         gsap.to(words, {
           opacity: 1,
-          color: "#ffffff",
+          color: lit,
           ease: "none",
           duration: 0.4,
           stagger: { each: 0.5 },
@@ -52,10 +56,10 @@ export default function Decision() {
       });
 
       mm.add("(max-width: 767.98px)", () => {
-        gsap.set(words, { opacity: 0.1, color: "#454545" });
+        gsap.set(words, { opacity: 0.1, color: dim });
         gsap.to(words, {
           opacity: 1,
-          color: "#ffffff",
+          color: lit,
           ease: "none",
           duration: 0.4,
           stagger: { each: 0.5 },
@@ -65,7 +69,7 @@ export default function Decision() {
 
       return () => mm.revert();
     },
-    { scope: sectionRef }
+    { scope: sectionRef, dependencies: [theme] }
   );
 
   return (

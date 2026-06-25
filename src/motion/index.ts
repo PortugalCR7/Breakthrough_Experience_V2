@@ -7,4 +7,4 @@
  */
 export { gsap, ScrollTrigger, useGSAP, prefersReducedMotion } from "./gsap";
 export { LenisProvider, useLenis } from "./LenisProvider";
-export { useWordScrub, useWordScrubScope } from "./useWordScrub";
+export { useWordScrub, useWordScrubScope, readWordColors } from "./useWordScrub";

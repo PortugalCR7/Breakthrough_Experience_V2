@@ -18,6 +18,13 @@
   --gd: rgba(255,255,255,.65);
   --gf: rgba(255,255,255,.05);
   --mu: #8e8e8e;             /* muted gray */
+
+  /* Word-reveal narration colors — theme-aware (dark = dim grey → pure white).
+     Driven via tokens so light can ignite to ink without regressing dark.
+     See useWordScrub.ts + Decision/CtaStatement/FinalWord. */
+  --word-dim: #454545;
+  --word-lit: #ffffff;
+
   --fd: 'Bodoni Moda', serif;
   --fu: 'Jost', sans-serif;
   --fb: 'DM Sans', sans-serif;
@@ -34,6 +41,34 @@
   --body-lg: clamp(17px, 2vw, 22px);
   --body: 15px;
   --eyebrow: 13px;                   /* bumped up from 10px */
+}
+
+/* ═══════════════════════════════════════════════
+   LIGHT MODE — "Gallery White"
+   A designed counterpart, not an inversion. Cool blue-grey paper + ink-black.
+   Only the token values flip here; deliberate per-section treatments live in the
+   LIGHT OVERRIDES block at the end of this file. Photos stay B&W in both themes.
+═══════════════════════════════════════════════ */
+:root[data-theme="light"] {
+  --c0: #EDEFF1;             /* deepest base / grain bed */
+  --c1: #F1F2F4;             /* page background (the paper) */
+  --c2: #F7F8F9;             /* elevated surfaces / cards */
+  --c3: #FBFBFC;             /* highest surfaces */
+  --c4: #DEE1E6;             /* hairline rules / borders */
+  --sv: #14161A;             /* ink accent (CTAs, progress bar, .sv highlights) */
+  --sd: rgba(20,22,26,.55);
+  --sl: rgba(20,22,26,.10);
+  --sl-light: rgba(20,22,26,.05);
+  --gl: #14161A;             /* primary text / ink */
+  --gd: #565B63;             /* muted body text */
+  --gf: rgba(20,22,26,.05);
+  --mu: #8A9098;             /* muted labels */
+
+  /* Word-reveal ignites to ink on paper, with a soft grey resting state. */
+  --word-dim: #B6BAC0;
+  --word-lit: #14161A;
+
+  color-scheme: light;
 }
 
 /* Base styles resets */
@@ -1608,3 +1643,216 @@ html.has-custom-cursor * { cursor: none !important; }
   .btn-tactile{ padding:18px 22px; font-size:12px; letter-spacing:.1em; gap:10px; max-width:100%; }
   .btn-tactile-arrow{ font-size:13px; }
 }
+
+/* ═══════════════════════════════════════════════
+   THEME TOGGLE — fixed bottom-right, token-driven so it themes itself.
+═══════════════════════════════════════════════ */
+.theme-toggle {
+  position: fixed;
+  right: clamp(16px, 2.4vw, 28px);
+  bottom: clamp(16px, 2.4vw, 28px);
+  z-index: 990;
+  width: 46px; height: 46px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--c2);
+  color: var(--gl);
+  border: 1px solid var(--c4);
+  border-radius: 999px;
+  cursor: pointer;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 24px rgba(0,0,0,.35);
+  transition: background-color .35s ease, color .35s ease, border-color .25s ease,
+              transform .2s cubic-bezier(.16,1,.3,1), box-shadow .25s ease;
+}
+.theme-toggle:hover { transform: translateY(-2px); border-color: var(--sv); }
+.theme-toggle:active { transform: translateY(0) scale(.95); }
+.theme-toggle svg { display: block; }
+[data-theme="light"] .theme-toggle { box-shadow: 0 8px 24px rgba(20,22,26,.16); }
+
+/* ═══════════════════════════════════════════════
+   ✦ LIGHT MODE OVERRIDES — "Gallery White" ✦
+   Deliberate per-section treatments. Every rule is scoped to
+   [data-theme="light"] (unlayered, so it wins over Tailwind's layered
+   utilities) — dark mode is provably untouched. The Hero opts out via a local
+   data-theme="dark", so none of these match inside it.
+═══════════════════════════════════════════════ */
+
+/* ── Chrome ─────────────────────────────────────── */
+[data-theme="light"] #bar {
+  background: rgba(241,242,244,.82);
+  border-bottom-color: var(--c4);
+}
+[data-theme="light"] .bar-pipe { color: rgba(20,22,26,.2); }
+[data-theme="light"] body::after { opacity: .3; }
+[data-theme="light"] ::selection { background: rgba(20,22,26,.88); color: #F1F2F4; }
+[data-theme="light"] :focus-visible { outline-color: rgba(20,22,26,.65); }
+
+/* Section texture glow uses white light — invisible/awkward on paper, disable. */
+[data-theme="light"] .tex-glow::before,
+[data-theme="light"] .tex-glow.tex-glow--alt::before { background: none; }
+
+/* ── Display headlines: ink gradient (the dark gradient was white→grey,
+      which renders invisible on paper) ───────────── */
+[data-theme="light"] .anchor-body,
+[data-theme="light"] .meet-hl,
+[data-theme="light"] .enemy-hl,
+[data-theme="light"] .other-hl,
+[data-theme="light"] .frank-hl,
+[data-theme="light"] .frank-sub,
+[data-theme="light"] .oc-hl,
+[data-theme="light"] .testi-hl,
+[data-theme="light"] .mid-hl,
+[data-theme="light"] .pp-hl,
+[data-theme="light"] .al-sec-hl,
+[data-theme="light"] .faq-hl,
+[data-theme="light"] .decision-hl,
+[data-theme="light"] .decision-sub,
+[data-theme="light"] .co-t,
+[data-theme="light"] .foot-logo {
+  background-image: linear-gradient(174deg, #14161A 0%, #14161A 50%, #2c2f35 78%, #565B63 100%);
+  text-shadow: 0 1px 24px rgba(20,22,26,.06);
+}
+[data-theme="light"] .section-num {
+  background-image: linear-gradient(180deg, #14161A 0%, rgba(20,22,26,.18) 100%);
+}
+[data-theme="light"] .hero-hl,
+[data-theme="light"] .fw-txt { text-shadow: 0 1px 24px rgba(20,22,26,.05); }
+
+/* Accent words: ink fill, drop the white glow halo. */
+[data-theme="light"] .sv {
+  -webkit-text-fill-color: var(--sv);
+  color: var(--sv);
+  text-shadow: none;
+}
+
+/* ── Word-reveal narration on paper ─────────────── */
+[data-theme="light"] .word-reveal-span { color: var(--word-dim); }
+[data-theme="light"] .word-reveal-span.active { color: var(--word-lit); text-shadow: none; }
+[data-theme="light"] .cta-statement { color: var(--gl); }
+[data-theme="light"] .cta-beat { background: var(--c1); }
+@media (prefers-reduced-motion: reduce) {
+  [data-theme="light"] .word-reveal-span { color: var(--word-lit); opacity: 1 !important; }
+}
+
+/* ── Hardcoded greyscale Tailwind utilities → tokens ─────────────────
+      (unlayered rules beat Tailwind's layered utilities) ── */
+[data-theme="light"] .text-white { color: var(--gl); }
+[data-theme="light"] .text-stone-100,
+[data-theme="light"] .text-stone-200 { color: var(--gl); }
+[data-theme="light"] .text-stone-300,
+[data-theme="light"] .text-stone-400,
+[data-theme="light"] .text-neutral-300 { color: var(--gd); }
+[data-theme="light"] .text-neutral-400,
+[data-theme="light"] .text-neutral-600 { color: var(--mu); }
+
+[data-theme="light"] .border-neutral-700,
+[data-theme="light"] .border-neutral-800,
+[data-theme="light"] .border-neutral-900,
+[data-theme="light"] .border-stone-700 { border-color: var(--c4); }
+[data-theme="light"] .border-white\/10 { border-color: var(--sl); }
+
+[data-theme="light"] .bg-neutral-700,
+[data-theme="light"] .bg-neutral-800,
+[data-theme="light"] .bg-neutral-900,
+[data-theme="light"] .bg-stone-800 { background-color: var(--c2); }
+[data-theme="light"] .bg-neutral-950 { background-color: var(--c1); }
+[data-theme="light"] .bg-neutral-900\/40 { background-color: rgba(20,22,26,.04); }
+[data-theme="light"] .bg-neutral-950\/80 { background-color: rgba(20,22,26,.45); }
+
+/* Interactive / group-hover variants */
+[data-theme="light"] .hover\:bg-neutral-900\/40:hover { background-color: rgba(20,22,26,.04); }
+[data-theme="light"] .hover\:bg-neutral-700:hover { background-color: var(--c4); }
+[data-theme="light"] .hover\:text-white:hover { color: var(--gl); }
+[data-theme="light"] .group:hover .group-hover\:text-stone-300 { color: var(--gd); }
+
+/* Divide rules (sess-list, gap-list) */
+[data-theme="light"] .divide-neutral-900 > :not([hidden]) ~ :not([hidden]) { border-color: var(--c4); }
+
+/* MeetFrank portrait placeholder (only shown if the image fails to load) */
+[data-theme="light"] .frank-portrait .bg-gradient-to-br {
+  background-image: linear-gradient(to bottom right, var(--c3) 0%, var(--c2) 55%, var(--c4) 100%);
+}
+
+/* ── Photos · Gallery Print (B&W kept in both themes) ─────────────── */
+[data-theme="light"] .frank-portrait {
+  border: 1px solid var(--sv);
+  box-shadow: 0 10px 26px rgba(20,22,26,.20);
+}
+[data-theme="light"] .vision-cell {
+  border-color: var(--c4);
+  box-shadow: 0 8px 22px rgba(20,22,26,.10);
+}
+[data-theme="light"] .frank-portrait img,
+[data-theme="light"] .fw-portrait img,
+[data-theme="light"] .vision-cell img {
+  filter: grayscale(100%) contrast(1.06) brightness(.96);
+}
+[data-theme="light"] .p-band img {
+  filter: grayscale(100%) contrast(1.06) brightness(.9);
+}
+[data-theme="light"] .profile:hover .p-band img {
+  filter: grayscale(100%) contrast(1.06) brightness(1);
+}
+
+/* ── Hairline rules that were white-on-dark → ink-on-paper ───────── */
+[data-theme="light"] .faq-item { background-color: var(--c1); }
+[data-theme="light"] .oc-row,
+[data-theme="light"] .aph-row,
+[data-theme="light"] .pp-item,
+[data-theme="light"] .al-incl-row { border-bottom-color: var(--c4); }
+[data-theme="light"] .oc-row:first-child,
+[data-theme="light"] .aph-row:first-child,
+[data-theme="light"] .pp-item:first-child,
+[data-theme="light"] .al-incl-row:first-child { border-top-color: var(--c4); }
+[data-theme="light"] .tl-row { border-bottom-color: var(--c4); }
+[data-theme="light"] .asymmetric-panel { border-left-color: var(--c4); }
+[data-theme="light"] .scarcity {
+  background: rgba(20,22,26,.025);
+  border-color: var(--c4);
+}
+
+/* Outcomes panels: mirrored greyscale gradients → paper elevation */
+[data-theme="light"] .oc-panel:first-child { background: linear-gradient(150deg, var(--c3) 0%, var(--c2) 52%, var(--c1) 100%); }
+[data-theme="light"] .oc-panel:last-child  { background: linear-gradient(330deg, var(--c3) 0%, var(--c2) 52%, var(--c1) 100%); }
+
+/* ── Hover feedback: white tints/halos → ink on paper ───────────── */
+[data-theme="light"] .faq-item:not(.open):hover { background-color: rgba(20,22,26,.03); }
+[data-theme="light"] .faq-item:not(.open):hover .faq-qt { text-shadow: none; }
+[data-theme="light"] .faq-item:not(.open):hover .faq-tog {
+  border-color: rgba(20,22,26,.4);
+  background: rgba(20,22,26,.04);
+}
+[data-theme="light"] .pp-item:hover { background-color: rgba(20,22,26,.03); }
+[data-theme="light"] .not-item:hover { border-color: rgba(20,22,26,.4); background-color: rgba(20,22,26,.03); }
+[data-theme="light"] .not-item:hover .x { text-shadow: none; }
+[data-theme="light"] .tl-row:hover { background-color: rgba(20,22,26,.025); }
+[data-theme="light"] .profile:hover {
+  background-color: var(--c3);
+  box-shadow: 0 30px 55px -32px rgba(20,22,26,.28);
+}
+[data-theme="light"] .profile:hover .p-lbl { text-shadow: none; }
+[data-theme="light"] .auth-cell:hover { background-color: var(--c3); }
+[data-theme="light"] .auth-cell:hover .auth-n,
+[data-theme="light"] .auth-cell:hover .auth-w,
+[data-theme="light"] .pp-item:hover .pp-title { text-shadow: none; }
+[data-theme="light"] .tcard:hover {
+  border-color: rgba(20,22,26,.22);
+  box-shadow: 0 36px 60px -36px rgba(20,22,26,.22);
+}
+[data-theme="light"] .vision-cell:hover {
+  border-color: rgba(20,22,26,.28);
+  box-shadow: 0 30px 60px -36px rgba(20,22,26,.22);
+}
+
+/* ── Cursor-tracked glows: white light → faint ink on paper ─────── */
+[data-theme="light"] .profile::before,
+[data-theme="light"] .tcard::before,
+[data-theme="light"] .pp-item::before {
+  background: radial-gradient(230px circle at var(--mx,-100%) var(--my,-100%), rgba(20,22,26,.06), transparent 66%);
+}
+[data-theme="light"] .interactive-card::before {
+  background: radial-gradient(340px circle at var(--mx,-100%) var(--my,-100%), rgba(20,22,26,.07), transparent 62%);
+}
+[data-theme="light"] .interactive-card:hover { box-shadow: inset 0 0 0 1px rgba(20,22,26,.12); }
+[data-theme="light"] .cursor-glow { opacity: .12; }

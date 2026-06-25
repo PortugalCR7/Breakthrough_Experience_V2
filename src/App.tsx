@@ -25,6 +25,7 @@ import Footer from "./components/Footer";
 import CtaText1 from "./components/CtaText1";
 import CtaText2 from "./components/CtaText2";
 import CtaText3 from "./components/CtaText3";
+import ThemeToggle from "./components/ThemeToggle";
 
 export default function App() {
   return (
@@ -112,6 +113,9 @@ export default function App() {
 
       {/* Dynamic Brand Logo Footer card */}
       <Footer />
+
+      {/* Fixed bottom-right light/dark toggle (dark is default, persisted) */}
+      <ThemeToggle />
     </>
   );
 }

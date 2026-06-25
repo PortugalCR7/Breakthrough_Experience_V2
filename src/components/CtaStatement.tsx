@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { useScrollFadeIn } from "../hooks/useScrollFadeIn";
-import { gsap, useGSAP, prefersReducedMotion } from "../motion";
+import { gsap, useGSAP, prefersReducedMotion, readWordColors } from "../motion";
+import { useTheme } from "../theme/useTheme";
 
 interface CtaStatementProps {
   /** Logical lines of the statement. Rendered uppercase regardless of input casing. */
@@ -41,6 +42,7 @@ export default function CtaStatement({
   // Retained for the `reveal="line"` branch (used by other CtaText variants).
   const [fadeRef, isVisible] = useScrollFadeIn({ threshold: 0.25, rootMargin: "0px 0px -12% 0px" });
   const sectionRef = useRef<HTMLElement | null>(null);
+  const { theme } = useTheme();
 
   // Word indexing for word-reveal mode.
   let gi = 0;
@@ -59,8 +61,10 @@ export default function CtaStatement({
       const words = gsap.utils.toArray<HTMLElement>(".word-reveal-span", root);
       if (!words.length) return;
 
+      const { dim, lit } = readWordColors(root);
+
       if (prefersReducedMotion()) {
-        gsap.set(words, { opacity: 1, color: "#ffffff" });
+        gsap.set(words, { opacity: 1, color: lit });
         return;
       }
 
@@ -68,10 +72,10 @@ export default function CtaStatement({
 
       // Desktop: PIN + scroll-lock brighten (or plain scrub when pin === false).
       mm.add("(min-width: 768px)", () => {
-        gsap.set(words, { opacity: 0.1, color: "#454545" });
+        gsap.set(words, { opacity: 0.1, color: dim });
         gsap.to(words, {
           opacity: 1,
-          color: "#ffffff",
+          color: lit,
           ease: "none",
           duration: 0.4,
           stagger: { each: 0.5 },
@@ -83,10 +87,10 @@ export default function CtaStatement({
 
       // Touch / small screens: plain scrubbed brighten, native scroll, no pin.
       mm.add("(max-width: 767.98px)", () => {
-        gsap.set(words, { opacity: 0.1, color: "#454545" });
+        gsap.set(words, { opacity: 0.1, color: dim });
         gsap.to(words, {
           opacity: 1,
-          color: "#ffffff",
+          color: lit,
           ease: "none",
           duration: 0.4,
           stagger: { each: 0.5 },
@@ -96,7 +100,7 @@ export default function CtaStatement({
 
       return () => mm.revert();
     },
-    { scope: sectionRef, dependencies: [reveal, pin] }
+    { scope: sectionRef, dependencies: [reveal, pin, theme] }
   );
 
   // Merge the fade-in ref (line mode) onto the same section node we pin.
@@ -109,7 +113,7 @@ export default function CtaStatement({
     <section
       id={containerId || undefined}
       ref={setSection}
-      className="scroll-snap-section relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-neutral-950 px-[clamp(20px,4.5vw,56px)] py-[clamp(80px,14vh,160px)]"
+      className="cta-beat scroll-snap-section relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-neutral-950 px-[clamp(20px,4.5vw,56px)] py-[clamp(80px,14vh,160px)]"
     >
       <div
         className={`cta-statement w-full max-w-[1100px] mx-auto text-left${spacious ? " cta-statement--spacious" : ""}`}
