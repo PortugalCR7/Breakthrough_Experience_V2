@@ -70,8 +70,10 @@
   --gf: rgba(20,22,26,.05);
   --mu: #8A9098;             /* muted labels */
 
-  /* Word-reveal ignites to ink on paper, with a soft grey resting state. */
-  --word-dim: #B6BAC0;
+  /* Word-reveal ignites to ink on paper. The resting (un-read) state must read as
+     a deliberate dim grey — mirroring dark's #454545-on-black — NOT a pale wash,
+     or trailing un-ignited words look unrendered against the paper. */
+  --word-dim: #8B9099;
   --word-lit: #14161A;
 
   color-scheme: light;
@@ -1807,6 +1809,10 @@ html.has-custom-cursor * { cursor: none !important; }
 [data-theme="light"] .vision-cell img {
   filter: grayscale(100%) contrast(1.06) brightness(.96);
 }
+/* The portrait badge inverts in light (bg = --sv = ink, name = --c1 = paper).
+   The subtitle colour was hard-coded near-black for the dark theme's WHITE badge,
+   so on the inverted dark badge it went invisible — restore a legible paper tint. */
+[data-theme="light"] .frank-badge-ttl { color: rgba(241,242,244,.62); }
 [data-theme="light"] .p-band img {
   filter: grayscale(100%) contrast(1.06) brightness(.9);
 }
