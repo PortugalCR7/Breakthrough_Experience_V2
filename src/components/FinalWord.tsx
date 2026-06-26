@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { gsap, useGSAP, prefersReducedMotion, readWordColors, ScrollTrigger } from "../motion";
+import { gsap, useGSAP, prefersReducedMotion, ScrollTrigger } from "../motion";
 import { useTheme } from "../theme/useTheme";
 
 const LINES = [
@@ -38,17 +38,15 @@ export default function FinalWord() {
       const words = gsap.utils.toArray<HTMLElement>(".word-reveal-span", scope);
       if (!words.length) return;
 
-      const { dim, lit } = readWordColors(scope);
-
       if (prefersReducedMotion()) {
-        gsap.set(words, { opacity: 1, color: lit });
+        gsap.set(words, { opacity: 1, "--wp": 1 });
         if (portrait) gsap.set(portrait, { opacity: 1, x: 0 });
         if (sig) gsap.set(sig, { opacity: 1, y: 0 });
         return;
       }
 
       const build = (st: ScrollTrigger.Vars) => {
-        gsap.set(words, { opacity: 0.1, color: dim });
+        gsap.set(words, { opacity: 0.1, "--wp": 0 });
         if (portrait) gsap.set(portrait, { opacity: 0, x: -28 });
         if (sig) gsap.set(sig, { opacity: 0, y: 30 });
 
@@ -57,7 +55,7 @@ export default function FinalWord() {
         if (portrait) tl.to(portrait, { opacity: 1, x: 0, ease: "none", duration: 0.5 }, 0);
         tl.to(
           words,
-          { opacity: 1, color: lit, ease: "none", duration: 0.4, stagger: { each: 0.5 } },
+          { opacity: 1, "--wp": 1, ease: "none", duration: 0.4, stagger: { each: 0.5 } },
           0
         );
         // Signature resolves at/after the final line.
@@ -100,7 +98,7 @@ export default function FinalWord() {
 
       return () => mm.revert();
     },
-    { scope: sectionRef, dependencies: [theme] }
+    { scope: sectionRef, dependencies: [] }
   );
 
   return (

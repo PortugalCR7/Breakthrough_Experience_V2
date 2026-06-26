@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { useScrollFadeIn } from "../hooks/useScrollFadeIn";
-import { gsap, useGSAP, prefersReducedMotion, readWordColors } from "../motion";
+import { gsap, useGSAP, prefersReducedMotion } from "../motion";
 import { useTheme } from "../theme/useTheme";
 
 interface CtaStatementProps {
@@ -61,10 +61,8 @@ export default function CtaStatement({
       const words = gsap.utils.toArray<HTMLElement>(".word-reveal-span", root);
       if (!words.length) return;
 
-      const { dim, lit } = readWordColors(root);
-
       if (prefersReducedMotion()) {
-        gsap.set(words, { opacity: 1, color: lit });
+        gsap.set(words, { opacity: 1, "--wp": 1 });
         return;
       }
 
@@ -72,10 +70,10 @@ export default function CtaStatement({
 
       // Desktop: PIN + scroll-lock brighten (or plain scrub when pin === false).
       mm.add("(min-width: 768px)", () => {
-        gsap.set(words, { opacity: 0.1, color: dim });
+        gsap.set(words, { opacity: 0.1, "--wp": 0 });
         gsap.to(words, {
           opacity: 1,
-          color: lit,
+          "--wp": 1,
           ease: "none",
           duration: 0.4,
           stagger: { each: 0.5 },
@@ -87,10 +85,10 @@ export default function CtaStatement({
 
       // Touch / small screens: plain scrubbed brighten, native scroll, no pin.
       mm.add("(max-width: 767.98px)", () => {
-        gsap.set(words, { opacity: 0.1, color: dim });
+        gsap.set(words, { opacity: 0.1, "--wp": 0 });
         gsap.to(words, {
           opacity: 1,
-          color: lit,
+          "--wp": 1,
           ease: "none",
           duration: 0.4,
           stagger: { each: 0.5 },
@@ -100,7 +98,7 @@ export default function CtaStatement({
 
       return () => mm.revert();
     },
-    { scope: sectionRef, dependencies: [reveal, pin, theme] }
+    { scope: sectionRef, dependencies: [reveal, pin] }
   );
 
   // Merge the fade-in ref (line mode) onto the same section node we pin.

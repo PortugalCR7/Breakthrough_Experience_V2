@@ -4,7 +4,13 @@
 /* ═══════════════════════════════════════════════
    VARIABLES — sourced from original frankmondeose.html
 ═══════════════════════════════════════════════ */
-:root {
+/* Dark token values apply to the document root AND to any subtree that locally
+   opts back into dark via data-theme="dark" (e.g. the Hero, which sits over dark
+   cinematic photos in BOTH themes). Without the second selector a nested
+   data-theme="dark" did NOT re-establish these custom properties, so in light
+   mode the Hero inherited ink/grey tokens and its text went grey over the photos. */
+:root,
+[data-theme="dark"] {
   --c0: #000000;
   --c1: #000000;
   --c2: #000000;
@@ -1733,6 +1739,19 @@ html.has-custom-cursor * { cursor: none !important; }
 [data-theme="light"] .cta-beat { background: var(--c1); }
 @media (prefers-reduced-motion: reduce) {
   [data-theme="light"] .word-reveal-span { color: var(--word-lit); opacity: 1 !important; }
+}
+
+/* The pinned narration beats (CTA statements, Decision, Final Word) derive their
+   colour from a scrubbed progress var (--wp, 0→1) GSAP animates per word, mixed
+   across the theme tokens. Because colour is token-driven (not baked inline by
+   GSAP), a runtime theme toggle recolours instantly — so these pins NO LONGER
+   rebuild on theme change, which was inflating their pin-spacing on every toggle.
+   sRGB mixing matches GSAP's lerp, so dark renders identically. */
+.cta-statement .word-reveal-span,
+.decision-hl .word-reveal-span,
+.fw-txt .word-reveal-span {
+  color: color-mix(in srgb, var(--word-dim), var(--word-lit) calc(var(--wp, 0) * 100%));
+  -webkit-text-fill-color: color-mix(in srgb, var(--word-dim), var(--word-lit) calc(var(--wp, 0) * 100%));
 }
 
 /* ── Hardcoded greyscale Tailwind utilities → tokens ─────────────────

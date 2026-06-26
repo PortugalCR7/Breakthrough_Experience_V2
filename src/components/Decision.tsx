@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { useMagnetic } from "../hooks/useMagnetic";
-import { gsap, useGSAP, prefersReducedMotion, readWordColors } from "../motion";
+import { gsap, useGSAP, prefersReducedMotion } from "../motion";
 import { useTheme } from "../theme/useTheme";
 
 const HEADLINE: { word: string; sv?: boolean }[] = [
@@ -31,21 +31,19 @@ export default function Decision() {
       const words = gsap.utils.toArray<HTMLElement>(".word-reveal-span", hero);
       if (!words.length) return;
 
-      const { dim, lit } = readWordColors(hero);
-
       if (prefersReducedMotion()) {
-        gsap.set(words, { opacity: 1, color: lit });
+        gsap.set(words, { opacity: 1, "--wp": 1 });
         return;
       }
 
       const mm = gsap.matchMedia();
 
       mm.add("(min-width: 768px)", () => {
-        gsap.set(words, { opacity: 0.1, color: dim });
+        gsap.set(words, { opacity: 0.1, "--wp": 0 });
         const fits = !!section && section.offsetHeight <= window.innerHeight * 1.02;
         gsap.to(words, {
           opacity: 1,
-          color: lit,
+          "--wp": 1,
           ease: "none",
           duration: 0.4,
           stagger: { each: 0.5 },
@@ -56,10 +54,10 @@ export default function Decision() {
       });
 
       mm.add("(max-width: 767.98px)", () => {
-        gsap.set(words, { opacity: 0.1, color: dim });
+        gsap.set(words, { opacity: 0.1, "--wp": 0 });
         gsap.to(words, {
           opacity: 1,
-          color: lit,
+          "--wp": 1,
           ease: "none",
           duration: 0.4,
           stagger: { each: 0.5 },
@@ -69,7 +67,7 @@ export default function Decision() {
 
       return () => mm.revert();
     },
-    { scope: sectionRef, dependencies: [theme] }
+    { scope: sectionRef, dependencies: [] }
   );
 
   return (
