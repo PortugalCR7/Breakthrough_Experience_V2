@@ -42,6 +42,7 @@ export default function CtaStatement({
   // Retained for the `reveal="line"` branch (used by other CtaText variants).
   const [fadeRef, isVisible] = useScrollFadeIn({ threshold: 0.25, rootMargin: "0px 0px -12% 0px" });
   const sectionRef = useRef<HTMLElement | null>(null);
+  const indicatorRef = useRef<HTMLDivElement | null>(null);
   const { theme } = useTheme();
 
   // Word indexing for word-reveal mode.
@@ -81,6 +82,20 @@ export default function CtaStatement({
             ? { trigger: root, start: "top top", end: "+=90%", pin: true, pinSpacing: true, scrub: true, anticipatePin: 1 }
             : { trigger: root, start: "top 88%", end: "top 26%", scrub: true },
         });
+
+        if (indicatorRef.current && pin) {
+          gsap.set(indicatorRef.current, { opacity: 1 });
+          gsap.to(indicatorRef.current, {
+            opacity: 0,
+            ease: "none",
+            scrollTrigger: {
+              trigger: root,
+              start: "top top",
+              end: "+=20%",
+              scrub: true,
+            },
+          });
+        }
       });
 
       // Touch / small screens: plain scrubbed brighten, native scroll, no pin.
@@ -124,8 +139,8 @@ export default function CtaStatement({
                 className="cta-ln"
                 style={{
                   opacity: isVisible ? 1 : 0,
-                  transform: isVisible ? "translateY(0)" : "translateY(28px)",
-                  transition: "opacity .7s ease-out, transform .7s cubic-bezier(.16,1,.3,1)",
+                  transform: isVisible ? "translateY(0)" : "translateY(12px)",
+                  transition: "opacity .8s ease-out, transform .8s cubic-bezier(.16,1,.3,1)",
                   transitionDelay: `${lineIdx * 0.12}s`,
                   willChange: "opacity, transform",
                 }}
@@ -143,6 +158,15 @@ export default function CtaStatement({
               </div>
             ))}
       </div>
+
+      {reveal === "word" && pin && (
+        <div ref={indicatorRef} className="scroll-indicator" style={{ opacity: 0 }}>
+          <span className="scroll-indicator-text">Scroll to reveal</span>
+          <div className="scroll-indicator-line">
+            <div className="scroll-indicator-dot" />
+          </div>
+        </div>
+      )}
     </section>
   );
 }

@@ -21,6 +21,7 @@ export default function Decision() {
   const magneticRef = useMagnetic({ strength: 0.35 });
   const sectionRef = useRef<HTMLElement | null>(null);
   const heroScope = useRef<HTMLDivElement | null>(null);
+  const indicatorRef = useRef<HTMLDivElement | null>(null);
   const { theme } = useTheme();
 
   useGSAP(
@@ -51,6 +52,20 @@ export default function Decision() {
             ? { trigger: section, start: "top top", end: "+=85%", pin: true, pinSpacing: true, scrub: true, anticipatePin: 1 }
             : { trigger: hero, start: "top 88%", end: "top 26%", scrub: true },
         });
+
+        if (indicatorRef.current && fits) {
+          gsap.set(indicatorRef.current, { opacity: 1 });
+          gsap.to(indicatorRef.current, {
+            opacity: 0,
+            ease: "none",
+            scrollTrigger: {
+              trigger: section,
+              start: "top top",
+              end: "+=20%",
+              scrub: true,
+            },
+          });
+        }
       });
 
       mm.add("(max-width: 767.98px)", () => {
@@ -117,6 +132,13 @@ export default function Decision() {
               <span className="btn-tactile-arrow">→</span>
             </a>
           </div>
+        </div>
+      </div>
+
+      <div ref={indicatorRef} className="scroll-indicator" style={{ opacity: 0 }}>
+        <span className="scroll-indicator-text">Scroll to reveal</span>
+        <div className="scroll-indicator-line">
+          <div className="scroll-indicator-dot" />
         </div>
       </div>
     </section>

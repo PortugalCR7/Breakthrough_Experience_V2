@@ -26,6 +26,7 @@ export default function FinalWord() {
   const txtScope = useRef<HTMLDivElement | null>(null);
   const portraitRef = useRef<HTMLDivElement | null>(null);
   const sigRef = useRef<HTMLDivElement | null>(null);
+  const indicatorRef = useRef<HTMLDivElement | null>(null);
   const { theme } = useTheme();
 
   useGSAP(
@@ -45,10 +46,11 @@ export default function FinalWord() {
         return;
       }
 
-      const build = (st: ScrollTrigger.Vars) => {
+      const build = (st: ScrollTrigger.Vars, fitsPinning: boolean) => {
         gsap.set(words, { opacity: 0.1, "--wp": 0 });
         if (portrait) gsap.set(portrait, { opacity: 0, x: -28 });
         if (sig) gsap.set(sig, { opacity: 0, y: 30 });
+        if (indicatorRef.current) gsap.set(indicatorRef.current, { opacity: fitsPinning ? 1 : 0 });
 
         const tl = gsap.timeline({ scrollTrigger: st });
         // Portrait reveals immediately — at pin start, alongside the first words.
@@ -60,6 +62,10 @@ export default function FinalWord() {
         );
         // Signature resolves at/after the final line.
         if (sig) tl.to(sig, { opacity: 1, y: 0, ease: "none", duration: 0.6 }, ">-0.3");
+        // Scroll Indicator fades out over the first part of the pinned scroll
+        if (indicatorRef.current && fitsPinning) {
+          tl.to(indicatorRef.current, { opacity: 0, ease: "none", duration: 0.15 }, 0);
+        }
         return tl;
       };
 
@@ -80,7 +86,8 @@ export default function FinalWord() {
                 scrub: true,
                 anticipatePin: 1,
               }
-            : { trigger: scope, start: "top 85%", end: "top 22%", scrub: true }
+            : { trigger: scope, start: "top 85%", end: "top 22%", scrub: true },
+          fits
         );
         return () => {
           tl.scrollTrigger?.kill();
@@ -89,7 +96,7 @@ export default function FinalWord() {
       });
 
       mm.add("(max-width: 767.98px)", () => {
-        const tl = build({ trigger: scope, start: "top 85%", end: "top 28%", scrub: true });
+        const tl = build({ trigger: scope, start: "top 85%", end: "top 28%", scrub: true }, false);
         return () => {
           tl.scrollTrigger?.kill();
           tl.kill();
@@ -148,6 +155,13 @@ export default function FinalWord() {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      <div ref={indicatorRef} className="scroll-indicator" style={{ opacity: 0 }}>
+        <span className="scroll-indicator-text">Scroll to reveal</span>
+        <div className="scroll-indicator-line">
+          <div className="scroll-indicator-dot" />
         </div>
       </div>
     </section>
