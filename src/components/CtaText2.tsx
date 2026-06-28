@@ -10,8 +10,8 @@ export default function CtaText2() {
       size="clamp(26px, 3.2vw, 44px)"
       lines={[
         "Most men don't need more information.",
-        "They need structure.",
-        "They need accountability.",
+        "They need [structure.](italic,accent)",
+        "They need [accountability.](italic,accent)",
         "They need someone willing to hold them to who they can become.",
       ]}
     />

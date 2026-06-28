@@ -5,7 +5,7 @@ export default function CtaText1() {
     <CtaStatement
       lines={[
         "THE MAN YOU ARE PERFORMING",
-        "IS NOT THE MAN",
+        "IS NOT THE [MAN](italic,accent)",
         "THEY NEED.",
       ]}
     />

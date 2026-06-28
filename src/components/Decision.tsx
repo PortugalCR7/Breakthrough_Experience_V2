@@ -2,12 +2,9 @@ import { useRef } from "react";
 import { useMagnetic } from "../hooks/useMagnetic";
 import { gsap, useGSAP, prefersReducedMotion } from "../motion";
 import { useTheme } from "../theme/useTheme";
+import { parseEmphasisLine } from "../utils/emphasis";
 
-const HEADLINE: { word: string; sv?: boolean }[] = [
-  { word: "THE" }, { word: "MAN" }, { word: "YOU" }, { word: "WANT" }, { word: "TO" },
-  { word: "BECOME" }, { word: "IS" }, { word: "NOT" }, { word: "WAITING" },
-  { word: "IN" }, { word: "THE" }, { word: "FUTURE.", sv: true },
-];
+const HEADLINE = "THE MAN YOU WANT TO BECOME IS NOT WAITING IN THE [FUTURE.](accent,glow)";
 
 /**
  * Section 06 — The Decision (climactic set-piece).
@@ -97,12 +94,12 @@ export default function Decision() {
 
           {/* Headline — scrubbed word reveal */}
           <h2 className="decision-hl text-left" style={{ marginBottom: "32px" }}>
-            {HEADLINE.map((w, i) => (
+            {parseEmphasisLine(HEADLINE, 0).words.map(({ word, idx, classes }) => (
               <span
-                key={i}
-                className={`word-reveal-span mr-[0.25em] ${w.sv ? "sv text-[var(--sv)]" : ""}`}
+                key={idx}
+                className={`word-reveal-span mr-[0.25em] ${classes}`.trim()}
               >
-                {w.word}
+                {word}
               </span>
             ))}
           </h2>

@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { useScrollFadeIn } from "../hooks/useScrollFadeIn";
 import { gsap, useGSAP, prefersReducedMotion } from "../motion";
 import { useTheme } from "../theme/useTheme";
+import { parseEmphasisLine } from "../utils/emphasis";
 
 interface CtaStatementProps {
   /** Logical lines of the statement. Rendered uppercase regardless of input casing. */
@@ -45,14 +46,13 @@ export default function CtaStatement({
   const indicatorRef = useRef<HTMLDivElement | null>(null);
   const { theme } = useTheme();
 
-  // Word indexing for word-reveal mode.
-  let gi = 0;
-  const indexedLines = lines.map((line) =>
-    line
-      .split(/\s+/)
-      .filter(Boolean)
-      .map((word) => ({ word, idx: gi++ }))
-  );
+  // Word indexing for word-reveal mode with emphasis parsing.
+  let runningIdx = 0;
+  const parsedLines = lines.map((line) => {
+    const { words, nextIdx } = parseEmphasisLine(line, runningIdx);
+    runningIdx = nextIdx;
+    return words;
+  });
 
   useGSAP(
     () => {
@@ -133,25 +133,32 @@ export default function CtaStatement({
         style={size ? { fontSize: size } : undefined}
       >
         {reveal === "line"
-          ? lines.map((line, lineIdx) => (
-              <div
-                key={lineIdx}
-                className="cta-ln"
-                style={{
-                  opacity: isVisible ? 1 : 0,
-                  transform: isVisible ? "translateY(0)" : "translateY(12px)",
-                  transition: "opacity .8s ease-out, transform .8s cubic-bezier(.16,1,.3,1)",
-                  transitionDelay: `${lineIdx * 0.12}s`,
-                  willChange: "opacity, transform",
-                }}
-              >
-                {line}
-              </div>
-            ))
-          : indexedLines.map((lineWords, lineIdx) => (
+          ? lines.map((line, lineIdx) => {
+              const { words } = parseEmphasisLine(line, 0);
+              return (
+                <div
+                  key={lineIdx}
+                  className="cta-ln"
+                  style={{
+                    opacity: isVisible ? 1 : 0,
+                    transform: isVisible ? "translateY(0)" : "translateY(12px)",
+                    transition: "opacity .8s ease-out, transform .8s cubic-bezier(.16,1,.3,1)",
+                    transitionDelay: `${lineIdx * 0.12}s`,
+                    willChange: "opacity, transform",
+                  }}
+                >
+                  {words.map(({ word, idx, classes }) => (
+                    <span key={idx} className={`${classes} mr-[0.25em]`.trim() || undefined}>
+                      {word}
+                    </span>
+                  ))}
+                </div>
+              );
+            })
+          : parsedLines.map((lineWords, lineIdx) => (
               <div key={lineIdx} className="cta-ln">
-                {lineWords.map(({ word, idx }) => (
-                  <span key={idx} className="word-reveal-span mr-[0.25em]">
+                {lineWords.map(({ word, idx, classes }) => (
+                  <span key={idx} className={`word-reveal-span mr-[0.25em] ${classes}`.trim()}>
                     {word}
                   </span>
                 ))}

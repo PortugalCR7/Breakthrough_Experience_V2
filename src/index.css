@@ -1250,6 +1250,52 @@ html { scroll-snap-type: none; }
     0 0 2px rgba(255, 255, 255, 0.55);
 }
 
+/* ── Editorial Emphasis System ───────────────────── */
+.edt-emphasis {
+  display: inline-block;
+}
+
+.edt-emphasis--italic {
+  font-style: italic;
+}
+
+.edt-emphasis--accent {
+  color: var(--sv) !important;
+  -webkit-text-fill-color: var(--sv) !important;
+}
+
+.edt-emphasis--bright {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+}
+
+[data-theme="light"] .edt-emphasis--bright {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  text-shadow: none;
+}
+
+.edt-emphasis--weight {
+  font-weight: 700;
+}
+
+.edt-emphasis--bodoni {
+  font-family: var(--fd) !important;
+  text-transform: uppercase !important; /* Ensure Bodoni Moda is strictly uppercase */
+}
+
+.edt-emphasis--glow {
+  text-shadow: 
+    0 0 26px rgba(255, 255, 255, 0.28),
+    0 0 2px rgba(255, 255, 255, 0.55);
+}
+
+[data-theme="light"] .edt-emphasis--glow {
+  text-shadow: none;
+}
+
+
 /* Keep reveal-animated word spans solid (immune to any inherited gradient fill) */
 .word-reveal-span { -webkit-text-fill-color: currentColor; }
 .word-reveal-span.active { text-shadow: 0 0 30px rgba(255, 255, 255, 0.10); }

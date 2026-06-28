@@ -111,9 +111,8 @@ export default function Vision() {
             <span>GAP</span>
           </Phrase>
           
-          {/* 5. THROUGH — declarative thesis verb (carries .sv glow) */}
           <Phrase register="declarative" className="absolute italic font-bold text-[10.5vw] tracking-[-0.03em]" style={{ top: '44%', left: '17%' }}>
-            <span className="sv">THROUGH</span>
+            <span className="edt-emphasis edt-emphasis--accent edt-emphasis--glow">THROUGH</span>
           </Phrase>
           
           {/* 6. STRUCTURE, — substantive */}
@@ -132,9 +131,8 @@ export default function Vision() {
             <span>HONEST</span>
           </Phrase>
           
-          {/* 9. LEADERSHIP — declarative thesis verb (carries .sv glow) */}
           <Phrase register="declarative" className="absolute italic font-bold text-[10vw] tracking-[-0.03em]" style={{ top: '83%', left: '34%' }}>
-            <span className="sv">LEADERSHIP</span>
+            <span className="edt-emphasis edt-emphasis--accent edt-emphasis--glow">LEADERSHIP</span>
           </Phrase>
         </h2>
       </div>
