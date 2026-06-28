@@ -41,7 +41,7 @@ export default function MenIMeet() {
         <div className="meet-hdr" ref={hdrRef as any}>
           <div className={`fu ${isHdrVisible ? "vis" : ""}`}>
             <div className="eyebrow">The Men I Meet</div>
-            <h2 ref={hlScope} className="meet-hl">
+            <h2 ref={hlScope} className="meet-hl" style={{ fontFamily: 'var(--fd)' }}>
               <span className="word-reveal-span">FOR</span>{" "}
               <span className="word-reveal-span">TWENTY</span>
               <br />
@@ -117,10 +117,10 @@ export default function MenIMeet() {
           <div className="closer-b text-left text-stone-300">
             <p>This is not potential you lack.</p>
             <p className="mt-3">
-              this is a lack of structure, accountability, and guidance equal to the man trying to emerge.
+              This is a lack of structure, accountability, and guidance equal to the man trying to emerge.
             </p>
             <p className="mt-3 text-white font-semibold">
-              <strong>That's the gap. Breakthrough was built to close it.</strong>
+              <strong>That's the gap. <span style={{ fontFamily: "var(--fd)", fontStyle: "italic", fontWeight: "bold" }}>Breakthrough was built to close it.</span></strong>
             </p>
           </div>
         </div>

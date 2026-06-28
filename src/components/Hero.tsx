@@ -100,10 +100,7 @@ export default function Hero() {
       {/* ── Layer 2 · Scrim (legibility + cinema vignette) ───────── */}
       <div className="hero-scrim" aria-hidden="true" />
 
-      {/* ── Layer 3 · Oversized ghost wordmark ───────────────────── */}
-      <div id="hGhost" className={`hero-ghost ${scrollGhostActive ? "s" : ""}`}>
-        BREAKTHROUGH
-      </div>
+
 
       {/* ── Layer 4 · Composed type, anchored lower-left ─────────── */}
       <div className="hero-in">
@@ -166,17 +163,6 @@ export default function Hero() {
                 </span>
                 <span className="btn-tactile-arrow">→</span>
               </a>
-              <div className="hero-social-proof">
-                <div className="avatar-cluster">
-                  <div className="avatar-circle">M</div>
-                  <div className="avatar-circle">L</div>
-                  <div className="avatar-circle">D</div>
-                  <div className="avatar-circle">+100</div>
-                </div>
-                <span className="social-proof-text">
-                  Trusted by 100+ leaders & founders globally
-                </span>
-              </div>
             </div>
           </div>
         </div>

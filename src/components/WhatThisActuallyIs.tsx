@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { useScrollFadeIn } from "../hooks/useScrollFadeIn";
 import { SessionItem } from "../types";
 import { useWordScrub } from "../motion";
+import { useMagnetic } from "../hooks/useMagnetic";
 
 const SESSIONS: SessionItem[] = [
   {
@@ -75,6 +76,7 @@ export default function WhatThisActuallyIs() {
   const [workHeadRef, isWorkHeadVisible] = useScrollFadeIn({ threshold: 0.25 });
   const [listRef, isListVisible] = useScrollFadeIn({ threshold: 0.08, rootMargin: "0px 0px -8% 0px" });
   const [codaRef, isCodaVisible] = useScrollFadeIn({ threshold: 0.25 });
+  const magneticRef = useMagnetic({ strength: 0.35 });
 
   return (
     <section id="prog-sec" className="scroll-snap-section relative w-full overflow-hidden">
@@ -132,7 +134,7 @@ export default function WhatThisActuallyIs() {
               </div>
 
               {/* Lead-in + the "not this" chips */}
-              <div className="not-lead">BREAKTHROUGH IS NOT…</div>
+              <div className="not-lead font-bold">BREAKTHROUGH IS NOT…</div>
               <div className="not-row flex flex-wrap gap-x-6 gap-y-3">
                 {NOT_ITEMS.map((item) => (
                   <div key={item} className="not-item group cursor-pointer">
@@ -140,6 +142,17 @@ export default function WhatThisActuallyIs() {
                     <s className="transition-colors duration-300 group-hover:text-[var(--gl)]">{item}</s>
                   </div>
                 ))}
+              </div>
+
+              {/* Primary CTA */}
+              <div className="mt-16 flex justify-start w-full">
+                <a ref={magneticRef as any} href="#checkout" className="btn-tactile">
+                  <span className="btn-tactile-wrap">
+                    <span className="btn-tactile-text">BEGIN YOUR BREAKTHROUGH</span>
+                    <span className="btn-tactile-hover">BEGIN YOUR BREAKTHROUGH</span>
+                  </span>
+                  <span className="btn-tactile-arrow">→</span>
+                </a>
               </div>
             </div>
           </div>

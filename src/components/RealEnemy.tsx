@@ -7,7 +7,7 @@ const NARRATIVE_BLOCKS = [
   { id: "b2", className: "mt-4", node: <p className="text-[var(--sv)]">Performing success. Performing confidence. Performing strength.</p> },
   { id: "b3", className: "mt-4", node: <p>Eventually the performance becomes so convincing that <span className="text-white">even you forget who you are</span></p> },
   { id: "b4", className: "mt-1", node: <p><strong>underneath it.</strong></p> },
-  { id: "b5", className: "mt-6 border-l border-[var(--sv)] pl-4 text-white italic", node: <p>Breakthrough begins when the performance ends.</p> },
+  { id: "b5", className: "mt-6 border-l border-[var(--sv)] pl-4 text-white", node: <p style={{ fontFamily: 'var(--fd)', fontWeight: 'bold', fontStyle: 'italic' }}>Breakthrough begins when the performance ends.</p> },
 ];
 
 /** The big statement, split into scroll-scrub words (line breaks preserved). */
@@ -52,7 +52,7 @@ export default function RealEnemy() {
           {/* Center Column: large asymmetric headline — scrubbed word reveal */}
           <div>
             <div className={`eyebrow fu ${isVisible ? "vis" : ""}`} style={{ marginBottom: "24px" }}>The Real Enemy</div>
-            <h2 ref={hlScope} className="enemy-hl text-left">
+            <h2 ref={hlScope} className="enemy-hl text-left" style={{ fontFamily: 'var(--fd)' }}>
               {HEADLINE.map((w, i) => (
                 <span key={i}>
                   <span className={`word-reveal-span ${w.sv ? "sv text-[var(--sv)]" : ""}`}>{w.word}</span>

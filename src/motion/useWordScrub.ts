@@ -96,7 +96,7 @@ export function useWordScrub(
         return;
       }
 
-      gsap.set(words, { opacity: dimOpacity, color: dimC });
+      gsap.set(words, { opacity: dimOpacity, color: dimC, transition: "none" });
       gsap.to(words, {
         opacity: 1,
         color: litC,

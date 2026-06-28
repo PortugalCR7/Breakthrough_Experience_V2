@@ -1,87 +1,114 @@
-import { useRef } from "react";
-import { useIntersectionObserver } from "../hooks/useIntersectionObserver";
-import { useWordScrub } from "../motion";
+import React, { useRef } from "react";
+import { gsap, useGSAP } from "../motion";
 
-const VISION_WORDS = [
-  { text: "For", isSv: false, isBr: false },
-  { text: "over", isSv: false, isBr: false },
-  { text: "twenty", isSv: true, isBr: false },
-  { text: "years,", isSv: true, isBr: false },
-  { text: "", isBr: true },
-  { text: "I've", isSv: false, isBr: false },
-  { text: "helped", isSv: false, isBr: false },
-  { text: "men", isSv: false, isBr: false },
-  { text: "close", isSv: true, isBr: false },
-  { text: "that", isSv: true, isBr: false },
-  { text: "gap", isSv: true, isBr: false },
-  { text: "", isBr: true },
-  { text: "through", isSv: false, isBr: false },
-  { text: "structure,", isSv: true, isBr: false },
-  { text: "accountability,", isSv: true, isBr: false },
-  { text: "", isBr: true },
-  { text: "and", isSv: false, isBr: false },
-  { text: "honest", isSv: true, isBr: false },
-  { text: "leadership.", isSv: true, isBr: false },
-];
+function Phrase({
+  children,
+  className,
+  style,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  style?: React.CSSProperties;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    if (!ref.current) return;
+    
+    gsap.fromTo(
+      ref.current,
+      { opacity: 0.15 },
+      {
+        opacity: 1,
+        duration: 0.8,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: ref.current,
+          start: "top 85%",
+          toggleActions: "play none none reverse",
+        }
+      }
+    );
+  }, { scope: ref });
+
+  return (
+    <div ref={ref} className={className} style={style}>
+      {children}
+    </div>
+  );
+}
 
 /**
  * Section 01 — The Foundation / Vision statement.
- *
- * V2: the statement lights up word-by-word **as the reader scrolls through it**
- * (GSAP scrub via useWordScrub) — scroll speed becomes reading pace. This is the
- * signature narration beat. The earlier in-house scroll-scrub was removed for
- * jank; driving it through Lenis + GSAP (off the React render loop) is what makes
- * it read as premium rather than choppy.
+ * 
+ * V2: Immersive Editorial Spread. The copy becomes the composition.
+ * Driven entirely by typography variations (scale, weight, italic, tracking)
+ * and positioning to create a dynamic reading path.
  */
 export default function Vision() {
-  const [metaRef, isMetaVisible] = useIntersectionObserver({ threshold: 0.2 });
-  const stmtRef = useRef<HTMLHeadingElement | null>(null);
-
-  // Vision is the showcase beat that set the signed-off narration feel — it now
-  // simply inherits the unified useWordScrub defaults (stepped, slow, deep
-  // contrast). See useWordScrub.ts for the rationale behind those values.
-  useWordScrub(stmtRef);
-
   return (
     <section
       id="vision"
       className="scroll-snap-section relative w-full overflow-hidden"
-      style={{ paddingTop: "var(--secpad)", paddingBottom: "var(--secpad)" }}
+      style={{ paddingTop: "var(--sp)", paddingBottom: "var(--sp)" }}
     >
       <div className="w">
-        <div className="grid grid-cols-1 md:grid-cols-[0.8fr_2fr] gap-12 md:gap-24 items-start">
-
-          {/* Asymmetric Left metadata panel */}
-          <div
-            ref={metaRef as any}
-            className={`flex flex-col gap-4 gen-reveal ${isMetaVisible ? "vis" : ""}`}
-          >
-            <div className="section-num">01</div>
-          </div>
-
-          {/* Vision statement — scroll-scrubbed word narration */}
-          <div className="asymmetric-panel asymmetric-border-accent vis">
-            <div className="eyebrow" style={{ marginBottom: "24px" }}>The Foundation</div>
-            <h2
-              ref={stmtRef}
-              className="vision-text text-left tracking-tight leading-[0.95]"
-            >
-              {VISION_WORDS.map((word, index) => {
-                if (word.isBr) {
-                  return <br key={`br-${index}`} />;
-                }
-                return (
-                  <span
-                    key={`word-${index}`}
-                    className={`word-reveal-span mr-[0.25em] ${word.isSv ? "sv" : ""}`}
-                  >
-                    {word.text}
-                  </span>
-                );
-              })}
-            </h2>
-          </div>
-        </div>
+        <h2
+          className="relative w-full aspect-[100/60] leading-none uppercase"
+          style={{ fontFamily: 'var(--fd)' }}
+        >
+          {/* 1. FOR OVER */}
+          <Phrase className="absolute flex gap-[0.4em] font-light tracking-[0.05em] text-[2vw]" style={{ top: '15%', left: '13%' }}>
+            <span>FOR</span>
+            <span>OVER</span>
+          </Phrase>
+          
+          {/* 2. TWENTY YEARS */}
+          <Phrase className="absolute flex gap-[0.3em] font-normal text-[5.5vw]" style={{ top: '21%', left: '16%' }}>
+            <span className="sv">TWENTY</span>
+            <span className="sv">YEARS</span>
+          </Phrase>
+          
+          {/* 3. I'VE HELPED MEN */}
+          <Phrase className="absolute flex gap-[0.4em] font-light tracking-[0.05em] text-[2vw]" style={{ top: '32%', left: '29%' }}>
+            <span>I'VE</span>
+            <span>HELPED</span>
+            <span>MEN</span>
+          </Phrase>
+          
+          {/* 4. CLOSE THAT GAP */}
+          <Phrase className="absolute flex gap-[0.3em] font-normal text-[5.5vw]" style={{ top: '36%', left: '41%' }}>
+            <span className="sv">CLOSE</span>
+            <span className="sv">THAT</span>
+            <span className="sv">GAP</span>
+          </Phrase>
+          
+          {/* 5. THROUGH */}
+          <Phrase className="absolute italic font-bold text-[10.5vw] tracking-[-0.03em]" style={{ top: '44%', left: '17%' }}>
+            <span>THROUGH</span>
+          </Phrase>
+          
+          {/* 6. STRUCTURE, */}
+          <Phrase className="absolute font-normal text-[5.5vw]" style={{ top: '60%', left: '19%' }}>
+            <span className="sv">STRUCTURE,</span>
+          </Phrase>
+          
+          {/* 7. ACCOUNTABILITY, */}
+          <Phrase className="absolute font-normal text-[5.5vw]" style={{ top: '68%', left: '33%' }}>
+            <span className="sv">ACCOUNTABILITY,</span>
+          </Phrase>
+          
+          {/* 8. AND HONEST */}
+          <Phrase className="absolute flex gap-[0.4em] font-light tracking-[0.05em] text-[2vw]" style={{ top: '79%', left: '17%' }}>
+            <span>AND</span>
+            <span>HONEST</span>
+          </Phrase>
+          
+          {/* 9. LEADERSHIP */}
+          <Phrase className="absolute italic font-bold text-[10vw] tracking-[-0.03em]" style={{ top: '83%', left: '34%' }}>
+            <span>LEADERSHIP</span>
+          </Phrase>
+        </h2>
       </div>
     </section>
   );

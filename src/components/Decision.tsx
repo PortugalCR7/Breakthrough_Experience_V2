@@ -93,7 +93,7 @@ export default function Decision() {
           </h2>
 
           {/* Sub-headline */}
-          <p className="decision-sub">He is waiting on the other side of your decision.</p>
+          <p className="decision-sub italic">He is waiting on the other side of your decision.</p>
 
           {/* Body copy */}
           <div className="decision-b decision-body">

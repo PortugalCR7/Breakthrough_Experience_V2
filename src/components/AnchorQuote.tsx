@@ -38,9 +38,10 @@ export default function AnchorQuote() {
       <div className="w">
         <div className="anchor-wrap">
           <div className={`fu ${isVisible ? "vis" : ""}`}>
-            <div className="eyebrow">From the first step you take</div>
+            <div className="section-num">01</div>
+            <div className="eyebrow" style={{ marginTop: "40px" }}>From the first step you take</div>
             <h2 ref={anchorHlRef} className="anchor-body">
-              <span className="word-reveal-span mr-[0.25em]">"I</span>
+              <span className="word-reveal-span mr-[0.25em]">I</span>
               <span className="word-reveal-span mr-[0.25em]">am</span>
               <span className="word-reveal-span mr-[0.25em]">invested</span>
               <span className="word-reveal-span mr-[0.25em]">in</span>
@@ -57,17 +58,20 @@ export default function AnchorQuote() {
               <span className="word-reveal-span mr-[0.25em]">arena</span>
               <br />
               <span className="word-reveal-span mr-[0.25em]">with</span>
-              <span className="word-reveal-span mr-[0.25em]">you."</span>
+              <span className="word-reveal-span mr-[0.25em]">you.</span>
             </h2>
           </div>
           <div ref={quoteRef} className={`anchor-quote fu ${isVisible ? "vis" : ""}`} style={{ transitionDelay: "0.2s" }}>
-            <p style={{ fontStyle: "normal", fontWeight: 400 }}>
-              <KineticText text={'"I know who you are. I\'ve sat with you a thousand times.'} delay={250} />
+            <p style={{ fontStyle: "normal", fontWeight: 400, fontFamily: "var(--fb)" }}>
+              <KineticText text="I know who you are. I've sat with you a thousand times." delay={250} />
             </p>
             <p className="big text-stone-200 mt-2">
-              <KineticText text="You're not broken. " delay={600} />
-              <span className="sv" style={{ fontStyle: "italic" }}>
-                <KineticText text={'You\'re simply living beneath your potential."'} delay={1000} />
+              <span style={{ fontFamily: "var(--fb)" }}>
+                <KineticText text="You're not broken." delay={600} />
+              </span>
+              <br />
+              <span style={{ fontFamily: "var(--fd)", fontWeight: "bold", fontStyle: "italic" }}>
+                <KineticText text="You're simply living beneath your potential." delay={705} />
               </span>
             </p>
           </div>

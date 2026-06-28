@@ -27,6 +27,8 @@ export default function AlignedOtherSide() {
     >
       <div className="w">
         <div className="other-g">
+          {/* Editorial Vertical Divider */}
+
 
           {/* Left column: scrubbed word statement */}
           <div ref={hlScope}>
@@ -42,14 +44,14 @@ export default function AlignedOtherSide() {
           </div>
 
           {/* Right column: staggered bullet reveal */}
-          <div ref={rightRef as any}>
+          <div ref={rightRef as any} className="asymmetric-panel asymmetric-border-accent vis">
             <p
               className={`other-sub block-reveal-item ${isRightVisible ? "active" : ""}`}
               style={{ transitionDelay: "0s" }}
             >
               That is the man this work is designed to develop.
             </p>
-            <div className="other-list">
+            <div className="other-list" style={{ marginTop: '-12px', marginBottom: '14px' }}>
               <div
                 className={`other-item block-reveal-item ${isRightVisible ? "active" : ""}`}
                 style={{ transitionDelay: "0.1s" }}
@@ -74,17 +76,16 @@ export default function AlignedOtherSide() {
               >
                 <span className="oi-m">—</span>
                 <span>
-                  A man who leads his family, business, and life from{" "}
-                  <strong>conviction rather than reaction.</strong>
+                  A man who leads his family, business, and life from conviction rather than reaction.
                 </span>
               </div>
             </div>
 
             <p
-              className={`other-coda block-reveal-item ${isRightVisible ? "active" : ""}`}
+              className={`other-coda block-reveal-item font-bold ${isRightVisible ? "active" : ""}`}
               style={{ transitionDelay: "0.5s" }}
             >
-              This is who you already are. The work is closing the gap.
+              This is who you already are.<br />The work is closing the gap.
             </p>
           </div>
 

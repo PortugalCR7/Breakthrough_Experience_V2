@@ -36,7 +36,7 @@ const GAP_ROWS: GapRowItem[] = [
 ];
 
 const HEADLINE_WORDS = [
-  "THE", "DISTANCE", "BETWEEN",
+  "THE", "GAP", "BETWEEN",
   "THE", "MAN", "YOU", "ARE", "PERFORMING",
   "AND", "THE", "SOVEREIGN", "MAN", "YOU", "ARE."
 ];
@@ -61,7 +61,7 @@ export default function IdentityGap() {
   const headlineRef = useRef<HTMLHeadingElement | null>(null);
   const bodyRef = useRef<HTMLParagraphElement | null>(null);
   useWordScrub(headlineRef);
-  useWordScrub(bodyRef);
+  useWordScrub(bodyRef, { end: "top 50%" });
 
   // Staggered gap-row cascade trigger
   const [listRef, listVisible] = useScrollFadeIn({ threshold: 0.1, rootMargin: "0px 0px -10% 0px" });
