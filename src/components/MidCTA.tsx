@@ -1,11 +1,9 @@
 import { useRef } from "react";
 import { useScrollFadeIn } from "../hooks/useScrollFadeIn";
-import { useMagnetic } from "../hooks/useMagnetic";
 import { useWordScrub } from "../motion";
 
 export default function MidCTA() {
   const [ref, isVisible] = useScrollFadeIn({ threshold: 0.15 });
-  const magneticRef = useMagnetic({ strength: 0.35 });
   const midHlRef = useRef<HTMLHeadingElement | null>(null);
   useWordScrub(midHlRef);
 
@@ -58,7 +56,7 @@ export default function MidCTA() {
                 He is waiting on the other side of a decision.
               </p>
               <div>
-                <a ref={magneticRef as any} href="#checkout" className="btn-tactile">
+                <a href="#checkout" className="btn-tactile">
                   <span className="btn-tactile-wrap">
                     <span className="btn-tactile-text">Begin Your Breakthrough</span>
                     <span className="btn-tactile-hover">Begin Your Breakthrough</span>

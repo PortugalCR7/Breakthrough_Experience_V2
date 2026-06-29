@@ -1,6 +1,5 @@
 import { useRef } from "react";
 import { useScrollFadeIn } from "../hooks/useScrollFadeIn";
-import { useMagnetic } from "../hooks/useMagnetic";
 import { useWordScrub } from "../motion";
 
 const PP_ITEMS = [
@@ -40,7 +39,6 @@ const PP_ITEMS = [
 export default function PrimaryPath() {
   const [leftRef, isLeftVisible] = useScrollFadeIn({ threshold: 0.2 });
   const [itemsRef, itemsVisible] = useScrollFadeIn({ threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
-  const magneticRef = useMagnetic({ strength: 0.35 });
   const hlScope = useRef<HTMLHeadingElement | null>(null);
   useWordScrub(hlScope);
 
@@ -83,7 +81,7 @@ export default function PrimaryPath() {
             </div>
             <div className={`fu ${isLeftVisible ? "vis" : ""} mt-auto pt-8`} style={{ transitionDelay: "0.2s" }}>
               <div style={{ marginBottom: "16px" }}>
-                <a ref={magneticRef as any} href="#checkout" className="btn-tactile btn-stack w-full">
+                <a href="#checkout" className="btn-tactile btn-stack w-full">
                   <span className="btn-tactile-wrap">
                     <span className="btn-tactile-text">Begin Your<br />Breakthrough</span>
                     <span className="btn-tactile-hover">Begin Your<br />Breakthrough</span>

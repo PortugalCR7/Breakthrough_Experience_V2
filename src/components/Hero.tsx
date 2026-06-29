@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useParallax } from "../hooks/useParallax";
-import { useMagnetic } from "../hooks/useMagnetic";
 import ScrambleText from "./ScrambleText";
 
 const BG_IMAGES = [
@@ -18,7 +17,6 @@ const BG_IMAGES = [
  * sister site; the background drifts with a reduced-motion-aware parallax.
  */
 export default function Hero() {
-  const magneticRef = useMagnetic({ strength: 0.35 });
   const [olActive, setOlActive] = useState(false);
   const [wordsActive, setWordsActive] = useState<boolean[]>(Array(8).fill(false));
   const [gapActive, setGapActive] = useState(false);
@@ -72,7 +70,9 @@ export default function Hero() {
     };
   }, []);
 
-  const { elementRef, offset } = useParallax(-0.14);
+  // Parallax is permitted only on non-essential imagery, at a whisper.
+  // Constitution §VIII: no parallax on readable content; ≤ -0.08 on photos.
+  const { elementRef, offset } = useParallax(-0.08);
 
   return (
     <section id="hero" className="relative overflow-hidden" data-theme="dark">
@@ -152,7 +152,6 @@ export default function Hero() {
           <div id="hBtm" className={`hero-btm ${btmActive ? "s" : ""}`}>
             <div className="hero-cta-wrapper">
               <a
-                ref={magneticRef as any}
                 href="#checkout"
                 className="btn-tactile"
                 data-cursor-label="Begin"

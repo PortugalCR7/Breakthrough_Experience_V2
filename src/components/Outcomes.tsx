@@ -1,12 +1,9 @@
 import { useRef } from "react";
 import { useIntersectionObserver } from "../hooks/useIntersectionObserver";
-import { useTilt } from "../hooks/useTilt";
 import { useWordScrub } from "../motion";
 
 export default function Outcomes() {
   const [ref, isVisible] = useIntersectionObserver({ threshold: 0.1 });
-  const tiltRef1 = useTilt(5);
-  const tiltRef2 = useTilt(5);
   const hl1Ref = useRef<HTMLHeadingElement | null>(null);
   const hl2Ref = useRef<HTMLHeadingElement | null>(null);
   useWordScrub(hl1Ref);
@@ -17,8 +14,7 @@ export default function Outcomes() {
       <div className="oc-pair">
         
         {/* Left Card: Walk Away With */}
-        <div 
-          ref={tiltRef1 as any}
+        <div
           className="oc-panel interactive-card cursor-default"
           style={{
             opacity: isVisible ? 1 : 0,
@@ -65,9 +61,8 @@ export default function Outcomes() {
         </div>
 
         {/* Right Card: What 20 Years Taught Me (starts 0.25s after left card completes) */}
-        <div 
-          ref={tiltRef2 as any}
-          className="oc-panel interactive-card cursor-default" 
+        <div
+          className="oc-panel interactive-card cursor-default"
           style={{
             opacity: isVisible ? 1 : 0,
             transform: isVisible ? "translateX(0)" : "translateX(-40px)",

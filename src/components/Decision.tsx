@@ -1,5 +1,4 @@
 import { useRef } from "react";
-import { useMagnetic } from "../hooks/useMagnetic";
 import { gsap, useGSAP, prefersReducedMotion } from "../motion";
 import { useTheme } from "../theme/useTheme";
 import { parseEmphasisLine } from "../utils/emphasis";
@@ -15,7 +14,6 @@ const HEADLINE = "THE MAN YOU WANT TO BECOME IS NOT WAITING IN THE [FUTURE.](acc
  * laptops; otherwise it degrades to a plain scrub. Reduced-motion = instant.
  */
 export default function Decision() {
-  const magneticRef = useMagnetic({ strength: 0.35 });
   const sectionRef = useRef<HTMLElement | null>(null);
   const heroScope = useRef<HTMLDivElement | null>(null);
   const indicatorRef = useRef<HTMLDivElement | null>(null);
@@ -121,7 +119,7 @@ export default function Decision() {
 
           {/* CTA */}
           <div className="decision-cta">
-            <a ref={magneticRef as any} href="#checkout" className="btn-tactile">
+            <a href="#checkout" className="btn-tactile">
               <span className="btn-tactile-wrap">
                 <span className="btn-tactile-text">Begin Your Breakthrough</span>
                 <span className="btn-tactile-hover">Begin Your Breakthrough</span>

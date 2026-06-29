@@ -1,13 +1,11 @@
 import React, { useState, useRef } from "react";
 import { useScrollFadeIn } from "../hooks/useScrollFadeIn";
-import { useMagnetic } from "../hooks/useMagnetic";
 import { useWordScrub } from "../motion";
 import { X, ShieldAlert } from "lucide-react";
 
 export default function Alliance() {
   const [ref, isVisible] = useScrollFadeIn({ threshold: 0.1 });
   const [showNotice, setShowNotice] = useState(false);
-  const magneticRef = useMagnetic({ strength: 0.35 });
   const hlScope = useRef<HTMLHeadingElement | null>(null);
   useWordScrub(hlScope);
 
@@ -34,7 +32,7 @@ export default function Alliance() {
               access. This is where the real work becomes a way of life.
             </p>
             <div className="mt-auto pt-8">
-              <a ref={magneticRef as any} href="#" className="btn-tactile btn-stack w-full" onClick={handleApplyClick}>
+              <a href="#" className="btn-tactile btn-stack w-full" onClick={handleApplyClick}>
                 <span className="btn-tactile-wrap">
                   <span className="btn-tactile-text">Apply For<br />The Alliance</span>
                   <span className="btn-tactile-hover">Apply For<br />The Alliance</span>

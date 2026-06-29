@@ -5,7 +5,11 @@ import { useWordScrub } from "../motion";
 
 export default function Checkout() {
   const [ref, isVisible] = useScrollFadeIn({ threshold: 0.1 });
-  const magneticRef = useMagnetic({ strength: 0.35 });
+  // The magnetic pull is reserved for THE primary CTA — the one button that
+  // actually acts (the join submit). Capped to 0.15 so it reads as a settled
+  // tactile pull, not toy physics. Constitution §IX. Every other CTA on the
+  // page is navigation and uses the standard btn-tactile treatment.
+  const magneticRef = useMagnetic({ strength: 0.15 });
   const coTitleRef = useRef<HTMLDivElement | null>(null);
   useWordScrub(coTitleRef);
 
@@ -185,7 +189,7 @@ export default function Checkout() {
                 </div>
 
                 <div className="f-field" style={{ marginTop: "8px" }}>
-                  <button ref={magneticRef as any} type="submit" className="btn-tactile w-full" data-cursor-label="Join">
+                  <button ref={magneticRef as any} type="submit" className="btn-tactile cta-primary w-full" data-cursor-label="Join">
                     <span className="btn-tactile-wrap">
                       <span className="btn-tactile-text">Begin Your Breakthrough</span>
                       <span className="btn-tactile-hover">Begin Your Breakthrough</span>

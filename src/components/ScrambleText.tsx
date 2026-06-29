@@ -1,75 +1,53 @@
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { type CSSProperties } from "react";
 import { prefersReducedMotion } from "../motion";
 
-const GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ#%&*/<>{}[]".split("");
-const rand = () => GLYPHS[(Math.random() * GLYPHS.length) | 0];
-
 interface ScrambleTextProps {
-  /** The final, settled text. */
+  /** The text to reveal. */
   text: string;
-  /** Flip to true to start the decode. Idempotent — only the first true matters. */
+  /** Flip to true to play the reveal. */
   trigger?: boolean;
-  /** Total settle time in ms. */
+  /** Reveal duration in ms (clamped to the house ≤600ms reading budget). */
   duration?: number;
   className?: string;
   style?: CSSProperties;
 }
 
 /**
- * Kinetic text-scramble / decode. On `trigger`, each character position flickers
- * through random glyphs and settles left-to-right to the final text. Self-contained;
- * respects prefers-reduced-motion (renders the final text immediately, no scramble).
+ * Whole-unit masked reveal (externally triggered).
+ *
+ * Formerly a letter-by-letter glyph decode — removed because letter-level
+ * animation delays comprehension and is prohibited by the typography rule
+ * (Editorial Interaction Constitution §V). The phrase now rises once, as a
+ * single unit, behind a mask — the same grammar as the Hero's `.wi` word
+ * reveals — when its `trigger` flips true. Reduced-motion shows it instantly.
  */
 export default function ScrambleText({
   text,
   trigger = true,
-  duration = 900,
+  duration = 600,
   className,
   style,
 }: ScrambleTextProps) {
   const reduced = prefersReducedMotion();
-  const [display, setDisplay] = useState(reduced ? text : "");
-  const startedRef = useRef(false);
-  const rafRef = useRef<number>(0);
-
-  useEffect(() => {
-    if (!trigger || startedRef.current) return;
-    startedRef.current = true;
-
-    if (reduced) {
-      setDisplay(text);
-      return;
-    }
-
-    const chars = text.split("");
-    const start = performance.now();
-    // Each character locks in once progress passes its slot; later chars settle last.
-    const settleAt = chars.map((_, i) => (i / chars.length) * 0.62 + 0.18);
-
-    const tick = (now: number) => {
-      const p = Math.min((now - start) / duration, 1);
-      const out = chars
-        .map((c, i) => {
-          if (c === " ") return " ";
-          if (p >= settleAt[i]) return c;
-          return rand();
-        })
-        .join("");
-      setDisplay(out);
-      if (p < 1) {
-        rafRef.current = requestAnimationFrame(tick);
-      } else {
-        setDisplay(text);
-      }
-    };
-    rafRef.current = requestAnimationFrame(tick);
-
-    return () => cancelAnimationFrame(rafRef.current);
-  }, [trigger, text, duration, reduced]);
+  const revealed = reduced || trigger;
+  const ms = Math.min(duration, 600);
 
   return (
-    <span className={className} style={style} aria-label={text}>
-      <span aria-hidden="true">{display || " "}</span>
+    <span
+      className={`relative inline-block overflow-hidden align-bottom ${className ?? ""}`}
+      style={style}
+    >
+      <span
+        className="inline-block will-change-transform"
+        style={{
+          transform: revealed ? "translateY(0)" : "translateY(110%)",
+          transition: reduced
+            ? "none"
+            : `transform ${ms}ms cubic-bezier(0.16, 1, 0.3, 1)`,
+        }}
+      >
+        {text}
+      </span>
     </span>
   );
 }

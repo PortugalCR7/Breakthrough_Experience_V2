@@ -47,6 +47,26 @@
   --body-lg: clamp(17px, 2vw, 22px);
   --body: 15px;
   --eyebrow: 13px;                   /* bumped up from 10px */
+
+  /* ── MOTION TOKENS — the named house language ──────────────────────
+     Formalizes the curves/timings already used by hand across this file
+     and the motion layer. These are DEFAULTS: an editorial movement may
+     override a value when its composition justifies it, but it always
+     speaks this grammar (the curve, the greyscale, the hierarchy).
+     See the Editorial Interaction Constitution §VII. */
+  --ease-editorial: cubic-bezier(0.16, 1, 0.3, 1);  /* the house curve */
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);          /* rare fast dismissals only */
+  --t-micro: 120ms;                                 /* press / active confirmation */
+  --t-hover: 300ms;                                 /* hover state change */
+  --t-reveal: 600ms;                                /* single element entrance */
+  --t-elevate: 450ms;                               /* card lift / shadow */
+
+  /* Threshold interaction accent — the FMO blue. Lives ONLY in transient
+     interaction state (focus, active underline, press, primary-CTA glow).
+     Never present at rest; the resting composition stays pure greyscale. */
+  --int-accent: #3F6477;                            /* focus, active underline, glow seed */
+  --int-accent-deep: #366177;                       /* pressed / active depth */
+  --int-glow: rgba(63, 100, 119, 0.20);             /* primary-CTA hover glow seed */
 }
 
 /* ═══════════════════════════════════════════════
@@ -744,6 +764,11 @@ body::after {
   border-color: rgba(255, 255, 255, 0.4);
   background: rgba(255, 255, 255, 0.04);
 }
+/* Momentary press confirmation on the toggle in the supporting tone (§IX). */
+.faq-q:active .faq-tog {
+  border-color: var(--int-accent-deep);
+  color: var(--int-accent-deep);
+}
 .faq-ans { max-height: 0; overflow: hidden; transition: max-height .48s cubic-bezier(.16,1,.3,1); }
 .faq-item.open .faq-ans { max-height: 800px; }
 .faq-ai { padding: 0 0 28px; font-family: var(--fb); font-size: 15px; font-weight: 300; line-height: 1.8; color: var(--gd); max-width: 760px; }
@@ -1059,7 +1084,7 @@ footer { background: var(--c2); border-top: 1px solid var(--c4); padding: 48px 0
   cursor: pointer;
   border: 1px solid var(--sv);
   overflow: hidden;
-  transition: background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow var(--t-micro) cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .btn-tactile::before {
@@ -1083,6 +1108,29 @@ footer { background: var(--c2); border-top: 1px solid var(--c4); padding: 48px 0
 
 .btn-tactile:active {
   transform: translateY(1px) scale(0.98);
+  /* Momentary press confirmation in the supporting interaction tone, springing
+     back the instant the press releases (--t-micro). Blue only while engaged. */
+  box-shadow: inset 0 0 0 2px var(--int-accent-deep);
+}
+
+/* ── Primary CTA — the earned peak ──────────────────
+   The single most expressive interaction on the page belongs to the one button
+   closest to the act: the join submit. Its hover blooms a faint blue glow seed —
+   subliminal, never present at rest. Expression rises with commitment (§IV/§IX).
+   The press ring (--int-accent-deep) above still applies underneath. */
+.cta-primary {
+  transition:
+    background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.15s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow var(--t-hover) cubic-bezier(0.16, 1, 0.3, 1);
+}
+.cta-primary:hover {
+  box-shadow: 0 0 0 1px var(--int-glow), 0 8px 34px -6px var(--int-glow);
+}
+/* Keep the momentary press ring readable over the hover bloom. */
+.cta-primary:active {
+  box-shadow: inset 0 0 0 2px var(--int-accent-deep), 0 0 0 1px var(--int-glow);
 }
 
 .btn-tactile-wrap {
@@ -1661,18 +1709,24 @@ html { scroll-snap-type: none; }
 .tl-row:hover .tl-ev { color: var(--sv); }
 
 /* ── Animated underline links ─────────────────────── */
+/* The rule ignites left→right in the threshold accent; the text stays greyscale.
+   Invisible at rest (scaleX 0) — blue appears only during interaction. §IX. */
 .foot-links a { position: relative; }
 .foot-links a::after {
   content: '';
   position: absolute; left: 0; bottom: -4px;
   height: 1px; width: 100%;
-  background: var(--sv);
+  background: var(--int-accent);
   transform: scaleX(0); transform-origin: right;
   transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .foot-links a:hover::after { transform: scaleX(1); transform-origin: left; }
 
-/* ── Accessible focus rings ──────────────────────── */
+/* ── Accessible focus rings ──────────────────────────
+   Keyboard focus is the highest-value, least-decorative home for the FMO blue:
+   it is orientation (Hierarchy level 2), not ornament. :focus-visible keeps it
+   invisible to mouse users, so the resting composition stays pure greyscale.
+   This is state, not motion — it persists under reduced-motion. §VI / §IX. */
 a:focus-visible,
 button:focus-visible,
 .btn:focus-visible,
@@ -1686,7 +1740,7 @@ textarea:focus-visible,
 .sl-dot:focus-visible,
 [role="button"]:focus-visible,
 .faq-item:focus-visible {
-  outline: 2px solid rgba(255, 255, 255, 0.7);
+  outline: 2px solid var(--int-accent);
   outline-offset: 3px;
 }
 
