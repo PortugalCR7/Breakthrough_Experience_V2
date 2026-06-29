@@ -74,65 +74,59 @@ export default function Vision() {
       id="vision"
       className="vision-stage scroll-snap-section relative w-full overflow-hidden"
     >
-      {/* Vertical metadata strip — quiet left-edge anchor */}
-      <div className="vision-meta" aria-hidden="true">
-        <span className="vision-meta-num">01</span>
-        <span className="vision-meta-label">The Vision</span>
-      </div>
-
       <div className="w">
         <h2
           className="relative w-full aspect-[100/60] leading-none uppercase"
           style={{ fontFamily: 'var(--fd)' }}
         >
           {/* 1. FOR OVER — connective */}
-          <Phrase register="connective" className="absolute flex gap-[0.4em] font-light tracking-[0.05em] text-[2vw]" style={{ top: '15%', left: '13%' }}>
+          <Phrase register="connective" className="absolute flex gap-[0.4em] font-light tracking-[0.05em] vision-phrase--connective" style={{ top: '18%', left: '16%' }}>
             <span>FOR</span>
             <span>OVER</span>
           </Phrase>
           
           {/* 2. TWENTY YEARS — substantive (scale carries weight, not glow) */}
-          <Phrase register="substantive" className="absolute flex gap-[0.3em] font-normal text-[5.5vw]" style={{ top: '21%', left: '16%' }}>
+          <Phrase register="substantive" className="absolute flex gap-[0.3em] font-normal vision-phrase--substantive" style={{ top: '21%', left: '16%' }}>
             <span>TWENTY</span>
             <span>YEARS</span>
           </Phrase>
           
           {/* 3. I'VE HELPED MEN — connective */}
-          <Phrase register="connective" className="absolute flex gap-[0.4em] font-light tracking-[0.05em] text-[2vw]" style={{ top: '32%', left: '29%' }}>
+          <Phrase register="connective" className="absolute flex gap-[0.4em] font-light tracking-[0.05em] vision-phrase--connective" style={{ top: '31%', left: '16%' }}>
             <span>I'VE</span>
             <span>HELPED</span>
             <span>MEN</span>
           </Phrase>
           
           {/* 4. CLOSE THAT GAP — substantive */}
-          <Phrase register="substantive" className="absolute flex gap-[0.3em] font-normal text-[5.5vw]" style={{ top: '36%', left: '41%' }}>
+          <Phrase register="substantive" className="absolute flex gap-[0.3em] font-normal vision-phrase--substantive" style={{ top: '31%', left: '41%' }}>
             <span>CLOSE</span>
             <span>THAT</span>
             <span>GAP</span>
           </Phrase>
           
-          <Phrase register="declarative" className="absolute italic font-bold text-[10.5vw] tracking-[-0.03em]" style={{ top: '44%', left: '17%' }}>
-            <span className="edt-emphasis edt-emphasis--accent edt-emphasis--glow">THROUGH</span>
+          <Phrase register="declarative" className="absolute italic font-bold vision-phrase--declarative tracking-[-0.03em]" style={{ top: '45%', left: '17%' }}>
+            <span className="edt-emphasis edt-emphasis--bodoni edt-emphasis--accent edt-emphasis--glow">THROUGH</span>
           </Phrase>
           
           {/* 6. STRUCTURE, — substantive */}
-          <Phrase register="substantive" className="absolute font-normal text-[5.5vw]" style={{ top: '60%', left: '19%' }}>
+          <Phrase register="substantive" className="absolute font-normal vision-phrase--substantive" style={{ top: '62%', left: '19%' }}>
             <span>STRUCTURE,</span>
           </Phrase>
           
           {/* 7. ACCOUNTABILITY, — substantive */}
-          <Phrase register="substantive" className="absolute font-normal text-[5.5vw]" style={{ top: '68%', left: '33%' }}>
+          <Phrase register="substantive" className="absolute font-normal vision-phrase--substantive" style={{ top: '72%', left: '33%' }}>
             <span>ACCOUNTABILITY,</span>
           </Phrase>
           
           {/* 8. AND HONEST — connective */}
-          <Phrase register="connective" className="absolute flex gap-[0.4em] font-light tracking-[0.05em] text-[2vw]" style={{ top: '79%', left: '17%' }}>
+          <Phrase register="connective" className="absolute flex gap-[0.4em] font-light tracking-[0.05em] vision-phrase--connective" style={{ top: '81%', left: '19%' }}>
             <span>AND</span>
             <span>HONEST</span>
           </Phrase>
           
-          <Phrase register="declarative" className="absolute italic font-bold text-[10vw] tracking-[-0.03em]" style={{ top: '83%', left: '34%' }}>
-            <span className="edt-emphasis edt-emphasis--accent edt-emphasis--glow">LEADERSHIP</span>
+          <Phrase register="declarative" className="absolute italic font-bold vision-phrase--declarative tracking-[-0.03em]" style={{ top: '81%', left: '34%' }}>
+            <span className="edt-emphasis edt-emphasis--bodoni edt-emphasis--accent edt-emphasis--glow">LEADERSHIP</span>
           </Phrase>
         </h2>
       </div>
