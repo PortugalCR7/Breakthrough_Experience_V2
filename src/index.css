@@ -1483,6 +1483,7 @@ html { scroll-snap-type: none; }
 
 .edt-emphasis--bodoni {
   font-family: var(--fd) !important;
+  font-weight: 300 !important; /* House serif weight — regular Bodoni Moda, not the line's heavy weight */
   text-transform: uppercase !important; /* Ensure Bodoni Moda is strictly uppercase */
   letter-spacing: 0.03em !important;
 }
