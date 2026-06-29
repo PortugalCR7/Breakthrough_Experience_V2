@@ -1253,6 +1253,7 @@ footer { background: var(--c2); border-top: 1px solid var(--c4); padding: 48px 0
   font-weight: 300 !important;
   font-style: italic !important;
   text-transform: uppercase !important;
+  letter-spacing: 0.03em !important;
   line-height: 1.1 !important;
   margin-bottom: 0.5em;
 }
@@ -1263,6 +1264,7 @@ footer { background: var(--c2); border-top: 1px solid var(--c4); padding: 48px 0
   font-weight: 300 !important;
   font-style: italic !important;
   text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
   opacity: 0.55;
   margin-bottom: 0.6em;
 }
@@ -1272,7 +1274,90 @@ footer { background: var(--c2); border-top: 1px solid var(--c4); padding: 48px 0
   font-size: clamp(56px, 8vw, 110px) !important;
   font-weight: 800 !important;
   text-transform: uppercase !important;
+  letter-spacing: 0.01em !important;
   line-height: 1.05 !important;
+}
+
+/* ── CTA2 · "The Anaphora Ladder" (concept 2A) ─────────
+   Premise recedes; the two needs step down-and-in with
+   their payloads igniting as the bright beat; the final
+   line breaks the ladder back to the full margin. */
+.cta-l2-premise {
+  font-family: var(--fm) !important;
+  font-size: clamp(15px, 1.7vw, 22px) !important;
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase !important;
+  opacity: 0.5;
+  margin-bottom: 1.5em;
+}
+.cta-l2-need {
+  font-family: var(--fd) !important;
+  font-weight: 300 !important;
+  font-size: clamp(30px, 4.2vw, 56px) !important;
+  line-height: 1.12 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.03em !important;
+  margin-bottom: 0.34em;
+}
+.cta-l2-step1 { padding-left: clamp(16px, 3vw, 56px); }
+.cta-l2-step2 { padding-left: clamp(32px, 6vw, 112px); }
+.cta-l2-resolve {
+  font-family: var(--fd) !important;
+  font-weight: 300 !important;
+  font-size: clamp(30px, 4.4vw, 60px) !important;
+  line-height: 1.14 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.03em !important;
+  margin-top: 0.8em;
+}
+
+/* ── CTA3 · "The Fork" (concept 3A) ────────────────────
+   The losing path recedes (PERFORMANCE / past), the
+   chosen path advances (EMBODIMENT / breakthrough). */
+.cta-l3-prompt {
+  font-family: var(--fd) !important;
+  font-weight: 300 !important;
+  font-size: clamp(20px, 2.4vw, 32px) !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  opacity: 0.82;
+  margin-bottom: 1.1em;
+}
+.cta-l3-options {
+  font-family: var(--fd) !important;
+  font-weight: 300 !important;
+  font-size: clamp(32px, 4.8vw, 60px) !important;
+  line-height: 1.1 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.03em !important;
+  margin-bottom: 1.1em;
+}
+.cta-l3-past {
+  font-family: var(--fd) !important;
+  font-weight: 300 !important;
+  font-size: clamp(18px, 2.2vw, 28px) !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  opacity: 0.42;
+  padding-left: clamp(16px, 3vw, 64px);
+  margin-bottom: 0.32em;
+}
+.cta-l3-climax {
+  font-family: var(--fu) !important;
+  font-weight: 800 !important;
+  font-size: clamp(40px, 6vw, 78px) !important;
+  line-height: 1.04 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.01em !important;
+}
+
+@media (max-width: 767.98px) {
+  .cta-l2-step1, .cta-l2-step2 { padding-left: 0; }
+  .cta-l2-need { font-size: clamp(26px, 7vw, 40px) !important; }
+  .cta-l2-resolve { font-size: clamp(26px, 7.2vw, 42px) !important; }
+  .cta-l3-past { padding-left: 0; }
+  .cta-l3-options { font-size: clamp(28px, 7.5vw, 44px) !important; }
+  .cta-l3-climax { font-size: clamp(34px, 9vw, 60px) !important; }
 }
 
 /* Sticky Word Reveal span styling */
@@ -1399,6 +1484,7 @@ html { scroll-snap-type: none; }
 .edt-emphasis--bodoni {
   font-family: var(--fd) !important;
   text-transform: uppercase !important; /* Ensure Bodoni Moda is strictly uppercase */
+  letter-spacing: 0.03em !important;
 }
 
 .edt-emphasis--glow {
@@ -1409,6 +1495,30 @@ html { scroll-snap-type: none; }
 
 [data-theme="light"] .edt-emphasis--glow {
   text-shadow: none;
+}
+
+/* Relative-scale emphasis modifiers (used by CTA3 "The Fork").
+   `recede` holds a word permanently dim and small (the losing path);
+   `advance` scales a word up (the chosen path). Colour stays greyscale —
+   `recede` pins to --word-dim with !important so the scrub never brightens it. */
+.edt-emphasis--recede {
+  font-size: 0.6em;
+  letter-spacing: 0.02em;
+  color: var(--word-dim) !important;
+  -webkit-text-fill-color: var(--word-dim) !important;
+}
+.edt-emphasis--advance {
+  font-size: 1.16em;
+}
+
+/* Heavy-sans display emphasis (Jost 800). Pairs with `italic` for the
+   heavy-sans-italic treatment on the key beats (structure / accountability /
+   who they can become / decision / embodiment). */
+.edt-emphasis--sans {
+  font-family: var(--fu) !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.01em !important;
 }
 
 
