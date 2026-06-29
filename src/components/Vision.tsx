@@ -80,37 +80,37 @@ export default function Vision() {
           style={{ fontFamily: 'var(--fd)' }}
         >
           {/* 1. FOR OVER — connective */}
-          <Phrase register="connective" className="absolute flex gap-[0.4em] font-light tracking-[0.05em] vision-phrase--connective" style={{ top: '18%', left: '16%' }}>
+          <Phrase register="connective" className="absolute flex gap-[0.4em] font-light tracking-[0.05em] vision-phrase--connective" style={{ top: '17.5%', left: '0%' }}>
             <span>FOR</span>
             <span>OVER</span>
           </Phrase>
           
           {/* 2. TWENTY YEARS — substantive (scale carries weight, not glow) */}
-          <Phrase register="substantive" className="absolute flex gap-[0.3em] font-normal vision-phrase--substantive" style={{ top: '21%', left: '16%' }}>
+          <Phrase register="substantive" className="absolute flex gap-[0.3em] font-normal vision-phrase--substantive" style={{ top: '21%', left: '6%' }}>
             <span>TWENTY</span>
             <span>YEARS</span>
           </Phrase>
           
           {/* 3. I'VE HELPED MEN — connective */}
-          <Phrase register="connective" className="absolute flex gap-[0.4em] font-light tracking-[0.05em] vision-phrase--connective" style={{ top: '31%', left: '16%' }}>
+          <Phrase register="connective" className="absolute flex gap-[0.4em] font-light tracking-[0.05em] vision-phrase--connective" style={{ top: '31.5%', left: '16%' }}>
             <span>I'VE</span>
             <span>HELPED</span>
             <span>MEN</span>
           </Phrase>
           
           {/* 4. CLOSE THAT GAP — substantive */}
-          <Phrase register="substantive" className="absolute flex gap-[0.3em] font-normal vision-phrase--substantive" style={{ top: '31%', left: '41%' }}>
+          <Phrase register="substantive" className="absolute flex gap-[0.3em] font-normal vision-phrase--substantive" style={{ top: '31%', left: '38%' }}>
             <span>CLOSE</span>
             <span>THAT</span>
             <span>GAP</span>
           </Phrase>
           
-          <Phrase register="declarative" className="absolute italic font-bold vision-phrase--declarative tracking-[-0.03em]" style={{ top: '45%', left: '17%' }}>
+          <Phrase register="declarative" className="absolute italic font-bold vision-phrase--declarative tracking-[-0.03em]" style={{ top: '42%', left: '17%' }}>
             <span className="edt-emphasis edt-emphasis--bodoni edt-emphasis--accent edt-emphasis--glow">THROUGH</span>
           </Phrase>
           
           {/* 6. STRUCTURE, — substantive */}
-          <Phrase register="substantive" className="absolute font-normal vision-phrase--substantive" style={{ top: '62%', left: '19%' }}>
+          <Phrase register="substantive" className="absolute font-normal vision-phrase--substantive" style={{ top: '62%', left: '23%' }}>
             <span>STRUCTURE,</span>
           </Phrase>
           
@@ -120,7 +120,7 @@ export default function Vision() {
           </Phrase>
           
           {/* 8. AND HONEST — connective */}
-          <Phrase register="connective" className="absolute flex gap-[0.4em] font-light tracking-[0.05em] vision-phrase--connective" style={{ top: '81%', left: '19%' }}>
+          <Phrase register="connective" className="absolute flex gap-[0.4em] font-light tracking-[0.05em] vision-phrase--connective" style={{ top: '82.75%', left: '19%' }}>
             <span>AND</span>
             <span>HONEST</span>
           </Phrase>
