@@ -1229,6 +1229,52 @@ footer { background: var(--c2); border-top: 1px solid var(--c4); padding: 48px 0
 .cta-statement--spacious .cta-ln { margin-bottom: 0.6em; }
 .cta-statement--spacious .cta-ln:last-child { margin-bottom: 0; }
 
+/* Monolithic registers for CTA #1 */
+.cta-ln-center {
+  display: flex !important;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.cta-reg-mono-med {
+  font-family: var(--fm) !important;
+  font-size: clamp(22px, 2.8vw, 36px) !important;
+  letter-spacing: 0.2em !important;
+  font-weight: 400 !important;
+  text-transform: uppercase !important;
+  margin-bottom: 0.6em;
+}
+
+.cta-reg-serif-hero {
+  font-family: var(--fd) !important;
+  font-size: clamp(48px, 6.8vw, 92px) !important;
+  font-weight: 300 !important;
+  font-style: italic !important;
+  text-transform: uppercase !important;
+  line-height: 1.1 !important;
+  margin-bottom: 0.5em;
+}
+
+.cta-reg-serif-whisper {
+  font-family: var(--fd) !important;
+  font-size: clamp(18px, 2.2vw, 26px) !important;
+  font-weight: 300 !important;
+  font-style: italic !important;
+  text-transform: uppercase !important;
+  opacity: 0.55;
+  margin-bottom: 0.6em;
+}
+
+.cta-reg-sans-hero {
+  font-family: var(--fu) !important;
+  font-size: clamp(56px, 8vw, 110px) !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  line-height: 1.05 !important;
+}
+
 /* Sticky Word Reveal span styling */
 .word-reveal-span {
   display: inline-block;

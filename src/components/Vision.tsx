@@ -3,52 +3,21 @@ import { gsap, useGSAP } from "../motion";
 
 /**
  * Phrase — a single typographic unit within the Vision spread.
- *
- * `register` controls the reveal timing to create compositional rhythm:
- *   - "connective": small prepositions/articles — start nearly visible (0.4), arrive first
- *   - "substantive": mid-weight nouns — standard scrub (0.15 → 1)
- *   - "declarative": the editorial thesis verbs — start invisible (0.0), arrive last and land hardest
+ * Under this prototype, individual scrollTriggers are deactivated.
+ * All phrases are animated from a single timeline on the pinned parent container.
  */
 function Phrase({
   children,
   className,
   style,
-  register = "substantive",
 }: {
   children: React.ReactNode;
   className?: string;
   style?: React.CSSProperties;
   register?: "connective" | "substantive" | "declarative";
 }) {
-  const ref = useRef<HTMLDivElement>(null);
-
-  useGSAP(() => {
-    if (!ref.current) return;
-
-    const config = {
-      connective:   { from: 0.4, start: "top 92%", end: "top 60%" },
-      substantive:  { from: 0.15, start: "top 90%", end: "top 52%" },
-      declarative:  { from: 0.0,  start: "top 88%", end: "top 44%" },
-    }[register];
-
-    gsap.fromTo(
-      ref.current,
-      { opacity: config.from },
-      {
-        opacity: 1,
-        ease: "none",
-        scrollTrigger: {
-          trigger: ref.current,
-          start: config.start,
-          end: config.end,
-          scrub: 1.2,
-        },
-      }
-    );
-  }, { scope: ref });
-
   return (
-    <div ref={ref} className={className} style={style}>
+    <div className={`vision-phrase ${className || ""}`} style={style}>
       {children}
     </div>
   );
@@ -62,16 +31,57 @@ function Phrase({
  * italic, tracking) and positioning create a dynamic reading path.
  *
  * .sv glow now sits on the declarative verbs (THROUGH, LEADERSHIP) —
- * aligning with how .sv operates across every other headline on the page:
- * as a luminous accent on the most important word in the statement.
+ * aligning with how .sv operates across every other headline on the page.
  *
- * Phrase reveals are differentiated by register:
- * connective (already visible) → substantive (standard) → declarative (delayed, hardest landing).
+ * Prototype Reveal:
+ * - Pinned container setup.
+ * - All phrases start at 0.2 opacity.
+ * - Staggered sequential fade-in to 1.0 opacity on scroll scrub.
  */
 export default function Vision() {
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const phrases = gsap.utils.toArray<HTMLElement>(".vision-phrase", section);
+    if (!phrases.length) return;
+
+    // Set all phrases to start at baseline opacity of approximately 0.2
+    gsap.set(phrases, { opacity: 0.2 });
+
+    // Create a timeline that pins the section and drives opacity reveal
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: section,
+        start: "top top",
+        end: "+=100%", // Pin length/scroll distance
+        pin: true,
+        pinSpacing: true,
+        scrub: 1.0,
+        anticipatePin: 1,
+      },
+    });
+
+    // Sequentially reveal each phrase
+    phrases.forEach((phrase, index) => {
+      tl.to(
+        phrase,
+        {
+          opacity: 1,
+          ease: "power1.inOut",
+          duration: 1,
+        },
+        index * 0.8 // Sequence timing
+      );
+    });
+  }, { scope: sectionRef });
+
   return (
     <section
       id="vision"
+      ref={sectionRef}
       className="vision-stage scroll-snap-section relative w-full overflow-hidden"
     >
       <div className="w">

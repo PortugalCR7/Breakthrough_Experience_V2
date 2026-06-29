@@ -4,9 +4,14 @@ import { gsap, useGSAP, prefersReducedMotion } from "../motion";
 import { useTheme } from "../theme/useTheme";
 import { parseEmphasisLine } from "../utils/emphasis";
 
+interface CtaLine {
+  text: string;
+  className?: string;
+}
+
 interface CtaStatementProps {
   /** Logical lines of the statement. Rendered uppercase regardless of input casing. */
-  lines: string[];
+  lines: (string | CtaLine)[];
   containerId?: string;
   /** "word" reveals one word at a time (default); "line" reveals whole lines. */
   reveal?: "word" | "line";
@@ -49,7 +54,8 @@ export default function CtaStatement({
   // Word indexing for word-reveal mode with emphasis parsing.
   let runningIdx = 0;
   const parsedLines = lines.map((line) => {
-    const { words, nextIdx } = parseEmphasisLine(line, runningIdx);
+    const text = typeof line === "string" ? line : line.text;
+    const { words, nextIdx } = parseEmphasisLine(text, runningIdx);
     runningIdx = nextIdx;
     return words;
   });
@@ -134,11 +140,13 @@ export default function CtaStatement({
       >
         {reveal === "line"
           ? lines.map((line, lineIdx) => {
-              const { words } = parseEmphasisLine(line, 0);
+              const text = typeof line === "string" ? line : line.text;
+              const lineClass = typeof line === "string" ? "" : line.className || "";
+              const { words } = parseEmphasisLine(text, 0);
               return (
                 <div
                   key={lineIdx}
-                  className="cta-ln"
+                  className={`cta-ln ${lineClass}`.trim()}
                   style={{
                     opacity: isVisible ? 1 : 0,
                     transform: isVisible ? "translateY(0)" : "translateY(12px)",
@@ -155,15 +163,19 @@ export default function CtaStatement({
                 </div>
               );
             })
-          : parsedLines.map((lineWords, lineIdx) => (
-              <div key={lineIdx} className="cta-ln">
-                {lineWords.map(({ word, idx, classes }) => (
-                  <span key={idx} className={`word-reveal-span mr-[0.25em] ${classes}`.trim()}>
-                    {word}
-                  </span>
-                ))}
-              </div>
-            ))}
+          : parsedLines.map((lineWords, lineIdx) => {
+              const line = lines[lineIdx];
+              const lineClass = typeof line === "string" ? "" : line.className || "";
+              return (
+                <div key={lineIdx} className={`cta-ln ${lineClass}`.trim()}>
+                  {lineWords.map(({ word, idx, classes }) => (
+                    <span key={idx} className={`word-reveal-span mr-[0.25em] ${classes}`.trim()}>
+                      {word}
+                    </span>
+                  ))}
+                </div>
+              );
+            })}
       </div>
 
       {reveal === "word" && pin && (

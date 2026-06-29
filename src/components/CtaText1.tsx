@@ -4,9 +4,10 @@ export default function CtaText1() {
   return (
     <CtaStatement
       lines={[
-        "THE MAN YOU ARE PERFORMING",
-        "IS NOT THE [MAN](italic,accent)",
-        "THEY NEED.",
+        { text: "THE MAN", className: "cta-ln-center cta-reg-mono-med" },
+        { text: "YOU ARE PERFORMING", className: "cta-ln-center cta-reg-serif-hero" },
+        { text: "IS NOT THE MAN", className: "cta-ln-center cta-reg-serif-whisper" },
+        { text: "THEY NEED.", className: "cta-ln-center cta-reg-sans-hero" },
       ]}
     />
   );
