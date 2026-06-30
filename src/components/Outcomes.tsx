@@ -6,6 +6,9 @@ export default function Outcomes() {
   const [ref, isVisible] = useIntersectionObserver({ threshold: 0.1 });
   const hl1Ref = useRef<HTMLHeadingElement | null>(null);
   const hl2Ref = useRef<HTMLHeadingElement | null>(null);
+  // Both panel headlines are the section's top-level headings (there is no
+  // overarching section title), so they sit at <h2> to keep the outline
+  // gap-free under the page <h1> — styling is class-driven (.oc-hl), unchanged.
   useWordScrub(hl1Ref);
   useWordScrub(hl2Ref);
 
@@ -23,7 +26,7 @@ export default function Outcomes() {
             willChange: "opacity, transform",
           }}
         >
-          <h3 ref={hl1Ref} className="oc-hl">
+          <h2 ref={hl1Ref} className="oc-hl">
             <span className="word-reveal-span mr-[0.25em]">WHAT</span>
             <span className="word-reveal-span mr-[0.25em]">YOU</span>
             <br />
@@ -31,7 +34,7 @@ export default function Outcomes() {
             <span className="word-reveal-span mr-[0.25em]">AWAY</span>
             <br />
             <span className="word-reveal-span mr-[0.25em]">WITH</span>
-          </h3>
+          </h2>
           <div className="oc-list">
             <div className="oc-row">
               <span className="oc-m">✓</span>Greater self-trust.
@@ -71,7 +74,7 @@ export default function Outcomes() {
             willChange: "opacity, transform",
           }}
         >
-          <h3 ref={hl2Ref} className="oc-hl">
+          <h2 ref={hl2Ref} className="oc-hl">
             <span className="word-reveal-span mr-[0.25em]">WHAT</span>
             <span className="word-reveal-span mr-[0.25em]">TWENTY</span>
             <br />
@@ -80,7 +83,7 @@ export default function Outcomes() {
             <br />
             <span className="word-reveal-span mr-[0.25em]">TAUGHT</span>
             <span className="word-reveal-span mr-[0.25em]">ME</span>
-          </h3>
+          </h2>
           <div className="aph-list">
             <div className="aph-row">
               <p className="aph-t">

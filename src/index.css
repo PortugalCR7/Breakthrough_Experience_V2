@@ -1869,6 +1869,33 @@ html { scroll-snap-type: none; }
 }
 .foot-links a:hover::after { transform: scaleX(1); transform-origin: left; }
 
+/* ── Skip to content ─────────────────────────────────
+   First focusable element. Off-screen until it receives keyboard focus,
+   then it drops into the top-left so a keyboard user can jump past the
+   decorative/fixed chrome straight to <main>. Greyscale, no motion. */
+.skip-link {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10001;
+  transform: translateY(-120%);
+  padding: 12px 18px;
+  background: #000;
+  color: #fff;
+  border: 1px solid var(--int-accent);
+  font-family: var(--fb, sans-serif);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+}
+.skip-link:focus,
+.skip-link:focus-visible {
+  transform: translateY(0);
+  outline: 2px solid var(--int-accent);
+  outline-offset: 3px;
+}
+[data-theme="light"] .skip-link { background: #fff; color: #14161a; }
+
 /* ── Accessible focus rings ──────────────────────────
    Keyboard focus is the highest-value, least-decorative home for the FMO blue:
    it is orientation (Hierarchy level 2), not ornament. :focus-visible keeps it

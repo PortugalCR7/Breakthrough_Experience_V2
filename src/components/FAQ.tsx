@@ -73,6 +73,8 @@ export default function FAQ() {
         <div className="faq-list">
           {FAQ_ITEMS.map((item, idx) => {
             const isOpen = openIndex === idx;
+            const panelId = `${item.id}-panel`;
+            const btnId = `${item.id}-control`;
             return (
               <div
                 key={item.id}
@@ -83,6 +85,9 @@ export default function FAQ() {
                   className="faq-q"
                   role="button"
                   tabIndex={0}
+                  id={btnId}
+                  aria-expanded={isOpen}
+                  aria-controls={panelId}
                   onKeyDown={(e) => {
                     if (e.key === "Enter" || e.key === " ") {
                       e.preventDefault();
@@ -91,9 +96,14 @@ export default function FAQ() {
                   }}
                 >
                   <p className="faq-qt">{item.question}</p>
-                  <div className="faq-tog">{isOpen ? "×" : "+"}</div>
+                  <div className="faq-tog" aria-hidden="true">{isOpen ? "×" : "+"}</div>
                 </div>
-                <div className="faq-ans">
+                <div
+                  className="faq-ans"
+                  id={panelId}
+                  role="region"
+                  aria-labelledby={btnId}
+                >
                   <div className="faq-ai">
                     <p dangerouslySetInnerHTML={{ __html: item.answer }} />
                   </div>

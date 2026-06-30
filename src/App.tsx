@@ -30,6 +30,9 @@ import ThemeToggle from "./components/ThemeToggle";
 export default function App() {
   return (
     <>
+      {/* Keyboard skip link — first focusable element; visually hidden until focused */}
+      <a href="#main" className="skip-link">Skip to content</a>
+
       {/* Dynamic tactile custom cursor glow */}
       <CustomCursor />
 
@@ -43,7 +46,7 @@ export default function App() {
       <Header />
 
       {/* Main Single Page structural flow matching custom design layout */}
-      <main>
+      <main id="main">
         {/* Section 1: Cinematic Interactive Hero with cascades */}
         <Hero />
 

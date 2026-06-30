@@ -10,7 +10,7 @@ export default function Checkout() {
   // tactile pull, not toy physics. Constitution §IX. Every other CTA on the
   // page is navigation and uses the standard btn-tactile treatment.
   const magneticRef = useMagnetic({ strength: 0.15 });
-  const coTitleRef = useRef<HTMLDivElement | null>(null);
+  const coTitleRef = useRef<HTMLHeadingElement | null>(null);
   useWordScrub(coTitleRef);
 
   // Form states
@@ -62,9 +62,9 @@ export default function Checkout() {
         <div className="co-g">
           <div className={`fu ${isVisible ? "vis" : ""}`}>
             <div className="co-lbl">SECURE YOUR PLACE</div>
-            <div ref={coTitleRef} className="co-t">
+            <h2 ref={coTitleRef} className="co-t">
               <span className="word-reveal-span">BREAKTHROUGH</span>
-            </div>
+            </h2>
             <div className="co-list">
               <div className="co-row">
                 <span className="co-ck">✓</span>6 live 1:1 sessions with Frank directly
@@ -109,8 +109,10 @@ export default function Checkout() {
                       placeholder="First"
                       value={firstName}
                       onChange={(e) => setFirstName(e.target.value)}
+                      aria-invalid={errors.firstName}
+                      aria-describedby={errors.firstName ? "fNe" : undefined}
                     />
-                    <div className={`f-err ${errors.firstName ? "show" : ""}`} id="fNe">
+                    <div className={`f-err ${errors.firstName ? "show" : ""}`} id="fNe" role="alert">
                       Required
                     </div>
                   </div>
@@ -126,8 +128,10 @@ export default function Checkout() {
                       placeholder="Last"
                       value={lastName}
                       onChange={(e) => setLastName(e.target.value)}
+                      aria-invalid={errors.lastName}
+                      aria-describedby={errors.lastName ? "lNe" : undefined}
                     />
-                    <div className={`f-err ${errors.lastName ? "show" : ""}`} id="lNe">
+                    <div className={`f-err ${errors.lastName ? "show" : ""}`} id="lNe" role="alert">
                       Required
                     </div>
                   </div>
@@ -145,8 +149,10 @@ export default function Checkout() {
                     placeholder="you@email.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    aria-invalid={errors.email}
+                    aria-describedby={errors.email ? "eme" : undefined}
                   />
-                  <div className={`f-err ${errors.email ? "show" : ""}`} id="eme">
+                  <div className={`f-err ${errors.email ? "show" : ""}`} id="eme" role="alert">
                     Valid email required
                   </div>
                 </div>
