@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Jost:ital,wght@0,100..900;1,100..900&family=IBM+Plex+Mono:ital,wght@0,100..700;1,100..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Libre+Bodoni:ital,wght@0,400..700;1,400..700&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Jost:ital,wght@0,100..900;1,100..900&family=IBM+Plex+Mono:ital,wght@0,100..700;1,100..700&display=swap');
 @import "tailwindcss";
 
 /* ═══════════════════════════════════════════════
@@ -31,11 +31,11 @@
   --word-dim: #454545;
   --word-lit: #ffffff;
 
-  --fd: 'Newsreader', serif;
+  --fd: 'Libre Bodoni', serif;
   --fu: 'Jost', sans-serif;
   --fb: 'DM Sans', sans-serif;
   --fm: 'IBM Plex Mono', monospace;
-  --fs: 'Newsreader', serif;  /* editorial serif accent — Kasia-style italic moments */
+  --fs: 'Libre Bodoni', serif;  /* editorial serif accent — Kasia-style italic moments */
   --sp: clamp(140px, 16vw, 240px);  /* target gap BETWEEN sections */
   --secpad: calc(var(--sp) / 2);    /* per-section top/bottom pad; two halves = one --sp gap */
 
