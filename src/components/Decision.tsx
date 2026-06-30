@@ -9,9 +9,9 @@ const HEADLINE = "THE MAN YOU WANT TO BECOME IS NOT WAITING IN THE [FUTURE.](acc
  * Section 06 — The Decision (climactic set-piece).
  *
  * V2: the verdict brightens word-by-word as the reader scrolls (scrubbed
- * narration). On desktop it becomes a held PIN + scroll-lock — but only when the
- * set-piece comfortably fits the viewport, so it can never clip on shorter
- * laptops; otherwise it degrades to a plain scrub. Reduced-motion = instant.
+ * narration). The section always scrolls naturally — no viewport pin-lock — so
+ * the hand-off into Final Word (the only pinned closing sequence) stays smooth.
+ * Reduced-motion = instant.
  */
 export default function Decision() {
   const sectionRef = useRef<HTMLElement | null>(null);
@@ -21,7 +21,6 @@ export default function Decision() {
 
   useGSAP(
     () => {
-      const section = sectionRef.current;
       const hero = heroScope.current;
       if (!hero) return;
       const words = gsap.utils.toArray<HTMLElement>(".word-reveal-span", hero);
@@ -34,33 +33,19 @@ export default function Decision() {
 
       const mm = gsap.matchMedia();
 
+      // Desktop: non-pinned word-by-word scrub — the section scrolls naturally,
+      // with no viewport pin-lock. (Final Word remains the only pinned closing
+      // sequence.) Reveal timing is unchanged from the prior non-pinned path.
       mm.add("(min-width: 768px)", () => {
         gsap.set(words, { opacity: 0.1, "--wp": 0 });
-        const fits = !!section && section.offsetHeight <= window.innerHeight * 1.02;
         gsap.to(words, {
           opacity: 1,
           "--wp": 1,
           ease: "none",
           duration: 0.4,
           stagger: { each: 0.5 },
-          scrollTrigger: fits
-            ? { trigger: section, start: "top top", end: "+=85%", pin: true, pinSpacing: true, scrub: true, anticipatePin: 1 }
-            : { trigger: hero, start: "top 88%", end: "top 26%", scrub: true },
+          scrollTrigger: { trigger: hero, start: "top 88%", end: "top 26%", scrub: true },
         });
-
-        if (indicatorRef.current && fits) {
-          gsap.set(indicatorRef.current, { opacity: 1 });
-          gsap.to(indicatorRef.current, {
-            opacity: 0,
-            ease: "none",
-            scrollTrigger: {
-              trigger: section,
-              start: "top top",
-              end: "+=20%",
-              scrub: true,
-            },
-          });
-        }
       });
 
       mm.add("(max-width: 767.98px)", () => {
