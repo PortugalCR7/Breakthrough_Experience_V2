@@ -35,10 +35,11 @@ export default function Testimonials() {
   useWordScrub(testiHlRef);
 
   useEffect(() => {
-    // Autoplay testimonials every 5000ms
+    // Autoplay testimonials every 7000ms (~40% slower than the prior 5000ms,
+    // giving readers more time to comfortably finish each testimonial)
     const interval = setInterval(() => {
       setCurrent((prev) => (prev + 1) % TESTIMONIALS.length);
-    }, 5000);
+    }, 7000);
 
     return () => clearInterval(interval);
   }, [current]);

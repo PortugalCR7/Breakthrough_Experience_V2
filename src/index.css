@@ -486,8 +486,8 @@ body::after {
   content: '';
   position: absolute; inset: 0;
   background: linear-gradient(to bottom,
-    rgba(0,0,0,.12) 0%,
-    rgba(0,0,0,.5) 64%,
+    rgba(0,0,0,.06) 0%,
+    rgba(0,0,0,.25) 64%,
     var(--c2) 100%);
 }
 .p-n { font-family: var(--fm); font-size: 10px; letter-spacing: .18em; color: var(--mu); margin-bottom: 22px; }
@@ -1633,6 +1633,21 @@ html { scroll-snap-type: none; }
 }
 .edt-emphasis--advance {
   font-size: 1.16em;
+}
+
+/* Display-scale modifier: roughly doubles a word relative to its line
+   (used by CTA3's "DECISION"). Size only — colour/family/weight untouched. */
+.edt-emphasis--xl {
+  font-size: 2em;
+}
+
+/* A receded word whose colour is lifted to the BREAKTHROUGH accent (--sv).
+   Compound specificity (0,2,0) beats `recede`'s single-class !important so
+   only the colour changes — size/letter-spacing from `recede` are preserved.
+   Used by CTA3's "PERFORMANCE". */
+.edt-emphasis--recede.edt-emphasis--accent {
+  color: var(--sv) !important;
+  -webkit-text-fill-color: var(--sv) !important;
 }
 
 /* Heavy-sans display emphasis (Jost 800). Pairs with `italic` for the
