@@ -1064,6 +1064,58 @@ footer { background: var(--c2); border-top: 1px solid var(--c4); padding: 48px 0
   .is-box{padding:22px 24px}
 }
 
+/* ───────────────────────────────────────────────
+   MOBILE — KINETIC HEADLINE LEADING
+   Desktop sets these display headlines on tight leading (.88 / 1.05) where the
+   copy resolves to 1–2 lines and the compression reads as intentional editorial
+   weight. On narrow viewports the same copy wraps to 3–5 lines and that tight
+   leading collapses cap-height into the line below — the word-scrub glyph
+   collision visible in FAQ / Vision / RealEnemy / IdentityGap / AlignedOtherSide.
+   We relax leading on mobile only: the compressed character is preserved, the
+   line-to-line separation is restored. Desktop remains untouched.
+   ─────────────────────────────────────────────── */
+@media (max-width: 767.98px) {
+  /* .88-leading display group → just enough to clear the descender/cap overlap */
+  .frank-hl, .prog-hl, .oc-hl, .testi-hl,
+  .pp-hl, .al-sec-hl, .faq-hl, .decision-hl { line-height: 1.0; }
+
+  /* 1.05-leading group → modest relaxation for multi-line wraps */
+  .meet-hl, .enemy-hl, .gap-hl, .other-hl,
+  .mid-hl, .vision-text { line-height: 1.12; }
+}
+
+/* ───────────────────────────────────────────────
+   MOBILE — CTA BEAT PACING
+   The CTA beats (CtaText1/2/3) never pin on touch — they already degrade to a
+   plain scrubbed brighten (CtaStatement.tsx). So the long empty hold beneath the
+   headline on a phone is not a pin: it is the desktop framing — min-height:100vh
+   + ~118px vertical padding with the statement vertically centred — reserving a
+   full-plus screen where the centred copy leaves a tall dead band above and below.
+   On mobile we trim the reserved height and padding so the beat reads as an
+   intentional standalone moment instead of a stall. The interaction (scrubbed
+   brighten + scroll cue) is unchanged; desktop's full-viewport beat is untouched. */
+@media (max-width: 767.98px) {
+  .cta-beat {
+    min-height: 72vh;
+    padding-top: clamp(56px, 11vh, 96px);
+    padding-bottom: clamp(56px, 11vh, 96px);
+  }
+}
+
+/* ───────────────────────────────────────────────
+   MOBILE — SECTION RHYTHM FLOOR
+   --sp is the gap between sections (two --secpad halves). Desktop rides the 16vw
+   track; on a phone 16vw collapses to the 140px floor, which reads loose against
+   the smaller canvas. We lower ONLY the mobile floor (140 → 104) for a tighter,
+   intentional rhythm while preserving editorial breathing room. Because --secpad
+   is calc(--sp / 2), it recomputes automatically. Desktop (≥768px) keeps the
+   original clamp untouched — at those widths 16vw already exceeds the floor. */
+@media (max-width: 767.98px) {
+  :root, [data-theme="dark"], [data-theme="light"] {
+    --sp: clamp(104px, 16vw, 240px);
+  }
+}
+
 /* @keyframes soundWave visualizer helper */
 @keyframes soundWave {
   0% {
