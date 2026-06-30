@@ -4,9 +4,9 @@ import ScrambleText from "./ScrambleText";
 import ScrollCue from "./ScrollCue";
 
 const BG_IMAGES = [
-  { src: "/bg_forest.png", name: "The Forest" },
-  { src: "/bg_dojo.png", name: "The Dojo" },
-  { src: "/bg_cabin.png", name: "The Cabin" },
+  { src: "/bg_forest.png", webp: "/bg_forest.webp", name: "The Forest" },
+  { src: "/bg_dojo.png", webp: "/bg_dojo.webp", name: "The Dojo" },
+  { src: "/bg_cabin.png", webp: "/bg_cabin.webp", name: "The Cabin" },
 ];
 
 /**
@@ -84,17 +84,19 @@ export default function Hero() {
         style={{ transform: `translateY(${offset}px)` }}
       >
         {BG_IMAGES.map((img, idx) => (
-          <img
-            key={img.src}
-            src={img.src}
-            alt=""
-            aria-hidden="true"
-            loading={idx === 0 ? "eager" : "lazy"}
-            decoding="async"
-            fetchPriority={idx === 0 ? "high" : "low"}
-            className={`hero-photo ${currentBgIdx === idx ? "is-active" : ""}`}
-            referrerPolicy="no-referrer"
-          />
+          <picture key={img.src}>
+            <source type="image/webp" srcSet={img.webp} />
+            <img
+              src={img.src}
+              alt=""
+              aria-hidden="true"
+              loading={idx === 0 ? "eager" : "lazy"}
+              decoding="async"
+              fetchPriority={idx === 0 ? "high" : "low"}
+              className={`hero-photo ${currentBgIdx === idx ? "is-active" : ""}`}
+              referrerPolicy="no-referrer"
+            />
+          </picture>
         ))}
       </div>
 

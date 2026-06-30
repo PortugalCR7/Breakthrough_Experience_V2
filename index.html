@@ -4,6 +4,25 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BREAKTHROUGH — Frank Mondeose</title>
+
+    <!-- Performance: warm up font origins, then load fonts non-render-blocking -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Libre+Bodoni:ital,wght@0,400..700;1,400..700&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Jost:ital,wght@0,100..900;1,100..900&family=IBM+Plex+Mono:ital,wght@0,100..700;1,100..700&display=swap"
+    />
+
+    <!-- Performance: preload the LCP hero background (SPA root is empty, so the
+         preload scanner can't discover it from markup) -->
+    <link
+      rel="preload"
+      as="image"
+      href="/bg_forest.webp"
+      type="image/webp"
+      fetchpriority="high"
+    />
+
     <!-- No-flash theme guard: set data-theme before first paint. Dark is default. -->
     <script>
       (function () {
@@ -22,4 +41,3 @@
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
-

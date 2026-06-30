@@ -84,15 +84,21 @@ export default function MenIMeet() {
             >
               {profile.image && (
                 <div className="p-band" aria-hidden="true">
-                  <img
-                    src={profile.image}
-                    alt=""
-                    referrerPolicy="no-referrer"
-                    onError={(e) => {
-                      const band = (e.currentTarget.parentElement as HTMLElement);
-                      if (band) band.style.display = "none";
-                    }}
-                  />
+                  <picture>
+                    <source
+                      type="image/webp"
+                      srcSet={profile.image.replace(/\.png$/, ".webp")}
+                    />
+                    <img
+                      src={profile.image}
+                      alt=""
+                      referrerPolicy="no-referrer"
+                      onError={(e) => {
+                        const band = e.currentTarget.closest(".p-band") as HTMLElement | null;
+                        if (band) band.style.display = "none";
+                      }}
+                    />
+                  </picture>
                 </div>
               )}
               <div className="p-n">{profile.num}</div>

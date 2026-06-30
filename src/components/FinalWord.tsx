@@ -113,7 +113,10 @@ export default function FinalWord() {
         aria-hidden="true"
         style={{ opacity: 0, transition: "none" }}
       >
-        <img src="/frank_founder_updated.jpg" alt="" referrerPolicy="no-referrer" />
+        <picture>
+          <source type="image/webp" srcSet="/frank_founder_updated.webp" />
+          <img src="/frank_founder_updated.jpg" alt="" referrerPolicy="no-referrer" />
+        </picture>
       </div>
 
       <div className="w">

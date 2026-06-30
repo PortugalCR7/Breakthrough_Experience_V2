@@ -79,14 +79,17 @@ export default function MeetFrank() {
           <div ref={photoColRef} className="frank-photo-col bg-neutral-900">
             <div className="frank-portrait relative overflow-hidden bg-neutral-900 border border-neutral-800 rounded-lg">
               {!imgFailed ? (
-                <img
-                  ref={imgRef}
-                  src="/frank_founder_updated.jpg"
-                  alt="Frank Mondeose Portrait"
-                  className="absolute inset-0 w-full h-full object-cover object-center"
-                  referrerPolicy="no-referrer"
-                  onError={() => setImgFailed(true)}
-                />
+                <picture>
+                  <source type="image/webp" srcSet="/frank_founder_updated.webp" />
+                  <img
+                    ref={imgRef}
+                    src="/frank_founder_updated.jpg"
+                    alt="Frank Mondeose Portrait"
+                    className="absolute inset-0 w-full h-full object-cover object-center"
+                    referrerPolicy="no-referrer"
+                    onError={() => setImgFailed(true)}
+                  />
+                </picture>
               ) : (
                 <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-neutral-800 via-neutral-950 to-black p-8 text-neutral-600 text-[10px] tracking-widest text-center uppercase select-none">
                   Frank Mondeose Portrait
