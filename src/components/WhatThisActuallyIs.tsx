@@ -93,7 +93,7 @@ export default function WhatThisActuallyIs() {
           <div className="flex flex-col gap-8">
             <h2
               ref={progHlRef}
-              className="text-stone-100 text-[length:clamp(30px,4.6vw,72px)] font-light leading-[0.88] tracking-[-0.025em] uppercase"
+              className="text-stone-100 text-[length:clamp(30px,4.6vw,60px)] font-light leading-[0.88] tracking-[-0.025em] uppercase"
               style={{ fontFamily: "var(--fd)" }}
             >
               <span className="word-reveal-span mr-[0.25em]">THIS</span>
@@ -101,7 +101,7 @@ export default function WhatThisActuallyIs() {
               <span className="word-reveal-span mr-[0.25em]">NOT</span>
               <br />
               <span className="word-reveal-span mr-[0.25em]">A</span>
-              <span className="word-reveal-span mr-[0.25em]">PROGRAM.</span>
+              <span className="word-reveal-span mr-[0.25em]">PROGRAM</span>
               <br />
               <span className="word-reveal-span mr-[0.25em]">IT'S</span>
               <span className="word-reveal-span mr-[0.25em]">A</span>
