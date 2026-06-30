@@ -938,6 +938,55 @@ footer { background: var(--c2); border-top: 1px solid var(--c4); padding: 48px 0
   font-family: var(--fd);
   font-weight: 700;
 }
+
+/* ── VISION · Mobile composition "Two Movements" (portrait-native) ───────────
+   The desktop landscape canvas (aspect-100/60, absolutely-positioned scatter)
+   is reflowed into two stacked editorial stanzas separated by a negative-space
+   fold. Each movement resolves into its glowing declarative anchor:
+     Movement I  — FOR OVER … CLOSE THAT GAP  →  THROUGH    (right-anchored)
+     Movement II — STRUCTURE … AND HONEST     →  LEADERSHIP (left-anchored)
+   CSS-only: setting phrases to position:static makes their inline top/left inert,
+   so the DOM order and the GSAP reveal timeline are left completely untouched. */
+@media (max-width: 767.98px) {
+  #vision h2 {
+    aspect-ratio: auto;        /* drop the landscape canvas */
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;   /* phrases size to content; align-self places them */
+    gap: clamp(8px, 1.8vh, 16px);
+    padding: clamp(36px, 7vh, 64px) 0;
+  }
+  #vision h2 > .vision-phrase {
+    position: static;          /* neutralizes the inline top/left scatter */
+    margin: 0;
+  }
+
+  /* Register scale tuned for the portrait container width */
+  #vision h2 > .vision-phrase--connective  { font-size: clamp(12px, 3.6cqw, 20px); }
+  #vision h2 > .vision-phrase--substantive { font-size: clamp(26px, 8cqw, 56px); }
+  #vision h2 > .vision-phrase--declarative { font-size: clamp(46px, 15cqw, 88px); }
+
+  /* ── Movement I — setup + promise, resolving into THROUGH ── */
+  #vision h2 > .vision-phrase:nth-child(2) { margin-left: 8%; }                 /* TWENTY YEARS */
+  #vision h2 > .vision-phrase:nth-child(4) { align-self: flex-end; }            /* CLOSE THAT GAP */
+  #vision h2 > .vision-phrase:nth-child(5) {                                    /* THROUGH (anchor) */
+    align-self: flex-end;
+    margin-top: clamp(4px, 1vh, 10px);
+  }
+
+  /* ── The fold — deliberate breath between movements ── */
+  #vision h2 > .vision-phrase:nth-child(6) { margin-top: clamp(44px, 9vh, 96px); } /* STRUCTURE, */
+
+  /* ── Movement II — the means, resolving into LEADERSHIP ── */
+  #vision h2 > .vision-phrase:nth-child(7) { margin-left: 10%; }                /* ACCOUNTABILITY, */
+  #vision h2 > .vision-phrase:nth-child(8) { align-self: flex-end; }            /* AND HONEST */
+  #vision h2 > .vision-phrase:nth-child(9) {                                    /* LEADERSHIP (anchor) */
+    align-self: flex-start;
+    margin-top: clamp(4px, 1vh, 10px);
+  }
+}
+
 .vision-meta {
   position: absolute;
   left: clamp(20px, 4.5vw, 56px);
