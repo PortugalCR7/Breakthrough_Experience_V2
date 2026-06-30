@@ -7,12 +7,12 @@ const FAQ_ITEMS: FAQItem[] = [
   {
     id: "f1",
     question: "Is this coaching?",
-    answer: "No. And that distinction matters. Coaching is a methodology. What I do is mentorship built on lived experience — I have founded companies, built communities, trained facilitators, and developed curriculum across two decades. I do not give you a framework. I give you a direct encounter with a man who has been where you're standing, made the hard choices, and stayed in the arena. <strong>If you're looking for a coach, this is not it. If you're looking for someone who has lived the gap and closed it, read on.</strong>",
+    answer: "No. And that distinction matters. Coaching is a methodology. What I do is mentorship built on lived experience I have founded companies, built communities, trained facilitators, and developed curriculum across two decades. I do not give you a framework. I give you a direct encounter with a man who has been where you're standing, made the hard choices, and stayed in the arena. <strong>If you're looking for a coach, this is not it. If you're looking for someone who has lived the gap and closed it, read on.</strong>",
   },
   {
     id: "f2",
     question: "What happens in the six sessions?",
-    answer: "Each session follows the arc: Diagnostic, Gap, Interruption, Return, Anchor, Integration. But it's not a formula. Session one, I read where your energy is going. I name what I see. <strong>What I see is what I say — not what you want to hear, but what the man underneath your current results needs to be shown.</strong> Every session after that builds on honest ground, not managed impressions. The work gets more precise as we go.",
+    answer: "Each session follows the arc: Diagnostic, Gap, Interruption, Return, Anchor, Integration. But it's not a formula. Session one, I read where your energy is going. I name what I see. <strong>What I see is what I say, not what you want to hear, but what the man underneath your current results needs to be shown.</strong> Every session after that builds on honest ground, not managed impressions. The work gets more precise as we go.",
   },
   {
     id: "f3",
