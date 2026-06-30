@@ -49,12 +49,27 @@ export default function Vision() {
     const phrases = gsap.utils.toArray<HTMLElement>(".vision-phrase", section);
     if (!phrases.length) return;
 
-    // Set all phrases to start at baseline opacity of approximately 0.2
-    gsap.set(phrases, { opacity: 0.2 });
+    // Sequentially reveal each phrase on a single timeline. The trigger config
+    // is the only thing that differs by viewport (see below).
+    const buildReveal = (
+      scrollTrigger: ScrollTrigger.Vars
+    ) => {
+      gsap.set(phrases, { opacity: 0.2 });
+      const tl = gsap.timeline({ scrollTrigger });
+      phrases.forEach((phrase, index) => {
+        tl.to(
+          phrase,
+          { opacity: 1, ease: "power1.inOut", duration: 1 },
+          index * 0.8 // Sequence timing
+        );
+      });
+    };
 
-    // Create a timeline that pins the section and drives opacity reveal
-    const tl = gsap.timeline({
-      scrollTrigger: {
+    const mm = gsap.matchMedia();
+
+    // Desktop: PIN + scroll-lock — the editorial spread holds while it reveals.
+    mm.add("(min-width: 768px)", () => {
+      buildReveal({
         trigger: section,
         start: "top top",
         end: "+=100%", // Pin length/scroll distance
@@ -62,21 +77,22 @@ export default function Vision() {
         pinSpacing: true,
         scrub: 1.0,
         anticipatePin: 1,
-      },
+      });
     });
 
-    // Sequentially reveal each phrase
-    phrases.forEach((phrase, index) => {
-      tl.to(
-        phrase,
-        {
-          opacity: 1,
-          ease: "power1.inOut",
-          duration: 1,
-        },
-        index * 0.8 // Sequence timing
-      );
+    // Mobile: no pin, no held pause — phrases reveal on scrub as the section
+    // passes through and the next section enters naturally. Matches the CTA
+    // sections' mobile rhythm (CtaStatement's touch branch).
+    mm.add("(max-width: 767.98px)", () => {
+      buildReveal({
+        trigger: section,
+        start: "top 86%",
+        end: "top 30%",
+        scrub: 1.0,
+      });
     });
+
+    return () => mm.revert();
   }, { scope: sectionRef });
 
   return (
