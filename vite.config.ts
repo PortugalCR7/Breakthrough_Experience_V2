@@ -8,6 +8,15 @@ export default defineConfig(() => {
     plugins: [react(), tailwindcss()],
     build: {
       rollupOptions: {
+        // Multi-page build: the main experience plus the three standalone legal
+        // pages. Each legal entry ships its own crawlable static HTML (baked-in
+        // title / canonical / meta) and mounts the shared LegalPage React app.
+        input: {
+          main: path.resolve(__dirname, 'index.html'),
+          privacy: path.resolve(__dirname, 'privacy/index.html'),
+          terms: path.resolve(__dirname, 'terms/index.html'),
+          disclaimer: path.resolve(__dirname, 'disclaimer/index.html'),
+        },
         output: {
           // Split stable third-party libs into their own chunk so app-code edits
           // don't invalidate the (large, rarely-changing) vendor bundle on repeat

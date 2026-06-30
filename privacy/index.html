@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Primary meta -->
+    <title>Privacy Policy — BREAKTHROUGH</title>
+    <meta
+      name="description"
+      content="How BREAKTHROUGH collects, uses, stores, and protects your personal information when you use our website and coaching services."
+    />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="theme-color" content="#000000" />
+    <link rel="canonical" href="https://breakthrough-experience-v2.vercel.app/privacy" />
+
+    <!-- Performance: warm up font origins, then load fonts non-render-blocking -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Libre+Bodoni:ital,wght@0,400..700;1,400..700&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Jost:ital,wght@0,100..900;1,100..900&family=IBM+Plex+Mono:ital,wght@0,100..700;1,100..700&display=swap"
+    />
+
+    <!-- Icons / manifest -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="mask-icon" href="/favicon.svg" color="#000000" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="BREAKTHROUGH" />
+    <meta property="og:title" content="Privacy Policy — BREAKTHROUGH" />
+    <meta
+      property="og:description"
+      content="How BREAKTHROUGH collects, uses, stores, and protects your personal information when you use our website and coaching services."
+    />
+    <meta property="og:url" content="https://breakthrough-experience-v2.vercel.app/privacy" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- No-flash theme guard: set data-theme before first paint. Dark is default. -->
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem('bt-theme');
+          if (t !== 'light' && t !== 'dark') t = 'dark';
+          document.documentElement.setAttribute('data-theme', t);
+        } catch (e) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      })();
+    </script>
+  </head>
+  <body data-legal="privacy">
+    <div id="root"></div>
+    <script type="module" src="/src/legal/main.tsx"></script>
+  </body>
+</html>

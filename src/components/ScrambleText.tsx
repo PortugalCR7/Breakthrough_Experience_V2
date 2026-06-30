@@ -72,7 +72,7 @@ export default function ScrambleText({
   }, [trigger, text, duration, reduced]);
 
   return (
-    <span className={className} style={style} aria-label={text}>
+    <span className={className} style={style} role="img" aria-label={text}>
       <span aria-hidden="true">{display || " "}</span>
     </span>
   );

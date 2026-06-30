@@ -36,7 +36,7 @@ export default function Footer() {
   return (
     <footer>
       <div className="w">
-        <p ref={logoRef} className="foot-logo" aria-label="BREAKTHROUGH" style={{ overflow: "hidden" }}>
+        <p ref={logoRef} className="foot-logo" role="img" aria-label="BREAKTHROUGH" style={{ overflow: "hidden" }}>
           {WORDMARK.map((l, i) => (
             <span
               key={i}
@@ -50,35 +50,12 @@ export default function Footer() {
         <p className="foot-sub text-neutral-400">
           Monde Osé · Breakthrough · Caracara Village + Nature Reserve · © {currentYear}
         </p>
-        <div className="foot-links mt-4">
-          <a
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              alert("Terms and policy configurations will load securely in production.");
-            }}
-          >
-            Privacy Policy
-          </a>
-          <a
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              alert("Default terms of mentorship services.");
-            }}
-          >
-            Terms
-          </a>
-          <a
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              alert("Frank's leadership support desk: admin@mondeose.com");
-            }}
-          >
-            Contact
-          </a>
-        </div>
+        <nav className="foot-links mt-4" aria-label="Legal & contact">
+          <a href="/privacy">Privacy Policy</a>
+          <a href="/terms">Terms</a>
+          <a href="/disclaimer">Disclaimer</a>
+          <a href="mailto:admin@mondeose.com">Contact</a>
+        </nav>
       </div>
     </footer>
   );
