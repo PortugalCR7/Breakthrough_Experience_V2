@@ -61,7 +61,9 @@ export default function MeetFrank() {
       });
 
       mm.add("(max-width: 767.98px)", () => {
-        if (imgRef.current) gsap.set(imgRef.current, { scale: 1.12 });
+        // No zoom on mobile — the 4/5 frame already shows the full figure, and
+        // a scale-up would re-introduce the head/foot crop we just fixed.
+        if (imgRef.current) gsap.set(imgRef.current, { scale: 1.0 });
         timelineDraw(timelineRef.current, false);
       });
 
