@@ -319,13 +319,9 @@ body::after {
 .hero-ol {
   font-family: var(--fm); font-size: 22px; letter-spacing: .24em;
   text-transform: uppercase; color: var(--sv);
-  display: flex; align-items: center; gap: 16px; margin-bottom: 0;
+  display: block; text-align: left; margin-bottom: 0;
   opacity: 0; transform: translateY(10px);
   transition: opacity .5s ease, transform .5s ease;
-}
-.hero-ol::before {
-  content: ''; width: clamp(28px, 4vw, 56px); height: 1px;
-  background: var(--sv); display: inline-block; opacity: .7;
 }
 .hero-ol.s { opacity: 1; transform: translateY(0); }
 .hero-hl {
@@ -1359,7 +1355,7 @@ footer { background: var(--c2); border-top: 1px solid var(--c4); padding: 48px 0
 .cta-l2-need {
   font-family: var(--fd) !important;
   font-weight: 300 !important;
-  font-size: clamp(31px, 4.3vw, 57px) !important;
+  font-size: clamp(33px, 4.5vw, 59px) !important;
   line-height: 1.12 !important;
   text-transform: uppercase !important;
   letter-spacing: 0.03em !important;
@@ -1370,7 +1366,7 @@ footer { background: var(--c2); border-top: 1px solid var(--c4); padding: 48px 0
 .cta-l2-resolve {
   font-family: var(--fd) !important;
   font-weight: 300 !important;
-  font-size: clamp(31px, 4.5vw, 61px) !important;
+  font-size: clamp(33px, 4.7vw, 63px) !important;
   line-height: 1.14 !important;
   text-transform: uppercase !important;
   letter-spacing: 0.03em !important;
@@ -1419,8 +1415,8 @@ footer { background: var(--c2); border-top: 1px solid var(--c4); padding: 48px 0
 
 @media (max-width: 767.98px) {
   .cta-l2-step1, .cta-l2-step2 { padding-left: 0; }
-  .cta-l2-need { font-size: clamp(27px, 7vw, 41px) !important; }
-  .cta-l2-resolve { font-size: clamp(27px, 7.2vw, 43px) !important; }
+  .cta-l2-need { font-size: clamp(29px, 7vw, 43px) !important; }
+  .cta-l2-resolve { font-size: clamp(29px, 7.2vw, 45px) !important; }
   .cta-l3-past { padding-left: 0; }
   .cta-l3-options { font-size: clamp(28px, 7.5vw, 44px) !important; }
   .cta-l3-climax { font-size: clamp(34px, 9vw, 60px) !important; }
