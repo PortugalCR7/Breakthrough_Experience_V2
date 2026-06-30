@@ -9,11 +9,11 @@ const PP_ITEMS = [
   },
   {
     title: "Between-Session Access",
-    desc: "Direct contact when the real work surfaces in your actual life — not when it's convenient for a calendar.",
+    desc: "Direct contact when the real work surfaces in your actual life, not when it's convenient for a calendar.",
   },
   {
     title: "Direct Feedback",
-    desc: "Unfiltered. What I see is what I say — not what you want to hear, but what the man underneath needs to be shown.",
+    desc: "Unfiltered. What I see is what I say, not what you want to hear, but what the man underneath needs to be shown.",
   },
   {
     title: "Brotherhood Introduction",
@@ -105,9 +105,8 @@ export default function PrimaryPath() {
               {PP_ITEMS.map((item, index) => (
                 <div
                   key={item.title}
-                  className={`pp-item block-reveal-item grid grid-cols-1 md:grid-cols-[40px_240px_1fr] gap-4 md:gap-12 items-start ${
-                    itemsVisible ? "active" : ""
-                  }`}
+                  className={`pp-item block-reveal-item grid grid-cols-1 md:grid-cols-[40px_240px_1fr] gap-4 md:gap-12 items-start ${itemsVisible ? "active" : ""
+                    }`}
                   style={{ transitionDelay: `${index * 0.1}s` }}
                 >
                   <span className="pp-ck">✓</span>
