@@ -48,7 +48,7 @@ export default function Footer() {
           ))}
         </p>
         <p className="foot-sub text-neutral-400">
-          Frank Mondeose · Monde Osé · Breakthrough · Caracara Village + Nature Reserve · © {currentYear}
+          Monde Osé · Breakthrough · Caracara Village + Nature Reserve · © {currentYear}
         </p>
         <div className="foot-links mt-4">
           <a
