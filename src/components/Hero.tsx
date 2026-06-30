@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParallax } from "../hooks/useParallax";
 import ScrambleText from "./ScrambleText";
+import ScrollCue from "./ScrollCue";
 
 const BG_IMAGES = [
   { src: "/bg_forest.png", name: "The Forest" },
@@ -187,13 +188,8 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* ── Scroll indicator ─────────────────────────────────────── */}
-      <div id="hScroll" className={`hero-scroll ${scrollGhostActive ? "s" : ""}`}>
-        <svg width="14" height="20" viewBox="0 0 14 20" fill="none" className="scroll-arrow" aria-hidden="true">
-          <path d="M7 2V18M7 18L2 13M7 18L12 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-        <span className="scroll-text">scroll</span>
-      </div>
+      {/* ── Scroll indicator (Option A · unified editorial cue) ──── */}
+      <ScrollCue />
     </section>
   );
 }

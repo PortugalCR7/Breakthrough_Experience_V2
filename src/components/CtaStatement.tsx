@@ -3,6 +3,7 @@ import { useScrollFadeIn } from "../hooks/useScrollFadeIn";
 import { gsap, useGSAP, prefersReducedMotion } from "../motion";
 import { useTheme } from "../theme/useTheme";
 import { parseEmphasisLine } from "../utils/emphasis";
+import ScrollCue from "./ScrollCue";
 
 interface CtaLine {
   text: string;
@@ -48,7 +49,6 @@ export default function CtaStatement({
   // Retained for the `reveal="line"` branch (used by other CtaText variants).
   const [fadeRef, isVisible] = useScrollFadeIn({ threshold: 0.25, rootMargin: "0px 0px -12% 0px" });
   const sectionRef = useRef<HTMLElement | null>(null);
-  const indicatorRef = useRef<HTMLDivElement | null>(null);
   const { theme } = useTheme();
 
   // Word indexing for word-reveal mode with emphasis parsing.
@@ -88,20 +88,6 @@ export default function CtaStatement({
             ? { trigger: root, start: "top top", end: "+=90%", pin: true, pinSpacing: true, scrub: true, anticipatePin: 1 }
             : { trigger: root, start: "top 88%", end: "top 26%", scrub: true },
         });
-
-        if (indicatorRef.current && pin) {
-          gsap.set(indicatorRef.current, { opacity: 1 });
-          gsap.to(indicatorRef.current, {
-            opacity: 0,
-            ease: "none",
-            scrollTrigger: {
-              trigger: root,
-              start: "top top",
-              end: "+=20%",
-              scrub: true,
-            },
-          });
-        }
       });
 
       // Touch / small screens: plain scrubbed brighten, native scroll, no pin.
@@ -178,14 +164,7 @@ export default function CtaStatement({
             })}
       </div>
 
-      {reveal === "word" && pin && (
-        <div ref={indicatorRef} className="scroll-indicator" style={{ opacity: 0 }}>
-          <span className="scroll-indicator-text">Scroll to reveal</span>
-          <div className="scroll-indicator-line">
-            <div className="scroll-indicator-dot" />
-          </div>
-        </div>
-      )}
+      <ScrollCue />
     </section>
   );
 }

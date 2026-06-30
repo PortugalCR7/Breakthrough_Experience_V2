@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import { gsap, useGSAP } from "../motion";
+import ScrollCue from "./ScrollCue";
 
 /**
  * Phrase — a single typographic unit within the Vision spread.
@@ -140,6 +141,8 @@ export default function Vision() {
           </Phrase>
         </h2>
       </div>
+
+      <ScrollCue />
     </section>
   );
 }

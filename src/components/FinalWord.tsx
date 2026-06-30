@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { gsap, useGSAP, prefersReducedMotion, ScrollTrigger } from "../motion";
 import { useTheme } from "../theme/useTheme";
+import ScrollCue from "./ScrollCue";
 
 const LINES = [
   "I've watched men wait years for the right moment.",
@@ -26,7 +27,6 @@ export default function FinalWord() {
   const txtScope = useRef<HTMLDivElement | null>(null);
   const portraitRef = useRef<HTMLDivElement | null>(null);
   const sigRef = useRef<HTMLDivElement | null>(null);
-  const indicatorRef = useRef<HTMLDivElement | null>(null);
   const { theme } = useTheme();
 
   useGSAP(
@@ -46,11 +46,10 @@ export default function FinalWord() {
         return;
       }
 
-      const build = (st: ScrollTrigger.Vars, fitsPinning: boolean) => {
+      const build = (st: ScrollTrigger.Vars) => {
         gsap.set(words, { opacity: 0.1, "--wp": 0 });
         if (portrait) gsap.set(portrait, { opacity: 0, x: -28 });
         if (sig) gsap.set(sig, { opacity: 0, y: 30 });
-        if (indicatorRef.current) gsap.set(indicatorRef.current, { opacity: fitsPinning ? 1 : 0 });
 
         const tl = gsap.timeline({ scrollTrigger: st });
         // Portrait reveals immediately — at pin start, alongside the first words.
@@ -62,33 +61,24 @@ export default function FinalWord() {
         );
         // Signature resolves at/after the final line.
         if (sig) tl.to(sig, { opacity: 1, y: 0, ease: "none", duration: 0.6 }, ">-0.3");
-        // Scroll Indicator fades out over the first part of the pinned scroll
-        if (indicatorRef.current && fitsPinning) {
-          tl.to(indicatorRef.current, { opacity: 0, ease: "none", duration: 0.15 }, 0);
-        }
         return tl;
       };
 
       const mm = gsap.matchMedia();
 
       mm.add("(min-width: 768px)", () => {
-        // Only pin when the set-piece comfortably fits the viewport, so it can
-        // never clip on shorter laptops; otherwise fall back to a plain scrub.
-        const fits = !!section && section.offsetHeight <= window.innerHeight * 1.02;
-        const tl = build(
-          fits
-            ? {
-                trigger: section,
-                start: "top top",
-                end: "+=95%",
-                pin: true,
-                pinSpacing: true,
-                scrub: true,
-                anticipatePin: 1,
-              }
-            : { trigger: scope, start: "top 85%", end: "top 22%", scrub: true },
-          fits
-        );
+        // Pin Lock & Release: the closing letter holds at the top of the viewport
+        // and ignites word-by-word as the reader scrolls, then releases — the same
+        // pinned set-piece grammar the CTA beats use. Pins on desktop unconditionally.
+        const tl = build({
+          trigger: section,
+          start: "top top",
+          end: "+=95%",
+          pin: true,
+          pinSpacing: true,
+          scrub: true,
+          anticipatePin: 1,
+        });
         return () => {
           tl.scrollTrigger?.kill();
           tl.kill();
@@ -96,7 +86,7 @@ export default function FinalWord() {
       });
 
       mm.add("(max-width: 767.98px)", () => {
-        const tl = build({ trigger: scope, start: "top 85%", end: "top 28%", scrub: true }, false);
+        const tl = build({ trigger: scope, start: "top 85%", end: "top 28%", scrub: true });
         return () => {
           tl.scrollTrigger?.kill();
           tl.kill();
@@ -158,12 +148,7 @@ export default function FinalWord() {
         </div>
       </div>
 
-      <div ref={indicatorRef} className="scroll-indicator" style={{ opacity: 0 }}>
-        <span className="scroll-indicator-text">Scroll to reveal</span>
-        <div className="scroll-indicator-line">
-          <div className="scroll-indicator-dot" />
-        </div>
-      </div>
+      <ScrollCue />
     </section>
   );
 }
