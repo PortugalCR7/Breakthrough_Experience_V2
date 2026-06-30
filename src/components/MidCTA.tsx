@@ -35,16 +35,20 @@ export default function MidCTA() {
               <div className={`eyebrow fu ${isVisible ? "vis" : ""}`} style={{ marginBottom: "20px" }}>
                 The Decision Point
               </div>
-              <h2 ref={midHlRef} className="mid-hl text-left leading-[0.88] tracking-[-0.025em]" style={{ marginBottom: 0 }}>
+              <h2 ref={midHlRef} className="mid-hl text-left" style={{ marginBottom: 0 }}>
                 <span className="word-reveal-span mr-[0.25em]">THE</span>
                 <span className="word-reveal-span mr-[0.25em]">MAN</span>
+                <br />
                 <span className="word-reveal-span mr-[0.25em]">YOU</span>
                 <span className="word-reveal-span mr-[0.25em]">WANT</span>
+                <br />
                 <span className="word-reveal-span mr-[0.25em]">TO</span>
                 <span className="word-reveal-span mr-[0.25em]">BECOME</span>
+                <br />
                 <span className="word-reveal-span mr-[0.25em]">IS</span>
                 <span className="word-reveal-span mr-[0.25em]">NOT</span>
                 <span className="word-reveal-span mr-[0.25em]">WAITING</span>
+                <br />
                 <span className="word-reveal-span mr-[0.25em]">IN</span>
                 <span className="word-reveal-span mr-[0.25em]">THE</span>
                 <span className="word-reveal-span sv mr-[0.25em]">FUTURE.</span>

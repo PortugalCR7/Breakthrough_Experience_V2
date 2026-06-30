@@ -56,7 +56,7 @@ export default function PrimaryPath() {
 
           {/* Left Column */}
           <div className="border-r border-white/10 pr-12 flex flex-col">
-            <h2 ref={hlScope} className="pp-hl" style={{ fontSize: "clamp(28px, 4vw, 80px)", lineHeight: "1.1" }}>
+            <h2 ref={hlScope} className="pp-hl" style={{ fontSize: "clamp(28px, 4vw, 80px)" }}>
               <span className="word-reveal-span">SIX</span>
               <br />
               <span className="word-reveal-span">PRIVATE</span>
