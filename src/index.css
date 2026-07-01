@@ -2513,3 +2513,49 @@ html.has-custom-cursor * { cursor: none !important; }
   text-decoration-thickness: 1px;
 }
 
+/* ═══════════════════════════════════════════════
+   404 — branded not-found (standalone MPA entry)
+   Quiet, centered, editorial. Reuses the brand tokens, type scale, and .btn so
+   it reads as part of the same system as the legal pages and main experience.
+   ═══════════════════════════════════════════════ */
+.nf {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 140px 24px 120px;
+  box-sizing: border-box;
+}
+.nf-inner { max-width: 640px; margin: 0 auto; }
+.nf-code {
+  display: block;
+  font-family: var(--fd);
+  font-size: clamp(110px, 22vw, 300px);
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  color: var(--gl);
+  /* Tabular figures keep the glyph box fixed as the digits scramble — no reflow. */
+  font-feature-settings: "tnum";
+  font-variant-numeric: tabular-nums;
+  margin-bottom: 32px;
+}
+.nf-title {
+  font-family: var(--fd);
+  font-size: var(--h2);
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--gl);
+  margin: 0 0 24px;
+}
+.nf-sub {
+  font-family: var(--fb);
+  font-size: var(--body-lg);
+  font-weight: 300;
+  line-height: 1.65;
+  color: var(--gd);
+  max-width: 46ch;
+  margin: 0 auto 48px;
+}
+.nf-cta { margin: 0 auto; }
+

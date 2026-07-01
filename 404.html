@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Primary meta -->
+    <title>Page Not Found — BREAKTHROUGH</title>
+    <meta
+      name="description"
+      content="The page you're looking for may have moved, or the link may be incorrect."
+    />
+    <!-- 404s must never be indexed; follow so any links out are still crawlable. -->
+    <meta name="robots" content="noindex, follow" />
+    <meta name="theme-color" content="#000000" />
+
+    <!-- Performance: warm up font origins, then load fonts non-render-blocking -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Libre+Bodoni:ital,wght@0,400..700;1,400..700&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Jost:ital,wght@0,100..900;1,100..900&family=IBM+Plex+Mono:ital,wght@0,100..700;1,100..700&display=swap"
+    />
+
+    <!-- Icons / manifest -->
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="BREAKTHROUGH" />
+    <meta property="og:title" content="Page Not Found — BREAKTHROUGH" />
+    <meta
+      property="og:description"
+      content="The page you're looking for may have moved, or the link may be incorrect."
+    />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- No-flash theme guard: set data-theme before first paint. Dark is default. -->
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem('bt-theme');
+          if (t !== 'light' && t !== 'dark') t = 'dark';
+          document.documentElement.setAttribute('data-theme', t);
+        } catch (e) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      })();
+    </script>
+  </head>
+  <body data-page="404">
+    <div id="root"></div>
+    <script type="module" src="/src/notfound/main.tsx"></script>
+  </body>
+</html>

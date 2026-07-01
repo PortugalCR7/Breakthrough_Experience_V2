@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { prefersReducedMotion } from "../motion";
 
-const GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ#%&*/<>{}[]".split("");
-const rand = () => GLYPHS[(Math.random() * GLYPHS.length) | 0];
+const DEFAULT_GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ#%&*/<>{}[]";
 
 interface ScrambleTextProps {
   /** The final, settled text. */
@@ -11,6 +10,11 @@ interface ScrambleTextProps {
   trigger?: boolean;
   /** Total settle time in ms. */
   duration?: number;
+  /**
+   * Glyph pool flickered through while decoding. Defaults to the Hero
+   * letter/symbol set; pass digits (e.g. "0123456789") for a numeric scramble.
+   */
+  glyphs?: string;
   className?: string;
   style?: CSSProperties;
 }
@@ -28,10 +32,12 @@ export default function ScrambleText({
   text,
   trigger = true,
   duration = 900,
+  glyphs = DEFAULT_GLYPHS,
   className,
   style,
 }: ScrambleTextProps) {
   const reduced = prefersReducedMotion();
+  const pick = () => glyphs[(Math.random() * glyphs.length) | 0];
   const [display, setDisplay] = useState(reduced ? text : "");
   const startedRef = useRef(false);
   const rafRef = useRef<number>(0);
@@ -56,7 +62,7 @@ export default function ScrambleText({
         .map((c, i) => {
           if (c === " ") return " ";
           if (p >= settleAt[i]) return c;
-          return rand();
+          return pick();
         })
         .join("");
       setDisplay(out);

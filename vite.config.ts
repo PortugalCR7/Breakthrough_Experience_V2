@@ -16,6 +16,9 @@ export default defineConfig(() => {
           privacy: path.resolve(__dirname, 'privacy/index.html'),
           terms: path.resolve(__dirname, 'terms/index.html'),
           disclaimer: path.resolve(__dirname, 'disclaimer/index.html'),
+          // Standalone 404 shell → emits dist/404.html, which Vercel serves for
+          // any unmatched route with a real HTTP 404 status.
+          notFound: path.resolve(__dirname, '404.html'),
         },
         output: {
           // Split stable third-party libs into their own chunk so app-code edits
