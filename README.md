@@ -1,20 +1,45 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# Breakthrough V2A Experience
 
-# Run and deploy your AI Studio app
+A premium web application showcasing the Breakthrough V2A Experience, built using Vite, React, and TypeScript.
 
-This contains everything you need to run your app locally.
+---
 
-View your app in AI Studio: https://ai.studio/apps/97887865-d1e8-400d-8dfc-8d9b188f8472
+## Getting Started
 
-## Run Locally
+### Prerequisites
 
-**Prerequisites:**  Node.js
+Ensure you have [Node.js](https://nodejs.org/) installed (version 18+ recommended).
 
+### Installation
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+Clone the repository and install the project dependencies:
+
+```bash
+npm install
+```
+
+### Development
+
+To run the local development server:
+
+```bash
+npm run dev
+```
+
+The application will be served at `http://localhost:3000`.
+
+### Build for Production
+
+To compile the application into static assets for production:
+
+```bash
+npm run build
+```
+
+The compiled assets will be outputted to the `dist/` directory.
+
+---
+
+## Deployment
+
+This application is configured for continuous deployment on **Vercel** directly from this GitHub repository. Merges or pushes to the main branch will automatically trigger production deployments.
