@@ -19,6 +19,8 @@ export default defineConfig(() => {
           // Standalone 404 shell → emits dist/404.html, which Vercel serves for
           // any unmatched route with a real HTTP 404 status.
           notFound: path.resolve(__dirname, '404.html'),
+          // Admin panel — separate MPA entry; never indexed (noindex in HTML).
+          admin: path.resolve(__dirname, 'src/admin/index.html'),
         },
         output: {
           // Split stable third-party libs into their own chunk so app-code edits
