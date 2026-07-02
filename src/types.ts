@@ -1,3 +1,6 @@
+// Section content types are defined in src/data/pageContent.ts
+// Item-level types (ProfileItem, GapRowItem, etc.) remain here
+
 export interface ProfileItem {
   id: string;
   num: string;
