@@ -2,8 +2,11 @@ import { useRef } from "react";
 import { useIntersectionObserver } from "../hooks/useIntersectionObserver";
 import KineticText from "./KineticText";
 import { gsap, useGSAP, prefersReducedMotion, useWordScrub } from "../motion";
+import { anchorQuoteContent, AnchorQuoteContent } from "../data/pageContent";
+import { useSection } from "../providers/contentProvider";
 
 export default function AnchorQuote() {
+  const content = useSection<AnchorQuoteContent>("anchor_quote", anchorQuoteContent);
   const [ref, isVisible] = useIntersectionObserver();
   const sectionRef = useRef<HTMLElement | null>(null);
   const quoteRef = useRef<HTMLDivElement | null>(null);
@@ -33,45 +36,47 @@ export default function AnchorQuote() {
     (ref as any).current = node;
   };
 
+  const hw = content.headlineWords;
+
   return (
     <section id="anchor" className="scroll-snap-section" ref={setSection}>
       <div className="w">
         <div className="anchor-wrap">
           <div className={`fu ${isVisible ? "vis" : ""}`}>
-            <div className="section-num">01</div>
-            <div className="eyebrow" style={{ marginTop: "40px" }}>From the first step you take</div>
+            <div className="section-num">{content.sectionNumber}</div>
+            <div className="eyebrow" style={{ marginTop: "40px" }}>{content.eyebrow}</div>
             <h2 ref={anchorHlRef} className="anchor-body">
-              <span className="word-reveal-span mr-[0.25em]">I</span>
-              <span className="word-reveal-span mr-[0.25em]">am</span>
-              <span className="word-reveal-span mr-[0.25em]">invested</span>
-              <span className="word-reveal-span mr-[0.25em]">in</span>
-              <span className="word-reveal-span mr-[0.25em]">you</span>
+              <span className="word-reveal-span mr-[0.25em]">{hw[0]}</span>
+              <span className="word-reveal-span mr-[0.25em]">{hw[1]}</span>
+              <span className="word-reveal-span mr-[0.25em]">{hw[2]}</span>
+              <span className="word-reveal-span mr-[0.25em]">{hw[3]}</span>
+              <span className="word-reveal-span mr-[0.25em]">{hw[4]}</span>
               <br />
-              <span className="word-reveal-span mr-[0.25em]">the</span>
-              <span className="word-reveal-span mr-[0.25em]">entire</span>
-              <span className="word-reveal-span mr-[0.25em]">way.</span>
+              <span className="word-reveal-span mr-[0.25em]">{hw[5]}</span>
+              <span className="word-reveal-span mr-[0.25em]">{hw[6]}</span>
+              <span className="word-reveal-span mr-[0.25em]">{hw[7]}</span>
               <br />
-              <span className="word-reveal-span mr-[0.25em]">I</span>
-              <span className="word-reveal-span mr-[0.25em]">am</span>
-              <span className="word-reveal-span mr-[0.25em]">in</span>
-              <span className="word-reveal-span mr-[0.25em]">the</span>
-              <span className="word-reveal-span mr-[0.25em]">arena</span>
+              <span className="word-reveal-span mr-[0.25em]">{hw[8]}</span>
+              <span className="word-reveal-span mr-[0.25em]">{hw[9]}</span>
+              <span className="word-reveal-span mr-[0.25em]">{hw[10]}</span>
+              <span className="word-reveal-span mr-[0.25em]">{hw[11]}</span>
+              <span className="word-reveal-span mr-[0.25em]">{hw[12]}</span>
               <br />
-              <span className="word-reveal-span mr-[0.25em]">with</span>
-              <span className="word-reveal-span mr-[0.25em]">you.</span>
+              <span className="word-reveal-span mr-[0.25em]">{hw[13]}</span>
+              <span className="word-reveal-span mr-[0.25em]">{hw[14]}</span>
             </h2>
           </div>
           <div ref={quoteRef} className={`anchor-quote fu ${isVisible ? "vis" : ""}`} style={{ transitionDelay: "0.2s" }}>
             <p style={{ fontStyle: "normal", fontWeight: 400, fontFamily: "var(--fb)" }}>
-              <KineticText text="I know who you are. I've sat with you a thousand times." delay={250} />
+              <KineticText text={content.quoteLine1} delay={250} />
             </p>
             <p className="big text-stone-200 mt-2">
               <span style={{ fontFamily: "var(--fb)" }}>
-                <KineticText text="You're not broken." delay={600} />
+                <KineticText text={content.quoteLine2} delay={600} />
               </span>
               <br />
               <span style={{ fontFamily: "var(--fd)", fontWeight: "bold", fontStyle: "italic" }}>
-                <KineticText text="You're simply living beneath your potential." delay={705} />
+                <KineticText text={content.quoteLine3} delay={705} />
               </span>
             </p>
           </div>

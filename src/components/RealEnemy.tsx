@@ -1,23 +1,12 @@
 import { useRef } from "react";
 import { useScrollFadeIn } from "../hooks/useScrollFadeIn";
 import { useWordScrub } from "../motion";
+import { realEnemyContent, RealEnemyContent } from "../data/pageContent";
+import { useSection } from "../providers/contentProvider";
 
-const NARRATIVE_BLOCKS = [
-  { id: "b1", className: "", node: <p><strong>They're performing it.</strong></p> },
-  { id: "b2", className: "mt-4", node: <p className="text-[var(--sv)]">Performing success. Performing confidence. Performing strength.</p> },
-  { id: "b3", className: "mt-4", node: <p>Eventually the performance becomes so convincing that <span className="text-white">even you forget who you are</span></p> },
-  { id: "b4", className: "mt-1", node: <p><strong>underneath it.</strong></p> },
-  { id: "b5", className: "mt-6 border-l border-[var(--sv)] pl-4 text-white", node: <p style={{ fontFamily: 'var(--fd)', fontWeight: 'bold', fontStyle: 'italic' }}>Breakthrough begins when the performance ends.</p> },
-];
-
-/** The big statement, split into scroll-scrub words (line breaks preserved). */
-const HEADLINE: { word: string; sv?: boolean; br?: boolean }[] = [
-  { word: "MOST" }, { word: "MEN", br: true },
-  { word: "AREN'T", br: true },
-  { word: "LIVING", sv: true, br: true },
-  { word: "THEIR", br: true },
-  { word: "LIVES." },
-];
+// Spacing classes for each narrative block wrapper — matches original layout.
+// The content type carries only html strings; spacing stays in JSX.
+const BLOCK_WRAPPER_CLASSES = ["", "mt-4", "mt-4", "mt-1", "mt-6"];
 
 /**
  * Section 02 — The Real Enemy.
@@ -27,6 +16,7 @@ const HEADLINE: { word: string; sv?: boolean; br?: boolean }[] = [
  * blocks cascade in on view. No translate-pin fighting the scroll.
  */
 export default function RealEnemy() {
+  const content = useSection<RealEnemyContent>("real_enemy", realEnemyContent);
   const [ref, isVisible] = useScrollFadeIn({ threshold: 0.2 });
   const [blocksRef, blocksVisible] = useScrollFadeIn({ threshold: 0.25, rootMargin: "0px 0px -10% 0px" });
   const hlScope = useRef<HTMLHeadingElement | null>(null);
@@ -45,15 +35,15 @@ export default function RealEnemy() {
           {/* Asymmetric Left metadata panel */}
           <div className="flex flex-col gap-4">
             <div className={`fu ${isVisible ? "vis" : ""}`} style={{ transitionDelay: "0.1s" }}>
-              <div className="section-num">02</div>
+              <div className="section-num">{content.sectionNumber}</div>
             </div>
           </div>
 
           {/* Center Column: large asymmetric headline — scrubbed word reveal */}
           <div>
-            <div className={`eyebrow fu ${isVisible ? "vis" : ""}`} style={{ marginBottom: "24px" }}>The Real Enemy</div>
+            <div className={`eyebrow fu ${isVisible ? "vis" : ""}`} style={{ marginBottom: "24px" }}>{content.eyebrow}</div>
             <h2 ref={hlScope} className="enemy-hl text-left" style={{ fontFamily: 'var(--fd)' }}>
-              {HEADLINE.map((w, i) => (
+              {content.headlineWords.map((w, i) => (
                 <span key={i}>
                   <span className={`word-reveal-span ${w.sv ? "sv text-[var(--sv)]" : ""}`}>{w.word}</span>
                   {w.br ? <br /> : " "}
@@ -65,14 +55,13 @@ export default function RealEnemy() {
           {/* Right Column: staggered narrative reveal */}
           <div ref={blocksRef as any} className="asymmetric-panel asymmetric-border-accent vis">
             <div className="enemy-b">
-              {NARRATIVE_BLOCKS.map((block, index) => (
+              {content.narrativeBlocks.map((block, index) => (
                 <div
                   key={block.id}
-                  className={`block-reveal-item ${block.className} ${blocksVisible ? "active" : ""}`}
+                  className={`block-reveal-item ${BLOCK_WRAPPER_CLASSES[index] ?? ""} ${blocksVisible ? "active" : ""}`}
                   style={{ transitionDelay: `${index * 0.12}s` }}
-                >
-                  {block.node}
-                </div>
+                  dangerouslySetInnerHTML={{ __html: block.html }}
+                />
               ))}
             </div>
           </div>
