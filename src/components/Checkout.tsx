@@ -4,6 +4,7 @@ import { useMagnetic } from "../hooks/useMagnetic";
 import { useWordScrub } from "../motion";
 import { checkoutContent, CheckoutContent } from "../data/pageContent";
 import { useSection } from "../providers/contentProvider";
+import supabase from "../lib/supabaseClient";
 
 export default function Checkout() {
   const content = useSection<CheckoutContent>("checkout", checkoutContent);
@@ -31,12 +32,14 @@ export default function Checkout() {
   });
 
   const [isSuccess, setIsSuccess] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const validateEmail = (val: string) => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const hasFnError = !firstName.trim();
@@ -49,14 +52,37 @@ export default function Checkout() {
       email: hasEmError,
     });
 
-    if (!hasFnError && !hasLnError && !hasEmError) {
+    if (hasFnError || hasLnError || hasEmError) return;
+
+    // Supabase not configured — fallback/dev mode only, no data is saved
+    if (!supabase) {
       setIsSuccess(true);
-      // Smooth scroll to top of checkout section on submit success
       const checkoutEl = document.getElementById("checkout");
-      if (checkoutEl) {
-        checkoutEl.scrollIntoView({ behavior: "smooth" });
-      }
+      if (checkoutEl) checkoutEl.scrollIntoView({ behavior: "smooth" });
+      return;
     }
+
+    setIsSubmitting(true);
+    setSubmitError(null);
+
+    const { error } = await supabase.from("signups").insert({
+      first_name: firstName.trim(),
+      last_name: lastName.trim(),
+      email: email.trim(),
+      phone: phone.trim() || null,
+      profile: profile || null,
+    });
+
+    setIsSubmitting(false);
+
+    if (error) {
+      setSubmitError("Something went wrong — please try again or email us directly.");
+      return;
+    }
+
+    setIsSuccess(true);
+    const checkoutEl = document.getElementById("checkout");
+    if (checkoutEl) checkoutEl.scrollIntoView({ behavior: "smooth" });
   };
 
   // Split successBody on {email} token to preserve bold email rendering
@@ -183,13 +209,30 @@ export default function Checkout() {
                   </select>
                 </div>
 
+                {submitError && (
+                  <div className="f-err show" role="alert" style={{ marginBottom: "12px" }}>
+                    {submitError}
+                  </div>
+                )}
+
                 <div className="f-field" style={{ marginTop: "8px" }}>
-                  <button ref={magneticRef as any} type="submit" className="btn-tactile cta-primary w-full" data-cursor-label="Join">
+                  <button
+                    ref={magneticRef as any}
+                    type="submit"
+                    className="btn-tactile cta-primary w-full"
+                    data-cursor-label="Join"
+                    disabled={isSubmitting}
+                    aria-busy={isSubmitting}
+                  >
                     <span className="btn-tactile-wrap">
-                      <span className="btn-tactile-text">{content.submitText}</span>
-                      <span className="btn-tactile-hover">{content.submitText}</span>
+                      <span className="btn-tactile-text">
+                        {isSubmitting ? "Submitting…" : content.submitText}
+                      </span>
+                      <span className="btn-tactile-hover">
+                        {isSubmitting ? "Submitting…" : content.submitText}
+                      </span>
                     </span>
-                    <span className="btn-tactile-arrow">→</span>
+                    {!isSubmitting && <span className="btn-tactile-arrow">→</span>}
                   </button>
                 </div>
                 <p className="f-note">{content.formNote}</p>
