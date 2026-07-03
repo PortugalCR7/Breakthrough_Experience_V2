@@ -1,5 +1,14 @@
-// Stub — replaced by AG 3's full implementation (cms/infrastructure) on merge.
-// That version conditionally creates a SupabaseClient when VITE_SUPABASE_URL and
-// VITE_SUPABASE_ANON_KEY are present; null means passphrase mode is active.
-const supabase = null;
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
+
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string | undefined;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
+
+let supabase: SupabaseClient | null = null;
+
+if (supabaseUrl && supabaseAnonKey) {
+  supabase = createClient(supabaseUrl, supabaseAnonKey);
+} else {
+  console.warn('Supabase credentials not found. Running in fallback mode.');
+}
+
 export default supabase;

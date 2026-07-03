@@ -2,8 +2,8 @@ import { useRef } from "react";
 import { gsap, useGSAP, prefersReducedMotion } from "../motion";
 import { useTheme } from "../theme/useTheme";
 import { parseEmphasisLine } from "../utils/emphasis";
-
-const HEADLINE = "THE MAN YOU WANT TO BECOME IS NOT WAITING IN THE [FUTURE.](accent,glow)";
+import { decisionContent, DecisionContent } from "../data/pageContent";
+import { useSection } from "../providers/contentProvider";
 
 /**
  * Section 06 — The Decision (climactic set-piece).
@@ -14,6 +14,7 @@ const HEADLINE = "THE MAN YOU WANT TO BECOME IS NOT WAITING IN THE [FUTURE.](acc
  * Reduced-motion = instant.
  */
 export default function Decision() {
+  const content = useSection<DecisionContent>("decision", decisionContent);
   const sectionRef = useRef<HTMLElement | null>(null);
   const heroScope = useRef<HTMLDivElement | null>(null);
   const indicatorRef = useRef<HTMLDivElement | null>(null);
@@ -70,14 +71,14 @@ export default function Decision() {
       <div className="w">
         <div ref={heroScope} className="decision-hero">
           {/* Meta kicker */}
-          <div className="section-num">06</div>
+          <div className="section-num">{content.sectionNumber}</div>
           <div className="eyebrow" style={{ marginTop: "8px", marginBottom: "24px" }}>
-            The Decision
+            {content.eyebrow}
           </div>
 
           {/* Headline — scrubbed word reveal */}
           <h2 className="decision-hl text-left" style={{ marginBottom: "32px" }}>
-            {parseEmphasisLine(HEADLINE, 0).words.map(({ word, idx, classes }) => (
+            {parseEmphasisLine(content.headline, 0).words.map(({ word, idx, classes }) => (
               <span
                 key={idx}
                 className={`word-reveal-span mr-[0.25em] ${classes}`.trim()}
@@ -88,26 +89,21 @@ export default function Decision() {
           </h2>
 
           {/* Sub-headline */}
-          <p className="decision-sub italic">He is waiting on the other side of your decision.</p>
+          <p className="decision-sub italic">{content.subHeadline}</p>
 
           {/* Body copy */}
           <div className="decision-b decision-body">
-            <p>
-              Five years from now, you'll either be living closer to the man you
-              know you can be, or explaining why you never became him.
-            </p>
-            <p className="mt-4">
-              The question isn't whether you're ready. The question is how much
-              longer you're willing to tolerate what you know isn't true.
-            </p>
+            {content.bodyParagraphs.map((para, i) => (
+              <p key={i} className={i > 0 ? "mt-4" : ""}>{para}</p>
+            ))}
           </div>
 
           {/* CTA */}
           <div className="decision-cta">
-            <a href="#checkout" className="btn-tactile">
+            <a href={content.ctaLink} className="btn-tactile">
               <span className="btn-tactile-wrap">
-                <span className="btn-tactile-text">Begin Your Breakthrough</span>
-                <span className="btn-tactile-hover">Begin Your Breakthrough</span>
+                <span className="btn-tactile-text">{content.ctaText}</span>
+                <span className="btn-tactile-hover">{content.ctaText}</span>
               </span>
               <span className="btn-tactile-arrow">→</span>
             </a>

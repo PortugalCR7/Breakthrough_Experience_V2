@@ -1,6 +1,8 @@
 import React, { useRef } from "react";
 import { gsap, useGSAP } from "../motion";
 import ScrollCue from "./ScrollCue";
+import { visionContent, VisionContent } from "../data/pageContent";
+import { useSection } from "../providers/contentProvider";
 
 /**
  * Phrase — a single typographic unit within the Vision spread.
@@ -40,6 +42,7 @@ function Phrase({
  * - Staggered sequential fade-in to 1.0 opacity on scroll scrub.
  */
 export default function Vision() {
+  const content = useSection<VisionContent>("vision", visionContent);
   const sectionRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
@@ -95,6 +98,12 @@ export default function Vision() {
     return () => mm.revert();
   }, { scope: sectionRef });
 
+  // Phrase index mapping (matches VisionContent.phrases order):
+  // 0 FOR OVER · 1 TWENTY YEARS · 2 I'VE HELPED MEN · 3 CLOSE THAT GAP
+  // 4 THROUGH (accent) · 5 STRUCTURE, · 6 ACCOUNTABILITY, · 7 AND HONEST
+  // 8 LEADERSHIP (accent)
+  const p = content.phrases;
+
   return (
     <section
       id="vision"
@@ -108,52 +117,47 @@ export default function Vision() {
         >
           {/* 1. FOR OVER — connective */}
           <Phrase register="connective" className="absolute flex gap-[0.4em] font-light tracking-[0.05em] vision-phrase--connective" style={{ top: '17.5%', left: '0%' }}>
-            <span>FOR</span>
-            <span>OVER</span>
+            {p[0].text.split(' ').map((w, i) => <span key={i}>{w}</span>)}
           </Phrase>
-          
+
           {/* 2. TWENTY YEARS — substantive (scale carries weight, not glow) */}
           <Phrase register="substantive" className="absolute flex gap-[0.3em] font-normal vision-phrase--substantive" style={{ top: '21%', left: '6%' }}>
-            <span>TWENTY</span>
-            <span>YEARS</span>
+            {p[1].text.split(' ').map((w, i) => <span key={i}>{w}</span>)}
           </Phrase>
-          
+
           {/* 3. I'VE HELPED MEN — connective */}
           <Phrase register="connective" className="absolute flex gap-[0.4em] font-light tracking-[0.05em] vision-phrase--connective" style={{ top: '31.5%', left: '16%' }}>
-            <span>I'VE</span>
-            <span>HELPED</span>
-            <span>MEN</span>
+            {p[2].text.split(' ').map((w, i) => <span key={i}>{w}</span>)}
           </Phrase>
-          
+
           {/* 4. CLOSE THAT GAP — substantive */}
           <Phrase register="substantive" className="absolute flex gap-[0.3em] font-normal vision-phrase--substantive" style={{ top: '31%', left: '38%' }}>
-            <span>CLOSE</span>
-            <span>THAT</span>
-            <span>GAP</span>
+            {p[3].text.split(' ').map((w, i) => <span key={i}>{w}</span>)}
           </Phrase>
-          
+
+          {/* 5. THROUGH — declarative accent */}
           <Phrase register="declarative" className="absolute italic font-bold vision-phrase--declarative tracking-[-0.03em]" style={{ top: '42%', left: '17%' }}>
-            <span className="edt-emphasis edt-emphasis--bodoni edt-emphasis--accent edt-emphasis--glow">THROUGH</span>
+            <span className="edt-emphasis edt-emphasis--bodoni edt-emphasis--accent edt-emphasis--glow">{p[4].text}</span>
           </Phrase>
-          
+
           {/* 6. STRUCTURE, — substantive */}
           <Phrase register="substantive" className="absolute font-normal vision-phrase--substantive" style={{ top: '62%', left: '23%' }}>
-            <span>STRUCTURE,</span>
+            <span>{p[5].text}</span>
           </Phrase>
-          
+
           {/* 7. ACCOUNTABILITY, — substantive */}
           <Phrase register="substantive" className="absolute font-normal vision-phrase--substantive" style={{ top: '72%', left: '33%' }}>
-            <span>ACCOUNTABILITY,</span>
+            <span>{p[6].text}</span>
           </Phrase>
-          
+
           {/* 8. AND HONEST — connective */}
           <Phrase register="connective" className="absolute flex gap-[0.4em] font-light tracking-[0.05em] vision-phrase--connective" style={{ top: '82.75%', left: '19%' }}>
-            <span>AND</span>
-            <span>HONEST</span>
+            {p[7].text.split(' ').map((w, i) => <span key={i}>{w}</span>)}
           </Phrase>
-          
+
+          {/* 9. LEADERSHIP — declarative accent */}
           <Phrase register="declarative" className="absolute italic font-bold vision-phrase--declarative tracking-[-0.03em]" style={{ top: '81%', left: '34%' }}>
-            <span className="edt-emphasis edt-emphasis--bodoni edt-emphasis--accent edt-emphasis--glow">LEADERSHIP</span>
+            <span className="edt-emphasis edt-emphasis--bodoni edt-emphasis--accent edt-emphasis--glow">{p[8].text}</span>
           </Phrase>
         </h2>
       </div>

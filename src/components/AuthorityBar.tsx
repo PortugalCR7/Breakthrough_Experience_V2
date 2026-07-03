@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useIntersectionObserver } from "../hooks/useIntersectionObserver";
+import { authorityBarContent, AuthorityBarContent } from "../data/pageContent";
+import { useSection } from "../providers/contentProvider";
 
 interface CounterProps {
   target: number;
@@ -40,31 +42,22 @@ function Counter({ target, suffix, trigger }: CounterProps) {
 }
 
 export default function AuthorityBar() {
+  const content = useSection<AuthorityBarContent>("authority_bar", authorityBarContent);
   const [ref, isVisible] = useIntersectionObserver();
 
   return (
     <section id="auth" ref={ref as any}>
       <div className="auth-strip">
-        <div className="auth-cell">
-          <Counter target={20} suffix="+" trigger={isVisible} />
-          <span className="auth-l">YEARS OF LEADERSHIP</span>
-        </div>
-        <div className="auth-cell">
-          <span className="auth-w">MONDE OSÉ</span>
-          <span className="auth-l">FOUNDER</span>
-        </div>
-        <div className="auth-cell">
-          <Counter target={75} suffix="+" trigger={isVisible} />
-          <span className="auth-l">INTERNATIONAL TRAININGS</span>
-        </div>
-        <div className="auth-cell">
-          <span className="auth-w">TEACHER</span>
-          <span className="auth-l">OF TEACHERS</span>
-        </div>
-        <div className="auth-cell">
-          <span className="auth-w">BUILDER</span>
-          <span className="auth-l">OF INTENTIONAL COMMUNITIES</span>
-        </div>
+        {content.stats.map((stat) => (
+          <div key={stat.label} className="auth-cell">
+            {stat.isCounter ? (
+              <Counter target={Number(stat.value)} suffix={stat.suffix ?? ""} trigger={isVisible} />
+            ) : (
+              <span className="auth-w">{stat.value}</span>
+            )}
+            <span className="auth-l">{stat.label}</span>
+          </div>
+        ))}
       </div>
     </section>
   );

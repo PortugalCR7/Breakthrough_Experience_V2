@@ -1,8 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-
-// Stub — interface intentionally mirrors AG 3's cms/infrastructure implementation
-// so consuming components (AdminLogin, AdminRoute) are merge-compatible.
-// This version runs passphrase-only; AG 3's version adds Supabase Auth on top.
+import supabase from '../lib/supabaseClient';
 
 export interface AdminAuthState {
   isAuthenticated: boolean;
@@ -13,6 +10,8 @@ export interface AdminAuthState {
   mode: 'supabase' | 'passphrase';
 }
 
+// Passphrase for offline/development mode.
+// In production, Supabase Auth replaces this entirely.
 const DEV_PASSPHRASE = 'breakthrough-admin-2026';
 
 export function useAdminAuth(): AdminAuthState {
@@ -20,29 +19,78 @@ export function useAdminAuth(): AdminAuthState {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const mode: 'supabase' | 'passphrase' = 'passphrase';
+  const mode: 'supabase' | 'passphrase' = supabase ? 'supabase' : 'passphrase';
 
   useEffect(() => {
-    const stored = sessionStorage.getItem('admin_auth');
-    setIsAuthenticated(stored === 'true');
-    setLoading(false);
-  }, []);
+    const checkSession = async () => {
+      if (mode === 'supabase' && supabase) {
+        try {
+          const { data: { session } } = await supabase.auth.getSession();
+          setIsAuthenticated(!!session);
+        } catch {
+          setIsAuthenticated(false);
+        }
+      } else {
+        const stored = sessionStorage.getItem('admin_auth');
+        setIsAuthenticated(stored === 'true');
+      }
+      setLoading(false);
+    };
+
+    checkSession();
+
+    if (mode === 'supabase' && supabase) {
+      const { data: { subscription } } = supabase.auth.onAuthStateChange(
+        (_event, session) => {
+          setIsAuthenticated(!!session);
+        }
+      );
+      return () => subscription.unsubscribe();
+    }
+  }, [mode]);
 
   const login = useCallback(async (credentials: { email?: string; password: string }): Promise<boolean> => {
     setError(null);
-    if (credentials.password === DEV_PASSPHRASE) {
-      sessionStorage.setItem('admin_auth', 'true');
-      setIsAuthenticated(true);
-      return true;
+
+    if (mode === 'supabase' && supabase) {
+      if (!credentials.email) {
+        setError('Email is required for Supabase authentication.');
+        return false;
+      }
+      try {
+        const { error: authError } = await supabase.auth.signInWithPassword({
+          email: credentials.email,
+          password: credentials.password,
+        });
+        if (authError) {
+          setError(authError.message);
+          return false;
+        }
+        setIsAuthenticated(true);
+        return true;
+      } catch {
+        setError('Authentication failed. Please try again.');
+        return false;
+      }
+    } else {
+      if (credentials.password === DEV_PASSPHRASE) {
+        sessionStorage.setItem('admin_auth', 'true');
+        setIsAuthenticated(true);
+        return true;
+      } else {
+        setError('Invalid passphrase.');
+        return false;
+      }
     }
-    setError('Invalid passphrase.');
-    return false;
-  }, []);
+  }, [mode]);
 
   const logout = useCallback(async () => {
+    if (mode === 'supabase' && supabase) {
+      await supabase.auth.signOut();
+    }
     sessionStorage.removeItem('admin_auth');
     setIsAuthenticated(false);
-  }, []);
+  }, [mode]);
 
   return { isAuthenticated, loading, error, login, logout, mode };
 }

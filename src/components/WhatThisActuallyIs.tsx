@@ -1,60 +1,8 @@
 import { useRef } from "react";
 import { useScrollFadeIn } from "../hooks/useScrollFadeIn";
-import { SessionItem } from "../types";
 import { useWordScrub } from "../motion";
-
-const SESSIONS: SessionItem[] = [
-  {
-    id: "s1",
-    num: "01 ·",
-    title: "THE DIAGNOSTIC",
-    description: "We identify where your energy is going. What's serving you. What's costing you. What needs to change.",
-  },
-  {
-    id: "s2",
-    num: "02 ·",
-    title: "THE GAP",
-    description: "We name the distance between your current reality and your potential. Clearly. Directly. Without excuses.",
-  },
-  {
-    id: "s3",
-    num: "03 ·",
-    title: "THE INTERRUPTION",
-    description: "The patterns holding you back are challenged. Blind spots become visible. Standards rise.",
-  },
-  {
-    id: "s4",
-    num: "04 ·",
-    title: "THE RETURN",
-    description: "Clarity returns. Direction returns. Self-trust returns. The man underneath the performance begins leading again.",
-  },
-  {
-    id: "s5",
-    num: "05 ·",
-    title: "THE ANCHOR",
-    description: "What you've discovered becomes stable. Not something you perform. Something you stand on.",
-  },
-  {
-    id: "s6",
-    num: "06 ·",
-    title: "THE INTEGRATION",
-    description: "The work moves into real life. Relationships. Business. Leadership. Brotherhood. The goal is not insight. The goal is embodiment.",
-  },
-];
-
-const NOT_ITEMS = [
-  "Therapy",
-  "A mastermind",
-  "A weekend retreat",
-  "Another course",
-  "Another collection of theories",
-];
-
-const PASSAGE_WORDS = [
-  "Breakthrough", "is", "six", "weeks", "of", "focused", "attention", "on", "the", "man", "behind", "your",
-  "current", "results.", "The", "goal", "is", "simple:", "to", "help", "you", "become", "the", "man", "you",
-  "already", "know", "you", "are", "capable", "of", "being."
-];
+import { whatThisIsContent, WhatThisIsContent } from "../data/pageContent";
+import { useSection } from "../providers/contentProvider";
 
 /**
  * Section 04 — What This Actually Is.
@@ -65,6 +13,7 @@ const PASSAGE_WORDS = [
  * per-frame React state — smooth and GPU-friendly.
  */
 export default function WhatThisActuallyIs() {
+  const content = useSection<WhatThisIsContent>("what_this_is", whatThisIsContent);
   const [topRef, isTopVisible] = useScrollFadeIn({ threshold: 0.2 });
   const passageScope = useRef<HTMLDivElement | null>(null);
   useWordScrub(passageScope);
@@ -76,6 +25,12 @@ export default function WhatThisActuallyIs() {
   const [listRef, isListVisible] = useScrollFadeIn({ threshold: 0.08, rootMargin: "0px 0px -8% 0px" });
   const [codaRef, isCodaVisible] = useScrollFadeIn({ threshold: 0.25 });
 
+  // headlineWords: ["THIS","IS","NOT","A","PROGRAM","IT'S","A","STRUCTURED","PATH","TO","CLOSE","THE","PERFORMANCE","GAP","FOR","GOOD."]
+  // <br /> after indices 2,4,7,10,12 — layout encoded in JSX
+  const hw = content.headlineWords;
+  // sessionsHeadlineWords: ["SIX","SESSIONS.","ONE","DIRECTION."] — <br /> after index 1
+  const shw = content.sessionsHeadlineWords;
+
   return (
     <section id="prog-sec" className="scroll-snap-section relative w-full overflow-hidden">
       <div className="w">
@@ -86,7 +41,7 @@ export default function WhatThisActuallyIs() {
           {/* Asymmetric Left metadata panel */}
           <div ref={topRef as any} className="flex flex-col gap-4">
             <div className={`fu ${isTopVisible ? "vis" : ""}`} style={{ transitionDelay: "0.1s" }}>
-              <div className="section-num">04</div>
+              <div className="section-num">{content.sectionNumber}</div>
             </div>
           </div>
 
@@ -96,34 +51,34 @@ export default function WhatThisActuallyIs() {
               className="text-stone-100 text-[length:clamp(30px,4.6vw,60px)] font-light leading-[0.88] tracking-[-0.025em] uppercase"
               style={{ fontFamily: "var(--fd)" }}
             >
-              <span className="word-reveal-span mr-[0.25em]">THIS</span>
-              <span className="word-reveal-span mr-[0.25em]">IS</span>
-              <span className="word-reveal-span mr-[0.25em]">NOT</span>
+              <span className="word-reveal-span mr-[0.25em]">{hw[0]}</span>
+              <span className="word-reveal-span mr-[0.25em]">{hw[1]}</span>
+              <span className="word-reveal-span mr-[0.25em]">{hw[2]}</span>
               <br />
-              <span className="word-reveal-span mr-[0.25em]">A</span>
-              <span className="word-reveal-span mr-[0.25em]">PROGRAM</span>
+              <span className="word-reveal-span mr-[0.25em]">{hw[3]}</span>
+              <span className="word-reveal-span mr-[0.25em]">{hw[4]}</span>
               <br />
-              <span className="word-reveal-span mr-[0.25em]">IT'S</span>
-              <span className="word-reveal-span mr-[0.25em]">A</span>
-              <span className="word-reveal-span mr-[0.25em]">STRUCTURED</span>
+              <span className="word-reveal-span mr-[0.25em]">{hw[5]}</span>
+              <span className="word-reveal-span mr-[0.25em]">{hw[6]}</span>
+              <span className="word-reveal-span mr-[0.25em]">{hw[7]}</span>
               <br />
-              <span className="word-reveal-span mr-[0.25em]">PATH</span>
-              <span className="word-reveal-span mr-[0.25em]">TO</span>
-              <span className="word-reveal-span mr-[0.25em]">CLOSE</span>
+              <span className="word-reveal-span mr-[0.25em]">{hw[8]}</span>
+              <span className="word-reveal-span mr-[0.25em]">{hw[9]}</span>
+              <span className="word-reveal-span mr-[0.25em]">{hw[10]}</span>
               <br />
-              <span className="word-reveal-span mr-[0.25em]">THE</span>
-              <span className="word-reveal-span mr-[0.25em]">PERFORMANCE</span>
+              <span className="word-reveal-span mr-[0.25em]">{hw[11]}</span>
+              <span className="word-reveal-span mr-[0.25em]">{hw[12]}</span>
               <br />
-              <span className="word-reveal-span mr-[0.25em]">GAP</span>
-              <span className="word-reveal-span mr-[0.25em]">FOR</span>
-              <span className="word-reveal-span mr-[0.25em]">GOOD.</span>
+              <span className="word-reveal-span mr-[0.25em]">{hw[13]}</span>
+              <span className="word-reveal-span mr-[0.25em]">{hw[14]}</span>
+              <span className="word-reveal-span mr-[0.25em]">{hw[15]}</span>
             </h2>
 
             <div className={`fu ${isTopVisible ? "vis" : ""}`} style={{ transitionDelay: "0.25s" }}>
               {/* Passage — scrubbed word-by-word narration (leads the block) */}
               <div ref={passageScope} className="is-box vis">
                 <p>
-                  {PASSAGE_WORDS.map((word, index) => (
+                  {content.passageWords.map((word, index) => (
                     <span key={`pass-word-${index}`} className="word-reveal-span mr-[0.25em]">
                       {word}
                     </span>
@@ -132,9 +87,9 @@ export default function WhatThisActuallyIs() {
               </div>
 
               {/* Lead-in + the "not this" chips */}
-              <div className="not-lead font-bold">BREAKTHROUGH IS NOT…</div>
+              <div className="not-lead font-bold">{content.notLeadText}</div>
               <div className="not-row flex flex-wrap gap-x-6 gap-y-3">
-                {NOT_ITEMS.map((item) => (
+                {content.notItems.map((item) => (
                   <div key={item} className="not-item group cursor-pointer">
                     <span className="x mr-2">✕</span>
                     <s className="transition-colors duration-300 group-hover:text-[var(--gl)]">{item}</s>
@@ -144,10 +99,10 @@ export default function WhatThisActuallyIs() {
 
               {/* Primary CTA */}
               <div className="mt-16 flex justify-start w-full">
-                <a href="#checkout" className="btn-tactile">
+                <a href={content.ctaLink} className="btn-tactile">
                   <span className="btn-tactile-wrap">
-                    <span className="btn-tactile-text">BEGIN YOUR BREAKTHROUGH</span>
-                    <span className="btn-tactile-hover">BEGIN YOUR BREAKTHROUGH</span>
+                    <span className="btn-tactile-text">{content.ctaText}</span>
+                    <span className="btn-tactile-hover">{content.ctaText}</span>
                   </span>
                   <span className="btn-tactile-arrow">→</span>
                 </a>
@@ -158,13 +113,13 @@ export default function WhatThisActuallyIs() {
 
         {/* The Work — six sessions */}
         <div ref={workHeadRef as any} className={`fu ${isWorkHeadVisible ? "vis" : ""}`}>
-          <div className="eyebrow mb-4">The Path</div>
+          <div className="eyebrow mb-4">{content.sessionsEyebrow}</div>
           <h3 ref={sessHlRef} className="sess-hl text-left uppercase mb-12">
-            <span className="word-reveal-span mr-[0.25em]">SIX</span>
-            <span className="word-reveal-span mr-[0.25em]">SESSIONS.</span>
+            <span className="word-reveal-span mr-[0.25em]">{shw[0]}</span>
+            <span className="word-reveal-span mr-[0.25em]">{shw[1]}</span>
             <br />
-            <span className="word-reveal-span mr-[0.25em]">ONE</span>
-            <span className="word-reveal-span mr-[0.25em]">DIRECTION.</span>
+            <span className="word-reveal-span mr-[0.25em]">{shw[2]}</span>
+            <span className="word-reveal-span mr-[0.25em]">{shw[3]}</span>
           </h3>
         </div>
 
@@ -172,7 +127,7 @@ export default function WhatThisActuallyIs() {
           ref={listRef as any}
           className="sess-list divide-y divide-neutral-900 border-t border-b border-neutral-900"
         >
-          {SESSIONS.map((session, index) => (
+          {content.sessions.map((session, index) => (
             <div
               key={session.id}
               className={`group relative grid grid-cols-1 md:grid-cols-[60px_240px_1fr] gap-6 md:gap-12 py-5 px-4 md:px-8 hover:bg-neutral-900/40 cursor-pointer block-reveal-item ${
@@ -201,7 +156,7 @@ export default function WhatThisActuallyIs() {
           className={`prog-def gen-reveal ${isCodaVisible ? "vis" : ""}`}
           style={{ marginTop: "40px" }}
         >
-         
+
         </div>
       </div>
     </section>

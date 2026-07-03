@@ -2,8 +2,11 @@ import React, { useRef, useState } from "react";
 import { useScrollFadeIn } from "../hooks/useScrollFadeIn";
 import { useMagnetic } from "../hooks/useMagnetic";
 import { useWordScrub } from "../motion";
+import { checkoutContent, CheckoutContent } from "../data/pageContent";
+import { useSection } from "../providers/contentProvider";
 
 export default function Checkout() {
+  const content = useSection<CheckoutContent>("checkout", checkoutContent);
   const [ref, isVisible] = useScrollFadeIn({ threshold: 0.1 });
   // The magnetic pull is reserved for THE primary CTA — the one button that
   // actually acts (the join submit). Capped to 0.15 so it reads as a settled
@@ -56,42 +59,32 @@ export default function Checkout() {
     }
   };
 
+  // Split successBody on {email} token to preserve bold email rendering
+  const successParts = content.successBody.split('{email}');
+
   return (
     <section id="checkout" className="scroll-snap-section" ref={ref as any}>
       <div className="ww">
         <div className="co-g">
           <div className={`fu ${isVisible ? "vis" : ""}`}>
-            <div className="co-lbl">SECURE YOUR PLACE</div>
+            <div className="co-lbl">{content.sectionLabel}</div>
             <h2 ref={coTitleRef} className="co-t">
-              <span className="word-reveal-span">BREAKTHROUGH</span>
+              <span className="word-reveal-span">{content.headline}</span>
             </h2>
             <div className="co-list">
-              <div className="co-row">
-                <span className="co-ck">✓</span>6 live 1:1 sessions with Frank directly
-              </div>
-              <div className="co-row">
-                <span className="co-ck">✓</span>The Diagnostic — session one
-              </div>
-              <div className="co-row">
-                <span className="co-ck">✓</span>Between-session access — real presence
-              </div>
-              <div className="co-row">
-                <span className="co-ck">✓</span>Brotherhood introduction
-              </div>
-              <div className="co-row">
-                <span className="co-ck">✓</span>Practical integration into real life
-              </div>
-              <div className="co-row">
-                <span className="co-ck">✓</span>Lasting accountability
-              </div>
+              {content.checklistItems.map((item, i) => (
+                <div key={i} className="co-row">
+                  <span className="co-ck">✓</span>{item}
+                </div>
+              ))}
             </div>
           </div>
 
           <div className={`fu ${isVisible ? "vis" : ""}`} style={{ transitionDelay: "0.2s" }}>
-            <span className="f-ey">INVESTMENT</span>
-            <div className="f-price">$2,500</div>
+            <span className="f-ey">{content.investmentLabel}</span>
+            <div className="f-price">{content.investmentPrice}</div>
             <div className="f-pnote">
-              Breakthrough · Single Payment · Direct with Frank
+              {content.investmentNote}
             </div>
 
             {!isSuccess ? (
@@ -99,7 +92,7 @@ export default function Checkout() {
                 <div className="f-row2">
                   <div className="f-field">
                     <label className="f-lbl" htmlFor="fN">
-                      First Name
+                      {content.formLabels.firstName}
                     </label>
                     <input
                       className={`f-in ${errors.firstName ? "err" : ""}`}
@@ -118,7 +111,7 @@ export default function Checkout() {
                   </div>
                   <div className="f-field">
                     <label className="f-lbl" htmlFor="lN">
-                      Last Name
+                      {content.formLabels.lastName}
                     </label>
                     <input
                       className={`f-in ${errors.lastName ? "err" : ""}`}
@@ -139,7 +132,7 @@ export default function Checkout() {
 
                 <div className="f-field">
                   <label className="f-lbl" htmlFor="em">
-                    Email Address
+                    {content.formLabels.email}
                   </label>
                   <input
                     className={`f-in ${errors.email ? "err" : ""}`}
@@ -159,7 +152,7 @@ export default function Checkout() {
 
                 <div className="f-field">
                   <label className="f-lbl" htmlFor="ph">
-                    Phone (optional)
+                    {content.formLabels.phone}
                   </label>
                   <input
                     className="f-in"
@@ -174,7 +167,7 @@ export default function Checkout() {
 
                 <div className="f-field">
                   <label className="f-lbl" htmlFor="pr">
-                    Which profile resonates? (optional)
+                    {content.formLabels.profile}
                   </label>
                   <select
                     className="f-in"
@@ -184,38 +177,29 @@ export default function Checkout() {
                     onChange={(e) => setProfile(e.target.value)}
                   >
                     <option value="">Select if it applies</option>
-                    <option value="Successful But Lacking Something">
-                      Successful But Lacking Something
-                    </option>
-                    <option value="Passionate But Struggling">
-                      Passionate But Struggling
-                    </option>
-                    <option value="A Man in Crisis">A Man in Crisis</option>
+                    {content.profileOptions.map((opt) => (
+                      <option key={opt} value={opt}>{opt}</option>
+                    ))}
                   </select>
                 </div>
 
                 <div className="f-field" style={{ marginTop: "8px" }}>
                   <button ref={magneticRef as any} type="submit" className="btn-tactile cta-primary w-full" data-cursor-label="Join">
                     <span className="btn-tactile-wrap">
-                      <span className="btn-tactile-text">Begin Your Breakthrough</span>
-                      <span className="btn-tactile-hover">Begin Your Breakthrough</span>
+                      <span className="btn-tactile-text">{content.submitText}</span>
+                      <span className="btn-tactile-hover">{content.submitText}</span>
                     </span>
                     <span className="btn-tactile-arrow">→</span>
                   </button>
                 </div>
-                <p className="f-note">
-                  Secure checkout · Frank's team confirms your first session
-                  within 24 hours
-                </p>
+                <p className="f-note">{content.formNote}</p>
               </form>
             ) : (
               <div className="f-success show" id="coSuccess">
-                <div className="fs-icon">◈</div>
-                <div className="fs-h">You're in.</div>
+                <div className="fs-icon">{content.successIcon}</div>
+                <div className="fs-h">{content.successHeadline}</div>
                 <p className="fs-p">
-                  Frank's team will be in touch with you at <strong>{email}</strong> within 24 hours to
-                  confirm your first session. You've made the decision. That was the
-                  hardest part.
+                  {successParts[0]}<strong>{email}</strong>{successParts[1]}
                 </p>
                 <button
                   onClick={() => {
@@ -228,7 +212,7 @@ export default function Checkout() {
                   }}
                   className="btn-ghost mt-6 text-sm"
                 >
-                  Register Another Account
+                  {content.resetButtonText}
                 </button>
               </div>
             )}

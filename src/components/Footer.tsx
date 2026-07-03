@@ -1,15 +1,18 @@
 import { useRef } from "react";
 import { gsap, useGSAP, prefersReducedMotion } from "../motion";
-
-/** "BREAK" (default) + "THROUGH" (accent) as individual letters for the cascade. */
-const WORDMARK: { ch: string; sv: boolean }[] = [
-  ..."BREAK".split("").map((ch) => ({ ch, sv: false })),
-  ..."THROUGH".split("").map((ch) => ({ ch, sv: true })),
-];
+import { footerContent, FooterContent } from "../data/pageContent";
+import { useSection } from "../providers/contentProvider";
 
 export default function Footer() {
+  const content = useSection<FooterContent>("footer", footerContent);
   const currentYear = new Date().getFullYear();
   const logoRef = useRef<HTMLParagraphElement | null>(null);
+
+  // Derive WORDMARK from content — accent starts at wordmarkAccentStart index.
+  const WORDMARK = content.wordmark.split("").map((ch, i) => ({
+    ch,
+    sv: i >= content.wordmarkAccentStart,
+  }));
 
   // Signature finale: the wordmark cascades in letter-by-letter as the footer
   // enters — a closing flourish (the reference's footer-letter device).
@@ -36,7 +39,7 @@ export default function Footer() {
   return (
     <footer>
       <div className="w">
-        <p ref={logoRef} className="foot-logo" role="img" aria-label="BREAKTHROUGH" style={{ overflow: "hidden" }}>
+        <p ref={logoRef} className="foot-logo" role="img" aria-label={content.wordmark} style={{ overflow: "hidden" }}>
           {WORDMARK.map((l, i) => (
             <span
               key={i}
@@ -48,13 +51,12 @@ export default function Footer() {
           ))}
         </p>
         <p className="foot-sub text-neutral-400">
-          Monde Osé · Breakthrough · Caracara Village + Nature Reserve · © {currentYear}
+          {content.subtitle} · © {currentYear}
         </p>
         <nav className="foot-links mt-4" aria-label="Legal & contact">
-          <a href="/privacy">Privacy Policy</a>
-          <a href="/terms">Terms</a>
-          <a href="/disclaimer">Disclaimer</a>
-          <a href="mailto:admin@mondeose.com">Contact</a>
+          {content.legalLinks.map((link) => (
+            <a key={link.href} href={link.href}>{link.label}</a>
+          ))}
         </nav>
       </div>
     </footer>

@@ -2,12 +2,8 @@ import { useEffect, useState } from "react";
 import { useParallax } from "../hooks/useParallax";
 import ScrambleText from "./ScrambleText";
 import ScrollCue from "./ScrollCue";
-
-const BG_IMAGES = [
-  { src: "/bg_forest.png", webp: "/bg_forest.webp", name: "The Forest" },
-  { src: "/bg_dojo.png", webp: "/bg_dojo.webp", name: "The Dojo" },
-  { src: "/bg_cabin.png", webp: "/bg_cabin.webp", name: "The Cabin" },
-];
+import { heroContent, HeroContent } from "../data/pageContent";
+import { useSection } from "../providers/contentProvider";
 
 /**
  * Section 01 — Hero.
@@ -18,6 +14,8 @@ const BG_IMAGES = [
  * sister site; the background drifts with a reduced-motion-aware parallax.
  */
 export default function Hero() {
+  const content = useSection<HeroContent>("hero", heroContent);
+
   const [olActive, setOlActive] = useState(false);
   const [wordsActive, setWordsActive] = useState<boolean[]>(Array(8).fill(false));
   const [gapActive, setGapActive] = useState(false);
@@ -26,11 +24,12 @@ export default function Hero() {
   const [currentBgIdx, setCurrentBgIdx] = useState(0);
 
   useEffect(() => {
+    const len = content.backgroundImages.length;
     const interval = setInterval(() => {
-      setCurrentBgIdx((prev) => (prev + 1) % BG_IMAGES.length);
+      setCurrentBgIdx((prev) => (prev + 1) % len);
     }, 5600);
     return () => clearInterval(interval);
-  }, []);
+  }, [content.backgroundImages.length]);
 
   useEffect(() => {
     // Stage 1: Eyebrow text fades in
@@ -83,7 +82,7 @@ export default function Hero() {
         className="hero-bg"
         style={{ transform: `translateY(${offset}px)` }}
       >
-        {BG_IMAGES.map((img, idx) => (
+        {content.backgroundImages.map((img, idx) => (
           <picture key={img.src}>
             <source type="image/webp" srcSet={img.webp} />
             <img
@@ -108,60 +107,57 @@ export default function Hero() {
       {/* ── Layer 4 · Composed type, anchored lower-left ─────────── */}
       <div className="hero-in">
         <div id="hOl" className={`hero-ol ${olActive ? "s" : ""}`}>
-          BREAKTHROUGH WITH FRANK MONDEOSE
+          {content.eyebrow}
         </div>
 
         <div className="hero-main">
           <h1 className="hero-hl">
             <span className="wc">
-              <span className={`wi ${wordsActive[0] ? "s" : ""}`}>THE</span>
+              <span className={`wi ${wordsActive[0] ? "s" : ""}`}>{content.headlineWords[0]}</span>
             </span>{" "}
             <span className="wc">
-              <span className={`wi ${wordsActive[1] ? "s" : ""}`}>DOJO</span>
+              <span className={`wi ${wordsActive[1] ? "s" : ""}`}>{content.headlineWords[1]}</span>
             </span>
             <br />
             <span className="wc">
-              <span className={`wi ${wordsActive[2] ? "s" : ""}`}>FOR</span>
+              <span className={`wi ${wordsActive[2] ? "s" : ""}`}>{content.headlineWords[2]}</span>
             </span>{" "}
             <span className="wc">
-              <span className={`wi ${wordsActive[3] ? "s" : ""}`}>MEN</span>
+              <span className={`wi ${wordsActive[3] ? "s" : ""}`}>{content.headlineWords[3]}</span>
             </span>
             <br />
             <span className="wc">
-              <span className={`wi ${wordsActive[4] ? "s" : ""}`}>ON</span>
+              <span className={`wi ${wordsActive[4] ? "s" : ""}`}>{content.headlineWords[4]}</span>
             </span>{" "}
             <span className="wc">
-              <span className={`wi ${wordsActive[5] ? "s" : ""}`}>THE</span>
+              <span className={`wi ${wordsActive[5] ? "s" : ""}`}>{content.headlineWords[5]}</span>
             </span>{" "}
             <span className="wc">
-              <span className={`wi ${wordsActive[6] ? "s" : ""}`}>CUSP</span>
+              <span className={`wi ${wordsActive[6] ? "s" : ""}`}>{content.headlineWords[6]}</span>
             </span>
             <br />
             <span className="wc">
               <span className={`wi ${wordsActive[7] ? "s" : ""}`} style={{ color: "var(--sv)" }}>
-                <ScrambleText text="OF IMPACT" trigger={wordsActive[7]} duration={950} />
+                <ScrambleText text={content.headlineWords[7]} trigger={wordsActive[7]} duration={950} />
               </span>
             </span>
           </h1>
 
           <div id="hGap" className={`hero-gap ${gapActive ? "s" : ""}`}>
-            <div className="gap-big tracking-tight">THE GAP IS NOT YOUR POTENTIAL.</div>
-            <div className="gap-sub">
-              It's the distance between the man you're living as and the man you
-              know you can be.
-            </div>
+            <div className="gap-big tracking-tight">{content.subtitleLine1}</div>
+            <div className="gap-sub">{content.subtitleLine2}</div>
           </div>
 
           <div id="hBtm" className={`hero-btm ${btmActive ? "s" : ""}`}>
             <div className="hero-cta-wrapper">
               <a
-                href="#checkout"
+                href={content.ctaLink}
                 className="btn-tactile"
                 data-cursor-label="Begin"
               >
                 <span className="btn-tactile-wrap">
-                  <span className="btn-tactile-text">Begin Your Breakthrough</span>
-                  <span className="btn-tactile-hover">Begin Your Breakthrough</span>
+                  <span className="btn-tactile-text">{content.ctaText}</span>
+                  <span className="btn-tactile-hover">{content.ctaText}</span>
                 </span>
                 <span className="btn-tactile-arrow">→</span>
               </a>
@@ -176,12 +172,12 @@ export default function Hero() {
           <span className="hero-caption-idx">
             {String(currentBgIdx + 1).padStart(2, "0")}{" "}
             <span className="hero-caption-sep">/</span>{" "}
-            {String(BG_IMAGES.length).padStart(2, "0")}
+            {String(content.backgroundImages.length).padStart(2, "0")}
           </span>
-          <span className="hero-caption-name">{BG_IMAGES[currentBgIdx].name}</span>
+          <span className="hero-caption-name">{content.backgroundImages[currentBgIdx].name}</span>
         </div>
         <div className="hero-progress">
-          {BG_IMAGES.map((_, idx) => (
+          {content.backgroundImages.map((_, idx) => (
             <span
               key={idx}
               className={`hero-progress-bar ${currentBgIdx === idx ? "is-active" : ""}`}

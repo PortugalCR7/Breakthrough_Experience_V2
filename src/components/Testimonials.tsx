@@ -1,33 +1,11 @@
 import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
 import { useIntersectionObserver } from "../hooks/useIntersectionObserver";
-import { TestimonialItem } from "../types";
 import { useWordScrub } from "../motion";
-
-const TESTIMONIALS: TestimonialItem[] = [
-  {
-    id: "t1",
-    tag: "The Successful Man",
-    quote: "I had achieved almost everything I set out to achieve. Yet I felt disconnected from myself. Frank helped me see what success had been distracting me from.",
-    name: "J.M.",
-    details: "CEO · New York",
-  },
-  {
-    id: "t2",
-    tag: "The Struggling Builder",
-    quote: "I thought I needed more discipline. What I actually needed was accountability and a structure strong enough to hold my vision.",
-    name: "D.R.",
-    details: "Entrepreneur · Austin",
-  },
-  {
-    id: "t3",
-    tag: "The Man in Crisis",
-    quote: "My marriage ended and so did the identity I had built around it. This wasn't coaching. It was a turning point.",
-    name: "M.T.",
-    details: "Father · Chicago",
-  },
-];
+import { testimonialContent, TestimonialContent } from "../data/pageContent";
+import { useSection } from "../providers/contentProvider";
 
 export default function Testimonials() {
+  const content = useSection<TestimonialContent>("testimonials", testimonialContent);
   const [ref1, isVisible1] = useIntersectionObserver();
   const [ref2, isVisible2] = useIntersectionObserver();
   const [current, setCurrent] = useState(0);
@@ -38,14 +16,14 @@ export default function Testimonials() {
     // Autoplay testimonials every 7000ms (~40% slower than the prior 5000ms,
     // giving readers more time to comfortably finish each testimonial)
     const interval = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % TESTIMONIALS.length);
+      setCurrent((prev) => (prev + 1) % content.testimonials.length);
     }, 7000);
 
     return () => clearInterval(interval);
-  }, [current]);
+  }, [current, content.testimonials.length]);
 
   const goTo = (index: number) => {
-    const len = TESTIMONIALS.length;
+    const len = content.testimonials.length;
     setCurrent((index + len) % len);
   };
 
@@ -65,17 +43,20 @@ export default function Testimonials() {
   const initials = (name: string) =>
     name.replace(/[^A-Za-z]/g, "").slice(0, 2).toUpperCase();
 
+  // headlineWords: ["WHAT","THE","MEN","SAY."] — <br /> after index 1
+  const hw = content.headlineWords;
+
   return (
     <section id="testi" className="scroll-snap-section">
       <div className="w">
         <div ref={ref1 as any} className={`fu ${isVisible1 ? "vis" : ""}`}>
-          <div className="eyebrow">The Men Who Did the Work</div>
+          <div className="eyebrow">{content.eyebrow}</div>
           <h2 ref={testiHlRef} className="testi-hl">
-            <span className="word-reveal-span mr-[0.25em]">WHAT</span>
-            <span className="word-reveal-span mr-[0.25em]">THE</span>
+            <span className="word-reveal-span mr-[0.25em]">{hw[0]}</span>
+            <span className="word-reveal-span mr-[0.25em]">{hw[1]}</span>
             <br />
-            <span className="word-reveal-span mr-[0.25em]">MEN</span>
-            <span className="word-reveal-span mr-[0.25em]">SAY.</span>
+            <span className="word-reveal-span mr-[0.25em]">{hw[2]}</span>
+            <span className="word-reveal-span mr-[0.25em]">{hw[3]}</span>
           </h2>
         </div>
 
@@ -88,7 +69,7 @@ export default function Testimonials() {
             onPointerUp={onPointerUp}
             style={{ touchAction: "pan-y" }}
           >
-            {TESTIMONIALS.map((t, idx) => (
+            {content.testimonials.map((t, idx) => (
               <div
                 key={t.id}
                 className={`slide ${idx === current ? "on block" : "hidden"}`}
@@ -125,7 +106,7 @@ export default function Testimonials() {
               →
             </button>
             <div className="sl-dots">
-              {TESTIMONIALS.map((_, idx) => (
+              {content.testimonials.map((_, idx) => (
                 <button
                   key={idx}
                   type="button"
