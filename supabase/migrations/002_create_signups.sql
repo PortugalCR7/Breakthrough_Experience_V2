@@ -21,3 +21,7 @@ CREATE POLICY "anon_insert"
   FOR INSERT
   TO anon
   WITH CHECK (true);
+
+-- Grant INSERT privilege to anon role (required in addition to the RLS policy above;
+-- RLS governs row visibility, but the anon role also needs table-level INSERT privilege).
+GRANT INSERT ON signups TO anon;
