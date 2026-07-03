@@ -2,15 +2,8 @@ import { useRef } from "react";
 import { gsap, useGSAP, prefersReducedMotion, ScrollTrigger } from "../motion";
 import { useTheme } from "../theme/useTheme";
 import ScrollCue from "./ScrollCue";
-
-const LINES = [
-  "I've watched men wait years for the right moment.",
-  "The right moment never arrives.",
-  "It is created.",
-  "You already know what needs to happen.",
-  "The only question is:",
-  "Are you willing to act on what you know?",
-];
+import { finalWordContent, FinalWordContent } from "../data/pageContent";
+import { useSection } from "../providers/contentProvider";
 
 /**
  * Section 14 — The Final Word (closing statement).
@@ -23,6 +16,7 @@ const LINES = [
  * clips; reduced-motion shows the whole letter + portrait instantly.
  */
 export default function FinalWord() {
+  const content = useSection<FinalWordContent>("final_word", finalWordContent);
   const sectionRef = useRef<HTMLElement | null>(null);
   const txtScope = useRef<HTMLDivElement | null>(null);
   const portraitRef = useRef<HTMLDivElement | null>(null);
@@ -98,6 +92,9 @@ export default function FinalWord() {
     { scope: sectionRef, dependencies: [] }
   );
 
+  // signatureTitles has \n line breaks — split for rendering
+  const sigTitleLines = content.signatureTitles.split('\n');
+
   return (
     <section
       id="finalword"
@@ -114,8 +111,8 @@ export default function FinalWord() {
         style={{ opacity: 0, transition: "none" }}
       >
         <picture>
-          <source type="image/webp" srcSet="/frank_founder_updated.webp" />
-          <img src="/frank_founder_updated.jpg" alt="" referrerPolicy="no-referrer" />
+          <source type="image/webp" srcSet={content.portraitWebp} />
+          <img src={content.portraitImage} alt="" referrerPolicy="no-referrer" />
         </picture>
       </div>
 
@@ -126,7 +123,7 @@ export default function FinalWord() {
           </div>
 
           <div className="fw-txt" ref={txtScope}>
-            {LINES.map((line, index) => (
+            {content.lines.map((line, index) => (
               <p key={index} className="mt-4 first:mt-0">
                 {line.split(/\s+/).map((word, wi) => (
                   <span key={wi} className="word-reveal-span mr-[0.25em]">
@@ -138,13 +135,11 @@ export default function FinalWord() {
 
             {/* Frank Mondeose signature — resolves at/after the final line */}
             <div ref={sigRef} className="mt-8" style={{ opacity: 0 }}>
-              <div className="fw-sig">Frank Mondeose</div>
+              <div className="fw-sig">{content.signatureName}</div>
               <div className="fw-ttls">
-                Teacher of Teachers
-                <br />
-                Mentor to Men on the
-                <br />
-                Cusp of Impact
+                {sigTitleLines.map((line, i) => (
+                  <span key={i}>{i > 0 && <br />}{line}</span>
+                ))}
               </div>
             </div>
           </div>
