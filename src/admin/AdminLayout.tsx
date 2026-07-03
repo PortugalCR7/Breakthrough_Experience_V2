@@ -1,6 +1,12 @@
 import type { ReactNode } from 'react';
 import { useAdminAuth } from './useAdminAuth';
-import { SECTIONS } from './sections';
+import { ALL_SECTION_DEFAULTS } from '../data/pageContent';
+
+const SECTION_KEYS = Object.keys(ALL_SECTION_DEFAULTS);
+
+function toLabel(key: string) {
+  return key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+}
 
 interface AdminLayoutProps {
   children: ReactNode;
@@ -32,7 +38,7 @@ export default function AdminLayout({ children, activeSection }: AdminLayoutProp
         <aside className="w-56 border-r border-zinc-800 overflow-y-auto shrink-0">
           <nav className="py-4">
             <p className="px-4 mb-2 text-[10px] tracking-[0.2em] text-zinc-600 uppercase">Sections</p>
-            {SECTIONS.map(({ key, label }) => (
+            {SECTION_KEYS.map(key => (
               <a
                 key={key}
                 href={`#${key}`}
@@ -44,7 +50,7 @@ export default function AdminLayout({ children, activeSection }: AdminLayoutProp
                     : 'text-zinc-400 hover:text-white hover:bg-zinc-900',
                 ].join(' ')}
               >
-                {label}
+                {toLabel(key)}
               </a>
             ))}
           </nav>
