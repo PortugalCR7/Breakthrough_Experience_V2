@@ -54,11 +54,16 @@ export default function Checkout() {
 
     if (hasFnError || hasLnError || hasEmError) return;
 
-    // Supabase not configured — fallback/dev mode only, no data is saved
     if (!supabase) {
-      setIsSuccess(true);
-      const checkoutEl = document.getElementById("checkout");
-      if (checkoutEl) checkoutEl.scrollIntoView({ behavior: "smooth" });
+      if (import.meta.env.DEV) {
+        // DEV only: local success without DB write so the form is testable
+        // without credentials. Structurally impossible in a production build.
+        setIsSuccess(true);
+        const checkoutEl = document.getElementById("checkout");
+        if (checkoutEl) checkoutEl.scrollIntoView({ behavior: "smooth" });
+      } else {
+        setSubmitError("Service unavailable — please try again later or email us directly.");
+      }
       return;
     }
 

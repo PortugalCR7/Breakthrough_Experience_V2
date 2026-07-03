@@ -9,15 +9,22 @@
  * DEPLOYMENT STEPS:
  *   1. Deploy this function:
  *        supabase functions deploy notify-signup --project-ref <your-project-ref>
- *   2. Add the Resend API key as a secret:
+ *   2. Add secrets:
  *        supabase secrets set RESEND_API_KEY=re_xxxxxxxxxxxx --project-ref <your-project-ref>
- *   3. Set Frank's notification email as a secret:
- *        supabase secrets set FRANK_EMAIL=frank@example.com --project-ref <your-project-ref>
- *   4. Create the Database Webhook in Supabase dashboard:
+ *        supabase secrets set FRANK_EMAIL=frank@yourdomain.com --project-ref <your-project-ref>
+ *        supabase secrets set WEBHOOK_SECRET=<generate-a-strong-random-string> --project-ref <your-project-ref>
+ *   3. Create the Database Webhook in Supabase dashboard:
  *        Database > Webhooks > Create new webhook
  *        Table: signups | Event: INSERT
  *        Type: Supabase Edge Functions
  *        Function: notify-signup
+ *        HTTP Headers: add  x-webhook-secret: <same value as WEBHOOK_SECRET secret above>
+ *
+ * WEBHOOK AUTHENTICATION:
+ *   Every incoming request is verified against the WEBHOOK_SECRET env var via
+ *   the x-webhook-secret header. Requests without the correct secret are
+ *   rejected with 401 before any email is sent. Set the same value in both
+ *   the Supabase secret store (WEBHOOK_SECRET) and the webhook HTTP headers.
  *
  * EMAIL "FROM" ADDRESS:
  *   Currently uses Resend's shared test domain (onboarding@resend.dev).
@@ -73,9 +80,16 @@ async function sendEmail(
 }
 
 Deno.serve(async (req: Request) => {
-  // Supabase Database Webhooks send POST requests
   if (req.method !== "POST") {
     return new Response("Method Not Allowed", { status: 405 });
+  }
+
+  // Verify the request originates from our Supabase webhook, not an arbitrary caller.
+  // The webhook is configured to send x-webhook-secret matching the WEBHOOK_SECRET env var.
+  const webhookSecret = Deno.env.get("WEBHOOK_SECRET");
+  const incomingSecret = req.headers.get("x-webhook-secret");
+  if (!webhookSecret || incomingSecret !== webhookSecret) {
+    return new Response("Unauthorized", { status: 401 });
   }
 
   const resendApiKey = Deno.env.get("RESEND_API_KEY");
