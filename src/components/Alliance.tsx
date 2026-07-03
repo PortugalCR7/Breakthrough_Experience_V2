@@ -2,8 +2,11 @@ import React, { useState, useRef, useEffect } from "react";
 import { useScrollFadeIn } from "../hooks/useScrollFadeIn";
 import { useWordScrub } from "../motion";
 import { X, ShieldAlert } from "lucide-react";
+import { allianceContent, AllianceContent } from "../data/pageContent";
+import { useSection } from "../providers/contentProvider";
 
 export default function Alliance() {
+  const content = useSection<AllianceContent>("alliance", allianceContent);
   const [ref, isVisible] = useScrollFadeIn({ threshold: 0.1 });
   const [showNotice, setShowNotice] = useState(false);
   const hlScope = useRef<HTMLHeadingElement | null>(null);
@@ -35,28 +38,44 @@ export default function Alliance() {
     };
   }, [showNotice]);
 
+  // headlineWords: ["THE","ALLIANCE"] — each on its own line
+  const hw = content.headlineWords;
+
+  // applyCtaText has \n for line break
+  const ctaLines = content.applyCtaText.split('\n');
+
   return (
     <section id="alliance-sec" className="scroll-snap-section" ref={ref as any}>
       <div className="w">
         <div className={`eyebrow fu ${isVisible ? "vis" : ""}`} style={{ marginBottom: "32px" }}>
-          The Deeper Path
+          {content.eyebrow}
         </div>
         <div className="pp-grid">
           <div className={`fu ${isVisible ? "vis" : ""} border-r border-white/10 pr-12 flex flex-col`}>
             <h2 ref={hlScope} className="al-sec-hl">
-              <span className="word-reveal-span">THE</span>
-              <br />
-              <span className="word-reveal-span">ALLIANCE</span>
+              {hw.map((word, i) => (
+                <span key={i}>
+                  <span className="word-reveal-span">{word}</span>
+                  {i < hw.length - 1 && <br />}
+                </span>
+              ))}
             </h2>
             <p className="al-sec-intro mt-6 mb-8">
-              For men seeking a deeper level of mentorship, accountability, and
-              access. This is where the real work becomes a way of life.
+              {content.introParagraph}
             </p>
             <div className="mt-auto pt-8">
               <a ref={triggerRef} href="#" className="btn-tactile btn-stack w-full" onClick={handleApplyClick}>
                 <span className="btn-tactile-wrap">
-                  <span className="btn-tactile-text">Apply For<br />The Alliance</span>
-                  <span className="btn-tactile-hover">Apply For<br />The Alliance</span>
+                  <span className="btn-tactile-text">
+                    {ctaLines.map((line, i) => (
+                      <span key={i}>{i > 0 && <br />}{line}</span>
+                    ))}
+                  </span>
+                  <span className="btn-tactile-hover">
+                    {ctaLines.map((line, i) => (
+                      <span key={i}>{i > 0 && <br />}{line}</span>
+                    ))}
+                  </span>
                 </span>
                 <span className="btn-tactile-arrow">→</span>
               </a>
@@ -64,27 +83,18 @@ export default function Alliance() {
           </div>
 
           <div className={`fu ${isVisible ? "vis" : ""} flex flex-col`} style={{ transitionDelay: "0.15s" }}>
-            <div className="al-incl-lbl">What's Included</div>
+            <div className="al-incl-lbl">{content.includedLabel}</div>
             <div className="al-incl-list">
-              <div className="al-incl-row">
-                <span className="al-ii-m">—</span>Extended 1:1 support
-              </div>
-              <div className="al-incl-row">
-                <span className="al-ii-m">—</span>Full Brotherhood Membership
-              </div>
-              <div className="al-incl-row">
-                <span className="al-ii-m">—</span>Purpose &amp; Legacy Architecture
-              </div>
-              <div className="al-incl-row">
-                <span className="al-ii-m">—</span>Long-term strategic mentorship
-              </div>
+              {content.includedItems.map((item, i) => (
+                <div key={i} className="al-incl-row">
+                  <span className="al-ii-m">—</span>{item}
+                </div>
+              ))}
             </div>
 
             <div className="mt-auto pt-12">
               <p className="al-right-note border-b-0 pb-0 mb-0">
-                Application required. Discernment on both sides. The Alliance is not
-                for every man. It is for the man who has closed the initial gap and
-                is ready to go further.
+                {content.applicationNote}
               </p>
             </div>
           </div>
@@ -114,19 +124,21 @@ export default function Alliance() {
                 <ShieldAlert className="h-5 w-5" aria-hidden="true" />
               </div>
               <h3 id="alliance-notice-title" className="font-sans text-xs font-bold tracking-widest text-[var(--sv)]">
-                ALLIANCE DISCERNING
+                {content.modalTitle}
               </h3>
             </div>
 
-            <p id="alliance-notice-desc" className="font-sans text-sm leading-relaxed text-stone-300">
-              Alliance applications are processed manually. Please secure your first 1:1 <strong>&quot;Breakthrough&quot; session</strong> with Frank, or contact our leadership board directly to register your legacy interest.
-            </p>
-            
+            <p
+              id="alliance-notice-desc"
+              className="font-sans text-sm leading-relaxed text-stone-300"
+              dangerouslySetInnerHTML={{ __html: content.modalBody }}
+            />
+
             <button
               onClick={() => setShowNotice(false)}
               className="mt-6 w-full py-3 border border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:text-white transition-all text-neutral-300 font-mono text-[10px] tracking-widest uppercase"
             >
-              Acknowledge and Close
+              {content.modalButtonText}
             </button>
           </div>
         </div>
