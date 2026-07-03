@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { ALL_SECTION_DEFAULTS } from '../data/pageContent';
 import { SECTION_SCHEMA } from './sectionSchema';
+import { useUpdateSection, CmsNotConfiguredError } from '../hooks/useUpdateSection';
 import type { FieldDef } from './editors/types';
 import TextInput from './editors/TextInput';
 import NumberInput from './editors/NumberInput';
@@ -92,29 +93,41 @@ function renderField(
   }
 }
 
-type ToastState = { visible: boolean; message: string };
+type ToastState = { visible: boolean; message: string; type: 'success' | 'error' };
 
 export default function SectionEditor({ sectionKey, onBack }: Props) {
   const fields = SECTION_SCHEMA[sectionKey] ?? [];
   const defaults = (ALL_SECTION_DEFAULTS[sectionKey] ?? {}) as Record<string, unknown>;
 
   const [formState, setFormState] = useState<Record<string, unknown>>(defaults);
-  const [toast, setToast] = useState<ToastState>({ visible: false, message: '' });
+  const [toast, setToast] = useState<ToastState>({ visible: false, message: '', type: 'success' });
+
+  const { update, state: updateState, reset: resetUpdate } = useUpdateSection<Record<string, unknown>>(sectionKey);
 
   // Re-initialize when the section key changes
   useEffect(() => {
     setFormState((ALL_SECTION_DEFAULTS[sectionKey] ?? {}) as Record<string, unknown>);
   }, [sectionKey]);
 
-  const showToast = (message: string) => {
-    setToast({ visible: true, message });
-    setTimeout(() => setToast({ visible: false, message: '' }), 3000);
+  const showToast = (message: string, type: 'success' | 'error' = 'success') => {
+    setToast({ visible: true, message, type });
+    setTimeout(() => setToast({ visible: false, message: '', type: 'success' }), 3000);
   };
 
-  const saveSection = useCallback(() => {
-    // TODO: wire to contentProvider write hook once available
-    showToast(`"${toLabel(sectionKey)}" saved locally.`);
-  }, [sectionKey]);
+  const saveSection = useCallback(async () => {
+    try {
+      await update(formState);
+      showToast(`"${toLabel(sectionKey)}" saved.`);
+    } catch (err) {
+      if (err instanceof CmsNotConfiguredError) {
+        showToast('CMS not configured — check Supabase credentials.', 'error');
+      } else {
+        showToast((err as Error).message || 'Save failed. Please try again.', 'error');
+      }
+    } finally {
+      resetUpdate();
+    }
+  }, [sectionKey, formState, update, resetUpdate]);
 
   if (fields.length === 0) {
     return (
@@ -153,20 +166,28 @@ export default function SectionEditor({ sectionKey, onBack }: Props) {
       {/* Save bar */}
       <div className="fixed bottom-0 left-0 right-0 bg-zinc-950 border-t border-zinc-800 px-6 py-4 flex items-center justify-between z-10">
         <p className="text-zinc-600 text-xs font-mono">
-          Changes are held in local state — persistence wires in Round 4.
+          Saves to Supabase — changes reflect on the public site immediately.
         </p>
         <button
           type="button"
           onClick={saveSection}
-          className="bg-red-700 hover:bg-red-600 text-white text-sm font-mono tracking-wider px-6 py-2 rounded transition-colors"
+          disabled={updateState.updating}
+          className="bg-red-700 hover:bg-red-600 disabled:opacity-40 text-white text-sm font-mono tracking-wider px-6 py-2 rounded transition-colors"
         >
-          SAVE
+          {updateState.updating ? 'SAVING…' : 'SAVE'}
         </button>
       </div>
 
       {/* Toast */}
       {toast.visible && (
-        <div className="fixed bottom-20 right-6 bg-zinc-800 border border-zinc-600 text-white text-sm px-4 py-2.5 rounded shadow-lg z-20 transition-opacity">
+        <div
+          role="status"
+          className={`fixed bottom-20 right-6 border text-white text-sm px-4 py-2.5 rounded shadow-lg z-20 transition-opacity ${
+            toast.type === 'error'
+              ? 'bg-red-900/90 border-red-700'
+              : 'bg-zinc-800 border-zinc-600'
+          }`}
+        >
           {toast.message}
         </div>
       )}

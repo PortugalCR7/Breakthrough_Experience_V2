@@ -27,7 +27,7 @@ export function ContentProvider({ children }: { children: ReactNode }) {
       const { data, error } = await supabase
         .from('page_sections')
         .select('section_key, content')
-        .order('display_order', { ascending: true });
+        .order('updated_at', { ascending: true });
 
       if (error) {
         console.warn('Failed to fetch sections:', error.message);

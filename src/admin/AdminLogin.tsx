@@ -61,7 +61,7 @@ export default function AdminLogin({ onLogin, error, mode }: AdminLoginProps) {
           </div>
 
           {error && (
-            <p className="text-red-400 text-xs">{error}</p>
+            <p aria-live="polite" className="text-red-400 text-xs">{error}</p>
           )}
 
           <button
