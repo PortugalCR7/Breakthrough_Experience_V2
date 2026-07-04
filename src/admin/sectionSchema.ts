@@ -251,12 +251,10 @@ export const SECTION_SCHEMA: Record<string, FieldDef[]> = {
     { key: 'headlineWords', label: 'Headline Words', type: 'string_array' },
     { key: 'introParagraph', label: 'Intro Paragraph (HTML)', type: 'richtext' },
     { key: 'applyCtaText', label: 'Apply CTA Text', type: 'text' },
+    { key: 'ctaLink', label: 'CTA Link', type: 'text' },
     { key: 'includedLabel', label: 'Included Label', type: 'text' },
     { key: 'includedItems', label: 'Included Items', type: 'string_array' },
     { key: 'applicationNote', label: 'Application Note (HTML)', type: 'richtext' },
-    { key: 'modalTitle', label: 'Modal Title', type: 'text' },
-    { key: 'modalBody', label: 'Modal Body (HTML)', type: 'richtext' },
-    { key: 'modalButtonText', label: 'Modal Button Text', type: 'text' },
   ],
 
   cta_text_3: [

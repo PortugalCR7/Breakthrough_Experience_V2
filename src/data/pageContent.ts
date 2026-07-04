@@ -155,12 +155,10 @@ export interface AllianceContent {
   headlineWords: string[];
   introParagraph: string;
   applyCtaText: string;
+  ctaLink: string;
   includedLabel: string;
   includedItems: string[];
   applicationNote: string;
-  modalTitle: string;
-  modalBody: string;
-  modalButtonText: string;
 }
 
 export interface CtaText3Content {
@@ -660,6 +658,7 @@ export const allianceContent: AllianceContent = {
   headlineWords: ["THE", "ALLIANCE"],
   introParagraph: "For men seeking a deeper level of mentorship, accountability, and access. This is where the real work becomes a way of life.",
   applyCtaText: "Apply For\nThe Alliance",
+  ctaLink: "https://forms.google.com/REPLACE_ME",
   includedLabel: "What's Included",
   includedItems: [
     "Extended 1:1 support",
@@ -668,9 +667,6 @@ export const allianceContent: AllianceContent = {
     "Long-term strategic mentorship",
   ],
   applicationNote: "Application required. Discernment on both sides. The Alliance is not for every man. It is for the man who has closed the initial gap and is ready to go further.",
-  modalTitle: "ALLIANCE DISCERNING",
-  modalBody: 'Alliance applications are processed manually. Please secure your first 1:1 <strong>&quot;Breakthrough&quot; session</strong> with Frank, or contact our leadership board directly to register your legacy interest.',
-  modalButtonText: "Acknowledge and Close",
 };
 
 // sectionKey: cta_text_3

@@ -54,7 +54,7 @@ export default function PrimaryPath() {
             </div>
             <div className={`fu ${isLeftVisible ? "vis" : ""} mt-auto pt-8`} style={{ transitionDelay: "0.2s" }}>
               <div style={{ marginBottom: "16px" }}>
-                <a href={content.ctaLink} className="btn-tactile btn-stack w-full">
+                <a href={content.ctaLink} className="btn-tactile btn-stack w-full" target="_blank" rel="noopener noreferrer">
                   <span className="btn-tactile-wrap">
                     <span className="btn-tactile-text">
                       {ctaLines.map((line, i) => (

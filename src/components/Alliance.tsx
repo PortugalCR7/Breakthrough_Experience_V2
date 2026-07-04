@@ -1,42 +1,14 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useRef } from "react";
 import { useScrollFadeIn } from "../hooks/useScrollFadeIn";
 import { useWordScrub } from "../motion";
-import { X, ShieldAlert } from "lucide-react";
 import { allianceContent, AllianceContent } from "../data/pageContent";
 import { useSection } from "../providers/contentProvider";
 
 export default function Alliance() {
   const content = useSection<AllianceContent>("alliance", allianceContent);
   const [ref, isVisible] = useScrollFadeIn({ threshold: 0.1 });
-  const [showNotice, setShowNotice] = useState(false);
   const hlScope = useRef<HTMLHeadingElement | null>(null);
   useWordScrub(hlScope);
-
-  // Modal focus management: remember the trigger, move focus into the dialog on
-  // open, restore it on close, and allow Escape to dismiss.
-  const triggerRef = useRef<HTMLAnchorElement | null>(null);
-  const closeBtnRef = useRef<HTMLButtonElement | null>(null);
-
-  const handleApplyClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
-    setShowNotice(true);
-  };
-
-  useEffect(() => {
-    if (!showNotice) return;
-    const previouslyFocused = triggerRef.current;
-    closeBtnRef.current?.focus();
-
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setShowNotice(false);
-    };
-    document.addEventListener("keydown", onKeyDown);
-
-    return () => {
-      document.removeEventListener("keydown", onKeyDown);
-      previouslyFocused?.focus();
-    };
-  }, [showNotice]);
 
   // headlineWords: ["THE","ALLIANCE"] — each on its own line
   const hw = content.headlineWords;
@@ -64,7 +36,7 @@ export default function Alliance() {
               {content.introParagraph}
             </p>
             <div className="mt-auto pt-8">
-              <a ref={triggerRef} href="#" className="btn-tactile btn-stack w-full" onClick={handleApplyClick}>
+              <a href={content.ctaLink} className="btn-tactile btn-stack w-full" target="_blank" rel="noopener noreferrer">
                 <span className="btn-tactile-wrap">
                   <span className="btn-tactile-text">
                     {ctaLines.map((line, i) => (
@@ -100,49 +72,6 @@ export default function Alliance() {
           </div>
         </div>
       </div>
-
-      {showNotice && (
-        <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4 bg-neutral-950/80 backdrop-blur-md animate-fade-in">
-          <div
-            className="relative w-full max-w-md border border-neutral-800 bg-neutral-900 p-8 shadow-2xl rounded-lg"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="alliance-notice-title"
-            aria-describedby="alliance-notice-desc"
-          >
-            <button
-              ref={closeBtnRef}
-              onClick={() => setShowNotice(false)}
-              aria-label="Close"
-              className="absolute top-4 right-4 text-neutral-400 hover:text-white transition-colors"
-            >
-              <X className="h-5 w-5" aria-hidden="true" />
-            </button>
-
-            <div className="flex items-center gap-3 mb-4">
-              <div className="h-10 w-10 flex items-center justify-center rounded-full bg-stone-800 border border-stone-700 text-[var(--sv)]">
-                <ShieldAlert className="h-5 w-5" aria-hidden="true" />
-              </div>
-              <h3 id="alliance-notice-title" className="font-sans text-xs font-bold tracking-widest text-[var(--sv)]">
-                {content.modalTitle}
-              </h3>
-            </div>
-
-            <p
-              id="alliance-notice-desc"
-              className="font-sans text-sm leading-relaxed text-stone-300"
-              dangerouslySetInnerHTML={{ __html: content.modalBody }}
-            />
-
-            <button
-              onClick={() => setShowNotice(false)}
-              className="mt-6 w-full py-3 border border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:text-white transition-all text-neutral-300 font-mono text-[10px] tracking-widest uppercase"
-            >
-              {content.modalButtonText}
-            </button>
-          </div>
-        </div>
-      )}
     </section>
   );
 }
