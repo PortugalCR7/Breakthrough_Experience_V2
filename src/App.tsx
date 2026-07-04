@@ -16,7 +16,6 @@ import Outcomes from "./components/Outcomes";
 import Testimonials from "./components/Testimonials";
 import MidCTA from "./components/MidCTA";
 import PrimaryPath from "./components/PrimaryPath";
-import Alliance from "./components/Alliance";
 import FAQ from "./components/FAQ";
 import Decision from "./components/Decision";
 import FinalWord from "./components/FinalWord";
@@ -94,9 +93,6 @@ export default function App() {
 
         {/* Section 10: Private options and investments cards */}
         <PrimaryPath />
-
-        {/* Section 11: Special Alliance invitation block */}
-        <Alliance />
 
         {/* Segue into FAQ */}
         <CtaText3 />
