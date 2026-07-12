@@ -1,5 +1,6 @@
 export type FieldType =
   | 'text'
+  | 'image'
   | 'number'
   | 'boolean'
   | 'richtext'

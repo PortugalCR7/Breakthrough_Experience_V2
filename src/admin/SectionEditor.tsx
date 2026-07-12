@@ -4,6 +4,7 @@ import { SECTION_SCHEMA } from './sectionSchema';
 import { useUpdateSection, CmsNotConfiguredError } from '../hooks/useUpdateSection';
 import type { FieldDef } from './editors/types';
 import TextInput from './editors/TextInput';
+import ImageInput from './editors/ImageInput';
 import NumberInput from './editors/NumberInput';
 import BooleanInput from './editors/BooleanInput';
 import StringArrayEditor from './editors/StringArrayEditor';
@@ -23,7 +24,8 @@ function toLabel(key: string) {
 function renderField(
   field: FieldDef,
   formState: Record<string, unknown>,
-  setFormState: React.Dispatch<React.SetStateAction<Record<string, unknown>>>
+  setFormState: React.Dispatch<React.SetStateAction<Record<string, unknown>>>,
+  sectionKey: string
 ) {
   const update = (val: unknown) =>
     setFormState((prev) => ({ ...prev, [field.key]: val }));
@@ -35,6 +37,15 @@ function renderField(
           label={field.label}
           value={(formState[field.key] as string) ?? ''}
           onChange={update}
+        />
+      );
+    case 'image':
+      return (
+        <ImageInput
+          label={field.label}
+          value={(formState[field.key] as string) ?? ''}
+          onChange={update}
+          folder={sectionKey}
         />
       );
     case 'number':
@@ -76,6 +87,7 @@ function renderField(
           value={(formState[field.key] as Record<string, unknown>) ?? {}}
           fields={field.fields ?? []}
           onChange={update}
+          folder={sectionKey}
         />
       );
     case 'object_array':
@@ -86,6 +98,7 @@ function renderField(
           fields={field.fields ?? []}
           onChange={update}
           itemLabel={field.label.replace(/s$/, '')}
+          folder={sectionKey}
         />
       );
     default:
@@ -158,7 +171,7 @@ export default function SectionEditor({ sectionKey, onBack }: Props) {
       <div className="flex flex-col gap-6 pb-24">
         {fields.map((field) => (
           <div key={field.key}>
-            {renderField(field, formState, setFormState)}
+            {renderField(field, formState, setFormState, sectionKey)}
           </div>
         ))}
       </div>

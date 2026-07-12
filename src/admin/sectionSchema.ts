@@ -11,8 +11,8 @@ export const SECTION_SCHEMA: Record<string, FieldDef[]> = {
     {
       key: 'backgroundImages', label: 'Background Images', type: 'object_array',
       fields: [
-        { key: 'src', label: 'Image Src', type: 'text' },
-        { key: 'webp', label: 'Image WebP', type: 'text' },
+        { key: 'src', label: 'Image Src', type: 'image' },
+        { key: 'webp', label: 'Image WebP', type: 'image' },
         { key: 'name', label: 'Name', type: 'text' },
       ],
     },
@@ -68,7 +68,7 @@ export const SECTION_SCHEMA: Record<string, FieldDef[]> = {
         { key: 'num', label: 'Number Label', type: 'text' },
         { key: 'title', label: 'Title (HTML)', type: 'richtext' },
         { key: 'body', label: 'Body (HTML)', type: 'richtext' },
-        { key: 'image', label: 'Image Path', type: 'text' },
+        { key: 'image', label: 'Image Path', type: 'image' },
       ],
     },
     { key: 'closerHeadline', label: 'Closer Headline', type: 'text' },
@@ -164,8 +164,8 @@ export const SECTION_SCHEMA: Record<string, FieldDef[]> = {
         { key: 'highlight', label: 'Highlight', type: 'boolean' },
       ],
     },
-    { key: 'portraitImage', label: 'Portrait Image Path', type: 'text' },
-    { key: 'portraitWebp', label: 'Portrait WebP Path', type: 'text' },
+    { key: 'portraitImage', label: 'Portrait Image Path', type: 'image' },
+    { key: 'portraitWebp', label: 'Portrait WebP Path', type: 'image' },
   ],
 
   outcomes: [
@@ -294,8 +294,8 @@ export const SECTION_SCHEMA: Record<string, FieldDef[]> = {
     { key: 'lines', label: 'Lines', type: 'string_array' },
     { key: 'signatureName', label: 'Signature Name', type: 'text' },
     { key: 'signatureTitles', label: 'Signature Titles', type: 'text' },
-    { key: 'portraitImage', label: 'Portrait Image Path', type: 'text' },
-    { key: 'portraitWebp', label: 'Portrait WebP Path', type: 'text' },
+    { key: 'portraitImage', label: 'Portrait Image Path', type: 'image' },
+    { key: 'portraitWebp', label: 'Portrait WebP Path', type: 'image' },
   ],
 
   checkout: [

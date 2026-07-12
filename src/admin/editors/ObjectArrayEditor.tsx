@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import TextInput from './TextInput';
+import ImageInput from './ImageInput';
 import NumberInput from './NumberInput';
 import BooleanInput from './BooleanInput';
 import RichTextEditor from './RichTextEditor';
@@ -13,6 +14,7 @@ interface Props {
   fields: FieldDef[];
   onChange: (v: Record<string, any>[]) => void;
   itemLabel?: string;
+  folder?: string;
 }
 
 function createEmpty(fields: FieldDef[]): Record<string, any> {
@@ -21,6 +23,7 @@ function createEmpty(fields: FieldDef[]): Record<string, any> {
     switch (f.type) {
       case 'text':
       case 'richtext':
+      case 'image':
         obj[f.key] = '';
         break;
       case 'number':
@@ -46,7 +49,8 @@ function createEmpty(fields: FieldDef[]): Record<string, any> {
 function renderField(
   field: FieldDef,
   value: Record<string, any>,
-  onChange: (v: Record<string, any>) => void
+  onChange: (v: Record<string, any>) => void,
+  folder?: string
 ) {
   const update = (key: string, val: any) => onChange({ ...value, [key]: val });
 
@@ -57,6 +61,15 @@ function renderField(
           label={field.label}
           value={value[field.key] ?? ''}
           onChange={(v) => update(field.key, v)}
+        />
+      );
+    case 'image':
+      return (
+        <ImageInput
+          label={field.label}
+          value={value[field.key] ?? ''}
+          onChange={(v) => update(field.key, v)}
+          folder={folder}
         />
       );
     case 'number':
@@ -120,6 +133,7 @@ export default function ObjectArrayEditor({
   fields,
   onChange,
   itemLabel = 'Item',
+  folder,
 }: Props) {
   const [expandedIndices, setExpandedIndices] = useState<Set<number>>(new Set());
 
@@ -236,7 +250,7 @@ export default function ObjectArrayEditor({
               <div className="p-4 flex flex-col gap-4">
                 {fields.map((field) => (
                   <div key={field.key}>
-                    {renderField(field, item, (updated) => updateItem(i, updated))}
+                    {renderField(field, item, (updated) => updateItem(i, updated), folder)}
                   </div>
                 ))}
               </div>
