@@ -29,7 +29,7 @@ export interface LegalDoc {
   body: string;
 }
 
-const ORIGIN = "https://breakthrough-experience-v2.vercel.app";
+const ORIGIN = "https://frankmondeose.com";
 
 export const LEGAL_DOCS: Record<LegalSlug, LegalDoc> = {
   privacy: {
