@@ -1,6 +1,8 @@
 import { useRef, useState } from "react";
 import { useScrollFadeIn } from "../hooks/useScrollFadeIn";
 import { gsap, useGSAP, prefersReducedMotion, useWordScrub } from "../motion";
+import { meetFrankContent, MeetFrankContent } from "../data/pageContent";
+import { useSection } from "../providers/contentProvider";
 
 /**
  * Section — Meet Frank.
@@ -14,6 +16,7 @@ import { gsap, useGSAP, prefersReducedMotion, useWordScrub } from "../motion";
  * Replaces the old per-frame useParallax (React-state-on-scroll) entirely.
  */
 export default function MeetFrank() {
+  const content = useSection<MeetFrankContent>("meet_frank", meetFrankContent);
   const [bioRef, isBioVisible] = useScrollFadeIn({ threshold: 0.1 });
   const [imgFailed, setImgFailed] = useState(false);
 
@@ -80,10 +83,10 @@ export default function MeetFrank() {
             <div className="frank-portrait relative overflow-hidden bg-neutral-900 border border-neutral-800 rounded-lg">
               {!imgFailed ? (
                 <picture>
-                  <source type="image/webp" srcSet="/frank_founder_updated.webp" />
+                  <source type="image/webp" srcSet={content.portraitWebp} />
                   <img
                     ref={imgRef}
-                    src="/frank_founder_updated.jpg"
+                    src={content.portraitImage}
                     alt="Frank Mondeose Portrait"
                     className="absolute inset-0 w-full h-full object-cover object-center"
                     referrerPolicy="no-referrer"
@@ -97,114 +100,66 @@ export default function MeetFrank() {
               )}
               {/* Frank Badge Overlay */}
               <div className="frank-badge absolute bottom-0 left-0 right-0 p-4 z-30 bg-gradient-to-t from-black/90 to-transparent">
-                <div className="frank-badge-name">FRANK MONDEOSE</div>
-                <div className="frank-badge-ttl">
-                  Teacher of Teachers · Mentor to Men on the Cusp of Impact
-                </div>
+                <div className="frank-badge-name">{content.badgeName}</div>
+                <div className="frank-badge-ttl">{content.badgeTitle}</div>
               </div>
             </div>
           </div>
 
           <div ref={bioRef as any}>
-            <div className={`eyebrow fu ${isBioVisible ? "vis" : ""}`}>Meet Frank</div>
+            <div className={`eyebrow fu ${isBioVisible ? "vis" : ""}`}>{content.eyebrow}</div>
             <h2 ref={frankHlRef} className="frank-hl">
-              <span className="word-reveal-span mr-[0.25em]">I</span>
-              <span className="word-reveal-span mr-[0.25em]">DID</span>
-              <span className="word-reveal-span mr-[0.25em]">NOT</span>
-              <span className="word-reveal-span mr-[0.25em]">BUILD</span>
+              <span className="word-reveal-span mr-[0.25em]">{content.headlineWords[0]}</span>
+              <span className="word-reveal-span mr-[0.25em]">{content.headlineWords[1]}</span>
+              <span className="word-reveal-span mr-[0.25em]">{content.headlineWords[2]}</span>
+              <span className="word-reveal-span mr-[0.25em]">{content.headlineWords[3]}</span>
               <br />
-              <span className="word-reveal-span mr-[0.25em]">THIS</span>
-              <span className="word-reveal-span mr-[0.25em]">FROM</span>
-              <span className="word-reveal-span mr-[0.25em]">THEORY.</span>
+              <span className="word-reveal-span mr-[0.25em]">{content.headlineWords[4]}</span>
+              <span className="word-reveal-span mr-[0.25em]">{content.headlineWords[5]}</span>
+              <span className="word-reveal-span mr-[0.25em]">{content.headlineWords[6]}</span>
               <br />
-              <span className="word-reveal-span mr-[0.25em]">I</span>
-              <span className="word-reveal-span mr-[0.25em]">EARNED</span>
-              <span className="word-reveal-span mr-[0.25em]">IT</span>
+              <span className="word-reveal-span mr-[0.25em]">{content.headlineWords[7]}</span>
+              <span className="word-reveal-span mr-[0.25em]">{content.headlineWords[8]}</span>
+              <span className="word-reveal-span mr-[0.25em]">{content.headlineWords[9]}</span>
               <br />
-              <span className="word-reveal-span mr-[0.25em]">THROUGH</span>
-              <span className="word-reveal-span sv mr-[0.25em]">EXPERIENCE.</span>
+              <span className="word-reveal-span mr-[0.25em]">{content.headlineWords[10]}</span>
+              <span className="word-reveal-span sv mr-[0.25em]">{content.headlineWords[11]}</span>
             </h2>
 
             <div className={`frank-b fu ${isBioVisible ? "vis" : ""}`} style={{ transitionDelay: "0.15s" }}>
-              <p>
-                For over twenty years, I have worked in some of the most demanding arenas
-                of human development: Entrepreneurship. Leadership. Men's Work. Cultural
-                Architecture. Development of Visionary Land-Based Projects.
-              </p>
-              <p className="mt-4">
-                I have founded companies. Produced large-scale events. Developed
-                curriculum. Trained facilitators. Mentored leaders. Built communities. And
-                sat with men through loss, reinvention, success, failure, and breakthrough.
-              </p>
-              <p className="mt-4">
-                What I bring into this work is not information. It is perspective earned
-                through experience.
-              </p>
-              <p className="mt-4">
-                For twenty years, men have arrived at my door carrying different stories
-                but the same question: <em>"Why am I not living the life I know I'm capable of?"</em>{" "}
-                I've asked that question myself.
-              </p>
+              <p dangerouslySetInnerHTML={{ __html: content.bioParagraphs[0] }} />
+              <p className="mt-4" dangerouslySetInnerHTML={{ __html: content.bioParagraphs[1] }} />
+              <p className="mt-4" dangerouslySetInnerHTML={{ __html: content.bioParagraphs[2] }} />
+              <p className="mt-4" dangerouslySetInnerHTML={{ __html: content.bioParagraphs[3] }} />
             </div>
 
             <h3 className={`frank-sub fu ${isBioVisible ? "vis" : ""}`} style={{ transitionDelay: "0.2s" }}>
-              That's why this work matters to me.
+              {content.subHeadline}
             </h3>
             <div className={`frank-b fu ${isBioVisible ? "vis" : ""}`} style={{ transitionDelay: "0.25s" }}>
-              <p>
-                Not because men need fixing. Because too many capable men settle for
-                less than they know is possible.
-              </p>
-              <p className="mt-4">
-                Over two decades, one truth has become clear: Most men do not need more
-                advice. They need structure. They need accountability. They need someone
-                capable of seeing the man they can become and refusing to negotiate with
-                anything less.
-              </p>
+              <p dangerouslySetInnerHTML={{ __html: content.bioParagraphs[4] }} />
+              <p className="mt-4" dangerouslySetInnerHTML={{ __html: content.bioParagraphs[5] }} />
             </div>
 
             <div className={`frank-close fu ${isBioVisible ? "vis" : ""}`} style={{ transitionDelay: "0.3s" }}>
-              I do not work with men who want to be fixed. I work with men who are ready to lead.
+              {content.closingStatement}
             </div>
 
             <div className={`fu ${isBioVisible ? "vis" : ""}`} style={{ transitionDelay: "0.35s" }}>
-              <span className="tl-lbl">The path that built Breakthrough</span>
+              <span className="tl-lbl">{content.timelineLabel}</span>
               <div className="tl" ref={timelineRef}>
-                <div className="tl-row">
-                  <span className="tl-yr">2005</span>
-                  <span className="tl-dash">——</span>
-                  <span className="tl-ev">Founded Monde Osé</span>
-                </div>
-                <div className="tl-row">
-                  <span className="tl-yr">2013</span>
-                  <span className="tl-dash">——</span>
-                  <span className="tl-ev">The Spiritual Playboy</span>
-                </div>
-                <div className="tl-row">
-                  <span className="tl-yr">2015</span>
-                  <span className="tl-dash">——</span>
-                  <span className="tl-ev">International Facilitation Begins</span>
-                </div>
-                <div className="tl-row">
-                  <span className="tl-yr">2019</span>
-                  <span className="tl-dash">——</span>
-                  <span className="tl-ev">Brotherhood Development</span>
-                </div>
-                <div className="tl-row">
-                  <span className="tl-yr">2020</span>
-                  <span className="tl-dash">——</span>
-                  <span className="tl-ev">Curriculum &amp; Faculty Leadership</span>
-                </div>
-                <div className="tl-row">
-                  <span className="tl-yr">2023</span>
-                  <span className="tl-dash">——</span>
-                  <span className="tl-ev">Caracara Village + Nature Reserve</span>
-                </div>
-                <div className="tl-row">
-                  <span className="tl-yr">2026</span>
-                  <span className="tl-dash">——</span>
-                  <span className="tl-ev" style={{ color: "var(--sv)", fontWeight: 600 }}>Breakthrough</span>
-                </div>
+                {content.timeline.map((row, i) => (
+                  <div className="tl-row" key={i}>
+                    <span className="tl-yr">{row.year}</span>
+                    <span className="tl-dash">——</span>
+                    <span
+                      className="tl-ev"
+                      style={row.highlight ? { color: "var(--sv)", fontWeight: 600 } : undefined}
+                    >
+                      {row.event}
+                    </span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
