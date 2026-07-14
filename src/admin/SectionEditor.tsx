@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { ALL_SECTION_DEFAULTS } from '../data/pageContent';
 import { SECTION_SCHEMA } from './sectionSchema';
 import { useUpdateSection, CmsNotConfiguredError } from '../hooks/useUpdateSection';
+import { useContentContext } from '../providers/contentProvider';
 import type { FieldDef } from './editors/types';
 import TextInput from './editors/TextInput';
 import ImageInput from './editors/ImageInput';
@@ -112,15 +113,23 @@ export default function SectionEditor({ sectionKey, onBack }: Props) {
   const fields = SECTION_SCHEMA[sectionKey] ?? [];
   const defaults = (ALL_SECTION_DEFAULTS[sectionKey] ?? {}) as Record<string, unknown>;
 
+  const { sections, loading: contentLoading } = useContentContext();
+
   const [formState, setFormState] = useState<Record<string, unknown>>(defaults);
   const [toast, setToast] = useState<ToastState>({ visible: false, message: '', type: 'success' });
 
   const { update, state: updateState, reset: resetUpdate } = useUpdateSection<Record<string, unknown>>(sectionKey);
 
-  // Re-initialize when the section key changes
+  // Seed from live Supabase content (merged over static defaults) once per
+  // section-open, after the initial content fetch has resolved. Deliberately
+  // does not depend on `sections` itself so an unrelated refetch() firing
+  // while this section is open can't stomp in-progress unsaved edits.
   useEffect(() => {
-    setFormState((ALL_SECTION_DEFAULTS[sectionKey] ?? {}) as Record<string, unknown>);
-  }, [sectionKey]);
+    if (contentLoading) return;
+    const liveContent = (sections[sectionKey] ?? {}) as Record<string, unknown>;
+    setFormState({ ...((ALL_SECTION_DEFAULTS[sectionKey] ?? {}) as Record<string, unknown>), ...liveContent });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sectionKey, contentLoading]);
 
   const showToast = (message: string, type: 'success' | 'error' = 'success') => {
     setToast({ visible: true, message, type });
@@ -148,6 +157,10 @@ export default function SectionEditor({ sectionKey, onBack }: Props) {
         No schema defined for section <code className="font-mono text-zinc-400">{sectionKey}</code>.
       </div>
     );
+  }
+
+  if (contentLoading) {
+    return <div className="text-zinc-500 text-sm p-6">Loading current content…</div>;
   }
 
   return (
